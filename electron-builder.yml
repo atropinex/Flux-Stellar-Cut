@@ -1,0 +1,24 @@
+# Packaging. Run "npm run package".
+appId: com.flux.stellarcut
+productName: Flux-Stellar-Cut
+directories:
+  output: dist
+files:
+  - out/**
+  - package.json
+# ffmpeg and ffprobe are real programs, so they cannot stay inside the asar archive.
+asarUnpack:
+  - node_modules/ffmpeg-static/**
+  - node_modules/ffprobe-static/**
+fileAssociations:
+  - ext: stellarproj
+    name: Flux-Stellar-Cut Project
+    role: Editor
+win:
+  target: nsis
+mac:
+  target: dmg
+  category: public.app-category.video
+linux:
+  target: AppImage
+  category: AudioVideo

@@ -1,0 +1,6 @@
+{
+  "extends": "./tsconfig.web.json",
+  "compilerOptions": {"types": []},
+  "include": ["scripts/ui/**/*.ts","scripts/ui/**/*.tsx","scripts/global.d.ts","scripts/common/CommonInteface.ts","scripts/common/utils/*.ts"],
+  "exclude": ["scripts/ui/mainindex.ts"]
+}
