@@ -7,6 +7,7 @@ import {setMediaMetadata} from '../../controller/project/StellarProject.Controll
 import {INPUT} from '../common/StellarStyles';
 import StellarIcon from '../common/StellarIcon';
 import {EmptyPanel, PanelSection} from '../common/StellarFields';
+import styles from './StellarInfoPanel.module.css';
 
 // The facts about a file (what the probe found), and the notes the person writes about it.
 
@@ -22,11 +23,11 @@ export const METADATA_FIELDS: { key: string; label: string; multiline?: boolean 
     {key: 'comment', label: 'Comment', multiline: true}
 ];
 
-function Fact({label, value}: { label: string; value: string }) {
+function Fact({label, value}: {label: string; value: string}) {
     return (
-        <div className="flex gap-2 px-3 py-0.5 text-[12px]">
-            <span className="w-[110px] shrink-0 text-dim">{label}</span>
-            <span className="min-w-0 flex-1 break-words">{value}</span>
+        <div className={styles.row}>
+            <span className={styles.textSpan}>{label}</span>
+            <span className={styles.span}>{value}</span>
         </div>
     );
 }
@@ -69,8 +70,7 @@ export default function StellarInfoPanel() {
     }, [selectedIds.join(',')]);
 
     if (!item) {
-        return <EmptyPanel icon={<StellarIcon name="list" size={28}/>}>Select a file in the Project panel to see its
-            information.</EmptyPanel>;
+        return <EmptyPanel icon={<StellarIcon name="list" size={28} />}>Select a file in the Project panel to see its information.</EmptyPanel>;
     }
 
     function valueOf(key: string): string {
@@ -99,30 +99,25 @@ export default function StellarInfoPanel() {
     }
 
     return (
-        <div className="h-full overflow-auto" data-theme="StellarInfo.panel">
+        <div className={styles.panel} data-theme="StellarInfo.panel">
             <PanelSection title={items.length > 1 ? `${items.length} items selected` : 'Information'}>
-                {items.length > 1 ?
-                    <p className="px-3 pb-1 text-[11px] text-dim">Notes you type are saved on all selected
-                        files.</p> : null}
-                {items.length === 1 ? factsOf(item).map(([label, value]) => <Fact key={label} label={label}
-                                                                                  value={value}/>) : null}
+                {items.length > 1 ? <p className={styles.textP}>Notes you type are saved on all selected files.</p> : null}
+                {items.length === 1 ? factsOf(item).map(([label, value]) => <Fact key={label} label={label} value={value} />) : null}
             </PanelSection>
 
             <PanelSection title="Metadata">
                 {METADATA_FIELDS.map((field) => (
-                    <div key={field.key} className="px-3 pb-2">
-                        <label className="mb-0.5 block text-[11px] text-dim">{field.label}</label>
+                    <div key={field.key} className={styles.div}>
+                        <label className={styles.textLabel}>{field.label}</label>
                         {field.multiline ? (
                             <textarea
-                                className={`${INPUT} min-h-[52px] resize-y`} value={valueOf(field.key)}
-                                onChange={(event) => setDrafts({...drafts, [field.key]: event.target.value})}
-                                onBlur={() => save(field.key)}
+                                className={`${styles.textarea} ${INPUT}`} value={valueOf(field.key)}
+                                onChange={(event) => setDrafts({...drafts, [field.key]: event.target.value})} onBlur={() => save(field.key)}
                             />
                         ) : (
                             <input
                                 className={INPUT} value={valueOf(field.key)}
-                                onChange={(event) => setDrafts({...drafts, [field.key]: event.target.value})}
-                                onBlur={() => save(field.key)}
+                                onChange={(event) => setDrafts({...drafts, [field.key]: event.target.value})} onBlur={() => save(field.key)}
                                 onKeyDown={(event) => {
                                     if (event.key === 'Enter') {
                                         event.currentTarget.blur();

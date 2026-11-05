@@ -1,0 +1,21 @@
+/* ------ handles ------ */
+
+.rect {
+    cursor: move;
+}
+
+.rect2 {
+    cursor: nwse-resize;
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+
+    height: 100%;
+    width: 100%;
+}
+
+.overlayIsPen {
+    cursor: crosshair;
+}

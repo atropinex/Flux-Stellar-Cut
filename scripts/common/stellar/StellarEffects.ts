@@ -30,34 +30,34 @@ function transition(
 ): EffectDefinition[] {
     return [{
         kind, label, category, appliesTo, edge, style,
-        params: [{key: 'duration', label: 'Duration', min: 0.1, max: 30, step: 0.05, default: 1, unit: 's'}]
+        params: [{ key: 'duration', label: 'Duration', min: 0.1, max: 30, step: 0.05, default: 1, unit: 's' }]
     }];
 }
 
 export const EFFECTS: EffectDefinition[] = [
     {
         kind: 'brightness', label: 'Brightness', category: 'Video Effects', appliesTo: 'video',
-        params: [{key: 'amount', label: 'Brightness', min: -100, max: 100, step: 1, default: 20, unit: ''}]
+        params: [{ key: 'amount', label: 'Brightness', min: -100, max: 100, step: 1, default: 20, unit: '' }]
     },
     {
         kind: 'contrast', label: 'Contrast', category: 'Video Effects', appliesTo: 'video',
-        params: [{key: 'amount', label: 'Contrast', min: -100, max: 100, step: 1, default: 20, unit: ''}]
+        params: [{ key: 'amount', label: 'Contrast', min: -100, max: 100, step: 1, default: 20, unit: '' }]
     },
     {
         kind: 'saturation', label: 'Saturation', category: 'Video Effects', appliesTo: 'video',
-        params: [{key: 'amount', label: 'Saturation', min: 0, max: 300, step: 1, default: 130, unit: '%'}]
+        params: [{ key: 'amount', label: 'Saturation', min: 0, max: 300, step: 1, default: 130, unit: '%' }]
     },
     {
         kind: 'hue', label: 'Hue Shift', category: 'Video Effects', appliesTo: 'video',
-        params: [{key: 'degrees', label: 'Hue', min: -180, max: 180, step: 1, default: 30, unit: '°'}]
+        params: [{ key: 'degrees', label: 'Hue', min: -180, max: 180, step: 1, default: 30, unit: '°' }]
     },
     {
         kind: 'blur', label: 'Gaussian Blur', category: 'Video Effects', appliesTo: 'video',
-        params: [{key: 'radius', label: 'Blurriness', min: 0, max: 100, step: 0.5, default: 10, unit: 'px'}]
+        params: [{ key: 'radius', label: 'Blurriness', min: 0, max: 100, step: 0.5, default: 10, unit: 'px' }]
     },
-    {kind: 'grayscale', label: 'Black & White', category: 'Video Effects', appliesTo: 'video', params: []},
-    {kind: 'sepia', label: 'Sepia', category: 'Video Effects', appliesTo: 'video', params: []},
-    {kind: 'invert', label: 'Invert', category: 'Video Effects', appliesTo: 'video', params: []},
+    { kind: 'grayscale', label: 'Black & White', category: 'Video Effects', appliesTo: 'video', params: [] },
+    { kind: 'sepia', label: 'Sepia', category: 'Video Effects', appliesTo: 'video', params: [] },
+    { kind: 'invert', label: 'Invert', category: 'Video Effects', appliesTo: 'video', params: [] },
     ...transition('fadeIn', 'Dip to Black (In)', 'Video Transitions', 'video', 'in', 'dipBlack'),
     ...transition('fadeOut', 'Dip to Black (Out)', 'Video Transitions', 'video', 'out', 'dipBlack'),
     ...transition('whiteIn', 'Dip to White (In)', 'Video Transitions', 'video', 'in', 'dipWhite'),
@@ -66,7 +66,7 @@ export const EFFECTS: EffectDefinition[] = [
     ...transition('dissolveOut', 'Cross Dissolve (Out)', 'Video Transitions', 'video', 'out', 'dissolve'),
     {
         kind: 'amplify', label: 'Amplify', category: 'Audio Effects', appliesTo: 'audio',
-        params: [{key: 'gain', label: 'Gain', min: -30, max: 30, step: 0.5, default: 6, unit: 'dB'}]
+        params: [{ key: 'gain', label: 'Gain', min: -30, max: 30, step: 0.5, default: 6, unit: 'dB' }]
     },
     ...transition('audioFadeIn', 'Fade In', 'Audio Transitions', 'audio', 'in', 'audioFade'),
     ...transition('audioFadeOut', 'Fade Out', 'Audio Transitions', 'audio', 'out', 'audioFade')

@@ -5,37 +5,10 @@ import {
 } from '../project/StellarProject.Controller';
 import {importWithDialog} from '../project/StellarMedia.Controller';
 import {
-    goToPreviousEdit,
-    goToNextEdit,
-    goToSequenceEnd,
-    goToIn,
-    goToOut,
-    markIn,
-    markOut,
-    clearInOut,
-    markClip,
-    addMarker,
-    addEditAtPlayhead,
-    placeSourceOnTimeline,
-    removeInOutRange,
-    rippleTrimAtPlayhead,
-    nudgeSelection,
-    toggleClipsEnabled,
-    linkSelection,
-    unlinkSelection,
-    toggleSnapping,
-    zoomIn,
-    zoomOut,
-    zoomToFit,
-    addTrackOfType,
-    copySelection,
-    cutSelection,
-    pasteAtPlayhead,
-    deleteSelection,
-    selectAllClips,
-    deselectAll,
-    setTool,
-    setClipSpeed
+    goToPreviousEdit, goToNextEdit, goToSequenceEnd, goToIn, goToOut, markIn, markOut, clearInOut, markClip, addMarker,
+    addEditAtPlayhead, placeSourceOnTimeline, removeInOutRange, rippleTrimAtPlayhead, nudgeSelection, toggleClipsEnabled,
+    linkSelection, unlinkSelection, toggleSnapping, zoomIn, zoomOut, zoomToFit, addTrackOfType, copySelection, cutSelection,
+    pasteAtPlayhead, deleteSelection, selectAllClips, deselectAll, setTool, setClipSpeed
 } from '../timeline/StellarTimelineActions.Controller';
 import {seekTo, shuttle, stepFrames, toggleLoop, togglePlay} from '../playback/StellarPlayback.Controller';
 import {toggleMaximizedPanel} from './StellarWorkspace.Controller';

@@ -8,6 +8,7 @@ import StellarIcon from '../common/StellarIcon';
 import StellarMonitorStage from './StellarMonitorStage';
 import StellarScrubBar from './StellarScrubBar';
 import StellarTransportBar from './StellarTransportBar';
+import styles from './StellarSourceMonitor.module.css';
 
 /** Plays a single clip from the project, so you can pick the part you want before putting it on the timeline. */
 export default function StellarSourceMonitor() {
@@ -62,9 +63,9 @@ export default function StellarSourceMonitor() {
 
     if (!media) {
         return (
-            <div className="flex h-full flex-col items-center justify-center gap-2 px-6 text-center text-dim">
-                <StellarIcon name="film" size={30}/>
-                <p className="text-[12px]">Double-click a clip in the Project panel to look at it here.</p>
+            <div className={styles.column}>
+                <StellarIcon name="film" size={30} />
+                <p className={styles.textP}>Double-click a clip in the Project panel to look at it here.</p>
             </div>
         );
     }
@@ -73,71 +74,47 @@ export default function StellarSourceMonitor() {
     const building = sources[media.path]?.mode === 'building';
 
     return (
-        <div className="flex h-full flex-col" data-theme="StellarSourceMonitor.panel">
+        <div className={styles.panel} data-theme="StellarSourceMonitor.panel">
             <StellarMonitorStage aspect={aspect}>
                 {media.kind === 'image' && url ? (
-                    <img src={url} alt="" className="absolute inset-0 h-full w-full object-contain"/>
+                    <img src={url} alt="" className={styles.overlayImg} />
                 ) : media.kind === 'audio' ? (
-                    <div className="absolute inset-0 flex items-center justify-center text-audio-clip">
-                        {thumbnails[media.path] ? null : <StellarIcon name="music" size={40}/>}
-                        {url ? <video ref={videoRef} src={url} className="hidden"
-                                      onTimeUpdate={(event) => setTime(event.currentTarget.currentTime)}
-                                      onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)}/> : null}
+                    <div className={styles.overlay}>
+                        {thumbnails[media.path] ? null : <StellarIcon name="music" size={40} />}
+                        {url ? <video ref={videoRef} src={url} className={styles.video} onTimeUpdate={(event) => setTime(event.currentTarget.currentTime)} onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} /> : null}
                     </div>
                 ) : url ? (
                     <video
                         ref={videoRef}
                         src={url}
-                        className="absolute inset-0 h-full w-full object-contain"
+                        className={styles.overlayImg}
                         onTimeUpdate={(event) => setTime(event.currentTarget.currentTime)}
                         onPlay={() => setPlaying(true)}
                         onPause={() => setPlaying(false)}
                     />
                 ) : (
-                    <div
-                        className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-[12px] text-warning">
-                        <StellarIcon name="clock" size={22} className={building ? 'stellar-spin' : ''}/>
+                    <div className={styles.overlay2}>
+                        <StellarIcon name="clock" size={22} className={building ? 'stellar-spin' : ''} />
                         {building ? 'Preparing for playback...' : 'This file cannot be played.'}
                     </div>
                 )}
             </StellarMonitorStage>
 
-            <StellarScrubBar time={time} duration={media.duration} inPoint={marks?.inPoint ?? null}
-                             outPoint={marks?.outPoint ?? null} onSeek={seek}/>
+            <StellarScrubBar time={time} duration={media.duration} inPoint={marks?.inPoint ?? null} outPoint={marks?.outPoint ?? null} onSeek={seek} />
 
             <StellarTransportBar
-                left={<span className="timecode text-[15px] text-accent">{formatTimecode(time, frameRate)}</span>}
-                right={<span className="truncate text-[11px] text-dim">{media.name}</span>}
+                left={<span className={`${styles.textSpan} timecode`}>{formatTimecode(time, frameRate)}</span>}
+                right={<span className={styles.textSpan2}>{media.name}</span>}
                 buttons={[
                     {icon: 'markIn', title: 'Mark In', onClick: () => setMark('inPoint')},
                     {icon: 'markOut', title: 'Mark Out', onClick: () => setMark('outPoint')},
                     null,
-                    {
-                        icon: 'stepBack',
-                        title: 'Step Back',
-                        onClick: () => seek(Math.max(0, time - 1 / frameRate)),
-                        disabled: !isPlayable
-                    },
-                    {
-                        icon: playing ? 'pause' : 'play',
-                        title: 'Play / Pause',
-                        onClick: togglePlayback,
-                        active: playing,
-                        disabled: !isPlayable
-                    },
-                    {
-                        icon: 'stepForward',
-                        title: 'Step Forward',
-                        onClick: () => seek(Math.min(media.duration, time + 1 / frameRate)),
-                        disabled: !isPlayable
-                    },
+                    {icon: 'stepBack', title: 'Step Back', onClick: () => seek(Math.max(0, time - 1 / frameRate)), disabled: !isPlayable},
+                    {icon: playing ? 'pause' : 'play', title: 'Play / Pause', onClick: togglePlayback, active: playing, disabled: !isPlayable},
+                    {icon: 'stepForward', title: 'Step Forward', onClick: () => seek(Math.min(media.duration, time + 1 / frameRate)), disabled: !isPlayable},
                     null,
                     {icon: 'insert', title: 'Insert (,)', onClick: () => placeSourceOnTimeline(media.id, 'insert')},
-                    {
-                        icon: 'overwrite',
-                        title: 'Overwrite (.)',
-                        onClick: () => placeSourceOnTimeline(media.id, 'overwrite')
-                    }
+                    {icon: 'overwrite', title: 'Overwrite (.)', onClick: () => placeSourceOnTimeline(media.id, 'overwrite')}
                 ]}
             />
         </div>

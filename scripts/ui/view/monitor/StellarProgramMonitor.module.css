@@ -1,0 +1,89 @@
+/* ------ StellarProgramMonitor ------ */
+
+.column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    height: 100%;
+
+    color: var(--sc-dim);
+}
+
+.textP {
+    font-size: 12px;
+}
+
+.textButton {
+    padding: 5px 10px;
+
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--sc-accentInk);
+
+    border-radius: 7px;
+    background-color: var(--sc-accent);
+}
+
+.panel {
+    display: flex;
+    flex-direction: column;
+
+    height: 100%;
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+
+    pointer-events: none;
+}
+
+.overlay2 {
+    position: absolute;
+    inset: 5%;
+
+    border: 1px solid color-mix(in oklab, var(--sc-ink) 40%, transparent);
+}
+
+.overlay3 {
+    position: absolute;
+    inset: 10%;
+
+    border: 1px solid color-mix(in oklab, var(--sc-ink) 25%, transparent);
+}
+
+.row {
+    position: absolute;
+    top: 7px;
+    left: 7px;
+
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    padding: 3px 7px;
+
+    font-size: 11px;
+    color: var(--sc-warning);
+
+    border-radius: 5px;
+    background-color: color-mix(in oklab, #000 60%, transparent);
+}
+
+.overlay4 {
+    position: absolute;
+    inset: 0;
+}
+
+.timecode {
+    font-size: 15px;
+    color: var(--sc-accent);
+}
+
+.textSpan {
+    font-size: 12px;
+    color: var(--sc-dim);
+}

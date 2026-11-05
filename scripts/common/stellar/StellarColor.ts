@@ -51,51 +51,33 @@ export interface ColorParam {
 }
 
 export const COLOR_PARAMS: ColorParam[] = [
-    {key: 'temperature', label: 'Temperature', group: 'Basic', min: -100, max: 100, step: 1, default: 0, unit: ''},
-    {key: 'tint', label: 'Tint', group: 'Basic', min: -100, max: 100, step: 1, default: 0, unit: ''},
-    {key: 'exposure', label: 'Exposure', group: 'Basic', min: -5, max: 5, step: 0.05, default: 0, unit: ''},
-    {key: 'contrast', label: 'Contrast', group: 'Basic', min: -100, max: 100, step: 1, default: 0, unit: ''},
-    {key: 'highlights', label: 'Highlights', group: 'Basic', min: -100, max: 100, step: 1, default: 0, unit: ''},
-    {key: 'shadows', label: 'Shadows', group: 'Basic', min: -100, max: 100, step: 1, default: 0, unit: ''},
-    {key: 'whites', label: 'Whites', group: 'Basic', min: -100, max: 100, step: 1, default: 0, unit: ''},
-    {key: 'blacks', label: 'Blacks', group: 'Basic', min: -100, max: 100, step: 1, default: 0, unit: ''},
-    {key: 'saturation', label: 'Saturation', group: 'Basic', min: 0, max: 200, step: 1, default: 100, unit: '%'},
-    {key: 'fadedFilm', label: 'Faded Film', group: 'Creative', min: 0, max: 100, step: 1, default: 0, unit: ''},
-    {key: 'sharpen', label: 'Sharpen', group: 'Creative', min: 0, max: 100, step: 1, default: 0, unit: ''},
-    {key: 'vibrance', label: 'Vibrance', group: 'Creative', min: -100, max: 100, step: 1, default: 0, unit: ''},
-    {key: 'vignette', label: 'Vignette', group: 'Creative', min: 0, max: 100, step: 1, default: 0, unit: ''},
-    {key: 'shadowHue', label: 'Shadow Hue', group: 'Color Wheels', min: 0, max: 360, step: 1, default: 220, unit: '°'},
-    {key: 'shadowAmount', label: 'Shadow Tint', group: 'Color Wheels', min: 0, max: 100, step: 1, default: 0, unit: ''},
-    {key: 'midHue', label: 'Midtone Hue', group: 'Color Wheels', min: 0, max: 360, step: 1, default: 40, unit: '°'},
-    {key: 'midAmount', label: 'Midtone Tint', group: 'Color Wheels', min: 0, max: 100, step: 1, default: 0, unit: ''},
-    {
-        key: 'highlightHue',
-        label: 'Highlight Hue',
-        group: 'Color Wheels',
-        min: 0,
-        max: 360,
-        step: 1,
-        default: 40,
-        unit: '°'
-    },
-    {
-        key: 'highlightAmount',
-        label: 'Highlight Tint',
-        group: 'Color Wheels',
-        min: 0,
-        max: 100,
-        step: 1,
-        default: 0,
-        unit: ''
-    }
+    { key: 'temperature', label: 'Temperature', group: 'Basic', min: -100, max: 100, step: 1, default: 0, unit: '' },
+    { key: 'tint', label: 'Tint', group: 'Basic', min: -100, max: 100, step: 1, default: 0, unit: '' },
+    { key: 'exposure', label: 'Exposure', group: 'Basic', min: -5, max: 5, step: 0.05, default: 0, unit: '' },
+    { key: 'contrast', label: 'Contrast', group: 'Basic', min: -100, max: 100, step: 1, default: 0, unit: '' },
+    { key: 'highlights', label: 'Highlights', group: 'Basic', min: -100, max: 100, step: 1, default: 0, unit: '' },
+    { key: 'shadows', label: 'Shadows', group: 'Basic', min: -100, max: 100, step: 1, default: 0, unit: '' },
+    { key: 'whites', label: 'Whites', group: 'Basic', min: -100, max: 100, step: 1, default: 0, unit: '' },
+    { key: 'blacks', label: 'Blacks', group: 'Basic', min: -100, max: 100, step: 1, default: 0, unit: '' },
+    { key: 'saturation', label: 'Saturation', group: 'Basic', min: 0, max: 200, step: 1, default: 100, unit: '%' },
+    { key: 'fadedFilm', label: 'Faded Film', group: 'Creative', min: 0, max: 100, step: 1, default: 0, unit: '' },
+    { key: 'sharpen', label: 'Sharpen', group: 'Creative', min: 0, max: 100, step: 1, default: 0, unit: '' },
+    { key: 'vibrance', label: 'Vibrance', group: 'Creative', min: -100, max: 100, step: 1, default: 0, unit: '' },
+    { key: 'vignette', label: 'Vignette', group: 'Creative', min: 0, max: 100, step: 1, default: 0, unit: '' },
+    { key: 'shadowHue', label: 'Shadow Hue', group: 'Color Wheels', min: 0, max: 360, step: 1, default: 220, unit: '°' },
+    { key: 'shadowAmount', label: 'Shadow Tint', group: 'Color Wheels', min: 0, max: 100, step: 1, default: 0, unit: '' },
+    { key: 'midHue', label: 'Midtone Hue', group: 'Color Wheels', min: 0, max: 360, step: 1, default: 40, unit: '°' },
+    { key: 'midAmount', label: 'Midtone Tint', group: 'Color Wheels', min: 0, max: 100, step: 1, default: 0, unit: '' },
+    { key: 'highlightHue', label: 'Highlight Hue', group: 'Color Wheels', min: 0, max: 360, step: 1, default: 40, unit: '°' },
+    { key: 'highlightAmount', label: 'Highlight Tint', group: 'Color Wheels', min: 0, max: 100, step: 1, default: 0, unit: '' }
 ];
 
 export function defaultCurve(): CurvePoint[] {
-    return [{x: 0, y: 0}, {x: 1, y: 1}];
+    return [{ x: 0, y: 0 }, { x: 1, y: 1 }];
 }
 
 export function defaultColor(): ColorSettings {
-    const color: Record<string, unknown> = {enabled: true, curve: defaultCurve()};
+    const color: Record<string, unknown> = { enabled: true, curve: defaultCurve() };
 
     for (const param of COLOR_PARAMS) {
         color[param.key] = param.default;

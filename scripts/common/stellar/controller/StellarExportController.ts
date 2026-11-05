@@ -7,8 +7,7 @@ import type {ExportModel} from '../../models/ExportModel';
 
 /** Answers the export requests and sends progress back to the window that asked. */
 export class StellarExportController {
-    constructor(private exporter: ExportModel) {
-    }
+    constructor(private exporter: ExportModel) {}
 
     register(): void {
         ipcMain.handle(StellarIPC.pickExportPath, (event, defaultName: string, extension: string, defaultFolder?: string) => {

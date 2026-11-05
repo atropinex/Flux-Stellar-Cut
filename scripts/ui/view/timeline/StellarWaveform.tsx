@@ -1,9 +1,10 @@
 import {useEffect, useRef} from 'react';
 import type {WaveformData} from '../../../common/stellar/StellarContract';
+import styles from './StellarWaveform.module.css';
 
-const cache = new Map<string, Promise<{ peaks: Uint8Array; perSecond: number } | null>>();
+const cache = new Map<string, Promise<{peaks: Uint8Array; perSecond: number} | null>>();
 
-function loadWaveform(path: string): Promise<{ peaks: Uint8Array; perSecond: number } | null> {
+function loadWaveform(path: string): Promise<{peaks: Uint8Array; perSecond: number} | null> {
     let promise = cache.get(path);
 
     if (!promise) {
@@ -84,5 +85,5 @@ export default function StellarWaveform({path, inPoint, sourceLength, width, hei
         };
     }, [path, inPoint, sourceLength, width, height, color]);
 
-    return <canvas ref={canvasRef} className="pointer-events-none absolute inset-0 h-full w-full opacity-80"/>;
+    return <canvas ref={canvasRef} className={styles.overlayCanvas} />;
 }

@@ -1,0 +1,171 @@
+/* ------ Fader ------ */
+
+.boxInput {
+    flex-shrink: 0;
+}
+
+
+/* ------ Strip ------ */
+
+.strip {
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: column;
+    gap: 5px;
+
+    width: 132px;
+
+    padding: 7px;
+
+    border-right: 1px solid var(--sc-line);
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.textSpan {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.row2 {
+    display: flex;
+    gap: 1.6px;
+}
+
+.textButton {
+    padding-inline: 5px;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    border-radius: 3px;
+}
+
+.textButtonMuted {
+    color: var(--sc-danger);
+
+    background-color: color-mix(in oklab, var(--sc-danger) 30%, transparent);
+}
+
+.textButtonNotMuted {
+    color: var(--sc-dim);
+
+    background-color: var(--sc-surface);
+}
+
+.textButtonSolo {
+    color: var(--sc-warning);
+
+    background-color: color-mix(in oklab, var(--sc-warning) 30%, transparent);
+}
+
+.text {
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 11px;
+    color: var(--sc-dim);
+}
+
+.row3 {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+
+    font-size: 11px;
+    color: var(--sc-dim);
+}
+
+.row4 {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    gap: 3px;
+
+    height: 150px;
+}
+
+.button {
+    padding: 1.6px;
+
+    border-radius: 3px;
+}
+
+.button:hover {
+    background-color: var(--sc-surfaceHover);
+}
+
+.textButtonAnimated {
+    color: var(--sc-accent);
+}
+
+.textButtonNotAnimated {
+    color: var(--sc-dim);
+}
+
+.textSpan2 {
+    font-size: 11px;
+    color: var(--sc-dim);
+}
+
+.div {
+    margin-top: 3px;
+    padding-top: 5px;
+
+    border-top: 1px solid var(--sc-line);
+}
+
+.text2 {
+    margin-bottom: 3px;
+
+    font-size: 10px;
+    letter-spacing: 0.025em;
+    color: var(--sc-dim);
+    text-transform: uppercase;
+}
+
+
+/* ------ StellarAudioMixerPanel ------ */
+
+.panel {
+    display: flex;
+    flex-direction: column;
+
+    height: 100%;
+}
+
+.textP {
+    padding: 3px 10px;
+
+    font-size: 11px;
+    color: var(--sc-warning);
+
+    background-color: color-mix(in oklab, var(--sc-warning) 15%, transparent);
+}
+
+.row5 {
+    display: flex;
+    flex: 1;
+    overflow-x: auto;
+
+    min-height: 0;
+}
+
+.master {
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: column;
+    gap: 5px;
+
+    width: 120px;
+
+    margin-left: auto;
+    padding: 7px;
+
+    border-left: 1px solid var(--sc-line);
+}

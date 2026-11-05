@@ -17,9 +17,7 @@ interface Bus {
 
 export interface ClipOutput {
     setBus(busId: string): void;
-
     setLevels(gain: number, pan: number): void;
-
     dispose(): void;
 }
 

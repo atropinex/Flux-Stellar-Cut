@@ -1,0 +1,97 @@
+/* ------ openMenu ------ */
+
+.root {
+    position: relative;
+    z-index: 10;
+
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 3px;
+
+    height: 33px;
+
+    padding-left: 10px;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 20px;
+    width: 20px;
+
+    margin-right: 3px;
+
+    color: var(--sc-accentInk);
+
+    border-radius: 5px;
+    background-color: var(--sc-accent);
+}
+
+.rowNav {
+    display: flex;
+    align-items: center;
+}
+
+.textButton {
+    padding: 3px 8px;
+
+    font-size: 12.5px;
+
+    border-radius: 5px;
+    transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+}
+
+.textButton:hover {
+    background-color: var(--sc-surfaceHover);
+}
+
+.buttonId {
+    background-color: var(--sc-surfaceHover);
+}
+
+.row2 {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+
+    font-size: 12.5px;
+    color: var(--sc-dim);
+
+    pointer-events: none;
+}
+
+.textSpan {
+    overflow: hidden;
+
+    max-width: 40vw;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.span {
+    height: 5px;
+    width: 5px;
+
+    border-radius: calc(infinity * 1px);
+    background-color: var(--sc-warning);
+}
+
+.row3 {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+
+    padding-right: 3px;
+}
+
+.button {
+    margin-inline: 3px;
+}

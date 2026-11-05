@@ -15,8 +15,7 @@ export class StellarProjectController {
         private projects: ProjectModel,
         private autosaves: AutosaveModel,
         private settings: SettingsModel
-    ) {
-    }
+    ) {}
 
     register(): void {
         ipcMain.handle(StellarIPC.listRecentProjects, () => this.projects.listRecent());

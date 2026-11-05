@@ -23,12 +23,7 @@ export interface ContextMenuState {
 
 export const contextMenuStore = createStore<ContextMenuState>({open: false, x: 0, y: 0, items: []});
 
-export function openContextMenu(event: {
-    clientX: number;
-    clientY: number;
-    preventDefault: () => void;
-    stopPropagation: () => void
-}, items: ContextMenuItem[]): void {
+export function openContextMenu(event: { clientX: number; clientY: number; preventDefault: () => void; stopPropagation: () => void }, items: ContextMenuItem[]): void {
     event.preventDefault();
     event.stopPropagation();
     contextMenuStore.set({open: true, x: event.clientX, y: event.clientY, items});

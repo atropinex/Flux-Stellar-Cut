@@ -18,8 +18,7 @@ export function autosaveStamp(date: Date): string {
 
 /** Writes timed copies of the project into "<project folder>/Stellar Auto-Save" and keeps the newest ones. */
 export class AutosaveModel {
-    constructor(private projects: ProjectModel, private maxVersions: () => number) {
-    }
+    constructor(private projects: ProjectModel, private maxVersions: () => number) {}
 
     save(projectPath: string, document: ProjectDocument, now = new Date()): string {
         const folder = this.folderFor(projectPath);
@@ -51,7 +50,7 @@ export class AutosaveModel {
     }
 
     /** Autosaves of this project, newest first. */
-    list(projectPath: string): { path: string; time: number }[] {
+    list(projectPath: string): {path: string; time: number}[] {
         const folder = this.folderFor(projectPath);
 
         if (!existsSync(folder)) {

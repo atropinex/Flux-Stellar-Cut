@@ -1,0 +1,291 @@
+/* ------ StellarTimelinePanel ------ */
+
+.column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+
+    height: 100%;
+
+    color: var(--sc-dim);
+}
+
+.textP {
+    font-size: 12px;
+}
+
+
+/* ------ handleDrop ------ */
+
+.panel {
+    display: flex;
+    flex-direction: column;
+
+    height: 100%;
+}
+
+.toolbar {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 3px;
+
+    height: 29px;
+
+    padding-inline: 7px;
+
+    border-bottom: 1px solid var(--sc-line);
+}
+
+.textButton {
+    overflow: hidden;
+
+    max-width: 130px;
+
+    padding: 3px 8px;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 12px;
+
+    border-radius: 5px;
+}
+
+.textButtonId {
+    color: var(--sc-ink);
+
+    background-color: var(--sc-surfaceHover);
+}
+
+.textButtonNotId {
+    color: var(--sc-dim);
+}
+
+.textButtonNotId:hover {
+    color: var(--sc-ink);
+}
+
+.textSpan {
+    margin-left: 10px;
+
+    font-size: 13px;
+    color: var(--sc-accent);
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+
+    margin-left: auto;
+}
+
+.textButtonSnapping {
+    color: var(--sc-accent);
+
+    background-color: color-mix(in oklab, var(--sc-accent) 20%, transparent);
+}
+
+.button {
+    width: 13px;
+    height: 13px;
+
+    border-radius: calc(infinity * 1px);
+    border: 1px solid color-mix(in oklab, var(--sc-ink) 40%, transparent);
+}
+
+.span {
+    height: 13px;
+    width: 1px;
+
+    margin-inline: 3px;
+
+    background-color: var(--sc-line);
+}
+
+.boxInput {
+    width: 78px;
+}
+
+.row2 {
+    display: flex;
+    flex: 1;
+
+    min-height: 0;
+}
+
+.div {
+    position: relative;
+
+    flex: 1;
+
+    min-height: 0;
+    min-width: 0;
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+
+    overflow: auto;
+}
+
+.div2 {
+    position: relative;
+}
+
+.row3 {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+
+    display: flex;
+
+    background-color: color-mix(in srgb,var(--sc-base) 75%,transparent);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+}
+
+.div3 {
+    position: sticky;
+    left: 0;
+    z-index: 40;
+
+    flex-shrink: 0;
+
+    border-right: 1px solid var(--sc-line);
+    border-bottom: 1px solid;
+    background-color: color-mix(in srgb,var(--sc-base) 80%,transparent);
+}
+
+.row4 {
+    display: flex;
+}
+
+.divIsFirstAudio {
+    border-top: 2px solid;
+    border-top-color: var(--sc-line);
+}
+
+.lane {
+    position: relative;
+
+    border-bottom: 1px solid color-mix(in oklab, var(--sc-line) 60%, transparent);
+}
+
+.laneLocked {
+    background-color: var(--sc-deep);
+}
+
+.lane0 {
+    background-color: color-mix(in oklab, var(--sc-ink) 1.5%, transparent);
+}
+
+.laneMuted {
+    opacity: 60%;
+}
+
+.div4 {
+    position: absolute;
+    bottom: 0;
+    z-index: 5;
+
+    pointer-events: none;
+    background-color: color-mix(in oklab, var(--sc-accent) 10%, transparent);
+}
+
+.div5 {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 25;
+
+    width: 1px;
+
+    pointer-events: none;
+    background-color: var(--sc-warning);
+}
+
+.playhead {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 26;
+
+    pointer-events: none;
+}
+
+.div6 {
+    position: absolute;
+    top: 0;
+    translate: calc(calc(1 / 2 * 100%) * -1) 0;
+
+    height: 0;
+    width: 0;
+
+    border-inline-style: solid;
+    border-inline-width: 6px;
+    border-top: 10px solid;
+    border-inline-color: transparent;
+    border-top-color: var(--sc-playhead);
+}
+
+.div7 {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    translate: calc(calc(1 / 2 * 100%) * -1) 0;
+
+    width: 1px;
+
+    background-color: var(--sc-playhead);
+}
+
+.div8 {
+    position: absolute;
+    z-index: 40;
+
+    pointer-events: none;
+    border: 1px solid var(--sc-accent);
+    background-color: color-mix(in oklab, var(--sc-accent) 15%, transparent);
+}
+
+.overlay2 {
+    position: absolute;
+    inset: 3px;
+
+    pointer-events: none;
+    border-radius: 10px;
+    border: 2px dashed color-mix(in oklab, var(--sc-accent) 60%, transparent);
+}
+
+.meter {
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: column;
+    align-items: center;
+
+    width: 52px;
+
+    padding-top: 3px;
+    padding-bottom: 7px;
+
+    border-left: 1px solid var(--sc-line);
+}
+
+.text {
+    margin-bottom: 3px;
+
+    font-size: 9px;
+    letter-spacing: 0.025em;
+    color: var(--sc-dim);
+    text-transform: uppercase;
+}
+
+.div9 {
+    flex: 1;
+
+    min-height: 0;
+}

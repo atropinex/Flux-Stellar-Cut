@@ -208,10 +208,7 @@ function traceMask(context: CanvasRenderingContext2D, mask: Mask, width: number,
     }
 
     // Rounded corners: curves that pass through the middle of every side.
-    const middle = (first: { x: number; y: number }, second: { x: number; y: number }) => ({
-        x: (first.x + second.x) / 2,
-        y: (first.y + second.y) / 2
-    });
+    const middle = (first: { x: number; y: number }, second: { x: number; y: number }) => ({x: (first.x + second.x) / 2, y: (first.y + second.y) / 2});
     const start = middle(points[points.length - 1], points[0]);
 
     context.moveTo(start.x, start.y);

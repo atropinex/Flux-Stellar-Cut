@@ -1,0 +1,53 @@
+/* ------ handleMove ------ */
+
+.div {
+    position: relative;
+
+    flex-shrink: 0;
+}
+
+.divVariant {
+    width: var(--sc-gap);
+
+    cursor: col-resize;
+}
+
+.divVariant2 {
+    height: var(--sc-gap);
+
+    cursor: row-resize;
+}
+
+.div2 {
+    position: absolute;
+
+    border-radius: calc(infinity * 1px);
+    background-color: color-mix(in oklab, var(--sc-accent) 0%, transparent);
+    transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+}
+
+:global(.group):hover .div2 {
+    background-color: color-mix(in oklab, var(--sc-accent) 60%, transparent);
+}
+
+:global(.group):active .div2 {
+    background-color: var(--sc-accent);
+}
+
+.divVariant3 {
+    inset-block: 7px;
+    left: calc(1 / 2 * 100%);
+    translate: calc(calc(1 / 2 * 100%) * -1) 0;
+
+    width: 1.6px;
+}
+
+.divVariant4 {
+    inset-inline: 7px;
+    top: calc(1 / 2 * 100%);
+    translate: 0 calc(calc(1 / 2 * 100%) * -1);
+
+    height: 1.6px;
+}

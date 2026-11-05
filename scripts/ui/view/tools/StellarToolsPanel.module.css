@@ -1,0 +1,42 @@
+/* ------ StellarToolsPanel ------ */
+
+.panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+
+    height: 100%;
+
+    padding-block: 7px;
+}
+
+.rowButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 29px;
+    width: 29px;
+
+    border-radius: 7px;
+    transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+}
+
+.textButtonId {
+    color: var(--sc-accentInk);
+
+    background-color: var(--sc-accent);
+}
+
+.textButtonNotId {
+    color: var(--sc-dim);
+}
+
+.textButtonNotId:hover {
+    color: var(--sc-ink);
+
+    background-color: var(--sc-surfaceHover);
+}

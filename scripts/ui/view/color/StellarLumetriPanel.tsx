@@ -1,36 +1,24 @@
 import {useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode} from 'react';
 import type {Clip} from '../../../common/stellar/StellarContract';
-import {
-    COLOR_PARAMS,
-    defaultCurve,
-    normalizeColor,
-    type ColorGroup,
-    type CurvePoint
-} from '../../../common/stellar/StellarColor';
+import {COLOR_PARAMS, defaultCurve, normalizeColor, type ColorGroup, type CurvePoint} from '../../../common/stellar/StellarColor';
 import {editorStore, getShownSequence} from '../../controller/project/StellarEditor.Store';
 import {useStore} from '../../controller/store/StellarStore';
 import {findClip, findTrack} from '../../controller/timeline/StellarTimeline.Controller';
 import {resetColor, updateColor} from '../../controller/timeline/StellarClipEdit.Controller';
 import StellarIcon from '../common/StellarIcon';
 import StellarPropertyRow from '../effects/StellarPropertyRow';
+import styles from './StellarLumetriPanel.module.css';
 
 // Color tuning in the style of Premiere's Lumetri Color: basic correction, creative, color wheels and a curve.
 
 const GROUPS: ColorGroup[] = ['Basic', 'Creative', 'Color Wheels'];
 const CURVE_SIZE = 180;
 
-function Group({title, children, open, onToggle}: {
-    title: string;
-    children: ReactNode;
-    open: boolean;
-    onToggle: () => void
-}) {
+function Group({title, children, open, onToggle}: {title: string; children: ReactNode; open: boolean; onToggle: () => void}) {
     return (
-        <div className="border-b border-line py-1" data-theme="StellarLumetri.section">
-            <button type="button"
-                    className="flex w-full items-center gap-1.5 px-3 py-1 text-left text-[12px] font-semibold hover:text-accent"
-                    onClick={onToggle}>
-                <StellarIcon name={open ? 'chevronDown' : 'chevronRight'} size={12}/>
+        <div className={styles.section} data-theme="StellarLumetri.section">
+            <button type="button" className={styles.rowButton} onClick={onToggle}>
+                <StellarIcon name={open ? 'chevronDown' : 'chevronRight'} size={12} />
                 {title}
             </button>
             {open ? children : null}
@@ -39,7 +27,7 @@ function Group({title, children, open, onToggle}: {
 }
 
 /** The curve: drag the points. Click an empty place to add one. Double-click a point to remove it. */
-function CurveEditor({clip, ids}: { clip: Clip; ids: string[] }) {
+function CurveEditor({clip, ids}: {clip: Clip; ids: string[]}) {
     const curve = normalizeColor(clip.color).curve;
     const svgRef = useRef<SVGSVGElement | null>(null);
     const dragging = useRef<number | null>(null);
@@ -60,12 +48,12 @@ function CurveEditor({clip, ids}: { clip: Clip; ids: string[] }) {
     const path = [...curve].sort((first, second) => first.x - second.x).map((point, index) => `${index === 0 ? 'M' : 'L'}${point.x * CURVE_SIZE},${(1 - point.y) * CURVE_SIZE}`).join(' ');
 
     return (
-        <div className="px-3 py-2">
+        <div className={styles.div}>
             <svg
                 ref={svgRef}
                 width={CURVE_SIZE}
                 height={CURVE_SIZE}
-                className="touch-none rounded-md bg-deep"
+                className={styles.curve}
                 data-theme="StellarLumetri.curve"
                 onPointerDown={(event) => {
                     if (event.target !== event.currentTarget) {
@@ -86,10 +74,7 @@ function CurveEditor({clip, ids}: { clip: Clip; ids: string[] }) {
                     const isEnd = index === 0 || index === curve.length - 1;
 
                     // The two end points can only go up and down.
-                    const next = curve.map((item, position) => (position === index ? {
-                        x: isEnd ? item.x : point.x,
-                        y: point.y
-                    } : item));
+                    const next = curve.map((item, position) => (position === index ? {x: isEnd ? item.x : point.x, y: point.y} : item));
 
                     replace(next, false);
                 }}
@@ -99,10 +84,7 @@ function CurveEditor({clip, ids}: { clip: Clip; ids: string[] }) {
                         const index = dragging.current;
                         const isEnd = index === 0 || index === curve.length - 1;
 
-                        replace(curve.map((item, position) => (position === index ? {
-                            x: isEnd ? item.x : point.x,
-                            y: point.y
-                        } : item)), true);
+                        replace(curve.map((item, position) => (position === index ? {x: isEnd ? item.x : point.x, y: point.y} : item)), true);
                     }
 
                     dragging.current = null;
@@ -110,13 +92,12 @@ function CurveEditor({clip, ids}: { clip: Clip; ids: string[] }) {
             >
                 {[0.25, 0.5, 0.75].map((line) => (
                     <g key={line} stroke="currentColor" strokeOpacity="0.12">
-                        <line x1={line * CURVE_SIZE} y1="0" x2={line * CURVE_SIZE} y2={CURVE_SIZE}/>
-                        <line x1="0" y1={line * CURVE_SIZE} x2={CURVE_SIZE} y2={line * CURVE_SIZE}/>
+                        <line x1={line * CURVE_SIZE} y1="0" x2={line * CURVE_SIZE} y2={CURVE_SIZE} />
+                        <line x1="0" y1={line * CURVE_SIZE} x2={CURVE_SIZE} y2={line * CURVE_SIZE} />
                     </g>
                 ))}
-                <line x1="0" y1={CURVE_SIZE} x2={CURVE_SIZE} y2="0" stroke="currentColor" strokeOpacity="0.25"
-                      strokeDasharray="3 3"/>
-                <path d={path} fill="none" stroke="var(--color-accent, #6aa7ff)" strokeWidth="2"/>
+                <line x1="0" y1={CURVE_SIZE} x2={CURVE_SIZE} y2="0" stroke="currentColor" strokeOpacity="0.25" strokeDasharray="3 3" />
+                <path d={path} fill="none" stroke="var(--color-accent, #6aa7ff)" strokeWidth="2" />
                 {curve.map((point, index) => (
                     <circle
                         key={`${point.x}-${index}`}
@@ -126,7 +107,7 @@ function CurveEditor({clip, ids}: { clip: Clip; ids: string[] }) {
                         fill="var(--color-accent, #6aa7ff)"
                         stroke="white"
                         strokeWidth="1"
-                        className="cursor-grab"
+                        className={styles.circle}
                         onPointerDown={(event) => {
                             event.stopPropagation();
                             (svgRef.current as SVGSVGElement).setPointerCapture(event.pointerId);
@@ -140,10 +121,9 @@ function CurveEditor({clip, ids}: { clip: Clip; ids: string[] }) {
                     />
                 ))}
             </svg>
-            <div className="mt-1 flex items-center gap-2 text-[11px] text-dim">
+            <div className={styles.row}>
                 Click to add a point. Double-click a point to remove it.
-                <button type="button" className="ml-auto rounded-md bg-surface px-2 py-0.5 hover:bg-surface-hover"
-                        onClick={() => updateColor(ids, {curve: defaultCurve()}, true, 'Reset curve')}>Reset</button>
+                <button type="button" className={styles.button} onClick={() => updateColor(ids, {curve: defaultCurve()}, true, 'Reset curve')}>Reset</button>
             </div>
         </div>
     );
@@ -152,21 +132,15 @@ function CurveEditor({clip, ids}: { clip: Clip; ids: string[] }) {
 export default function StellarLumetriPanel() {
     const sequence = useStore(editorStore, (state) => getShownSequence(state));
     const selection = useStore(editorStore, (state) => state.selection);
-    const [open, setOpen] = useState<Record<string, boolean>>({
-        Basic: true,
-        Creative: true,
-        'Color Wheels': false,
-        Curves: false
-    });
+    const [open, setOpen] = useState<Record<string, boolean>>({Basic: true, Creative: true, 'Color Wheels': false, Curves: false});
     const clip = sequence && selection[0] ? findClip(sequence, selection[0]) : undefined;
     const track = sequence && clip ? findTrack(sequence, clip.trackId) : undefined;
 
     if (!clip || !track || track.type !== 'video') {
         return (
-            <div className="flex h-full flex-col items-center justify-center gap-2 px-6 text-center text-dim"
-                 data-theme="StellarLumetri.panel">
-                <StellarIcon name="palette" size={28}/>
-                <p className="text-[12px]">Select a video clip to tune its color.</p>
+            <div className={styles.panel} data-theme="StellarLumetri.panel">
+                <StellarIcon name="palette" size={28} />
+                <p className={styles.textP}>Select a video clip to tune its color.</p>
             </div>
         );
     }
@@ -175,32 +149,26 @@ export default function StellarLumetriPanel() {
     const ids = selection;
 
     return (
-        <div className="h-full overflow-auto" data-theme="StellarLumetri.panel">
-            <div className="flex items-center gap-2 border-b border-line px-3 py-2">
-                <span className="truncate text-[13px] font-medium">{clip.name}</span>
-                <label className="ml-auto flex items-center gap-1.5 text-[12px]">
-                    <input type="checkbox" checked={color.enabled}
-                           onChange={(event) => updateColor(ids, {enabled: event.target.checked}, true, 'Toggle color')}/>
+        <div className={styles.panel2} data-theme="StellarLumetri.panel">
+            <div className={styles.row2}>
+                <span className={styles.textSpan}>{clip.name}</span>
+                <label className={styles.rowLabel}>
+                    <input type="checkbox" checked={color.enabled} onChange={(event) => updateColor(ids, {enabled: event.target.checked}, true, 'Toggle color')} />
                     On
                 </label>
-                <button type="button" className="rounded-md bg-surface px-2 py-0.5 text-[11px] hover:bg-surface-hover"
-                        onClick={() => resetColor(ids)}>Reset all
-                </button>
+                <button type="button" className={styles.textButton} onClick={() => resetColor(ids)}>Reset all</button>
             </div>
 
             {GROUPS.map((group) => (
-                <Group key={group} title={group} open={open[group] ?? false}
-                       onToggle={() => setOpen({...open, [group]: !open[group]})}>
+                <Group key={group} title={group} open={open[group] ?? false} onToggle={() => setOpen({...open, [group]: !open[group]})}>
                     {COLOR_PARAMS.filter((param) => param.group === group).map((param) => (
-                        <StellarPropertyRow key={param.key} clip={clip} ids={ids} path={`color.${param.key}`}
-                                            showLane={false}/>
+                        <StellarPropertyRow key={param.key} clip={clip} ids={ids} path={`color.${param.key}`} showLane={false} />
                     ))}
                 </Group>
             ))}
 
-            <Group title="Curves" open={open['Curves'] ?? false}
-                   onToggle={() => setOpen({...open, Curves: !open['Curves']})}>
-                <CurveEditor clip={clip} ids={ids}/>
+            <Group title="Curves" open={open['Curves'] ?? false} onToggle={() => setOpen({...open, Curves: !open['Curves']})}>
+                <CurveEditor clip={clip} ids={ids} />
             </Group>
         </div>
     );

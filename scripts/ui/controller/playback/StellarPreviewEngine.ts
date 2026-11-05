@@ -1,17 +1,6 @@
 import type {Clip, MediaItem, Sequence, Track} from '../../../common/stellar/StellarContract';
-import {
-    buildColorLuts,
-    effectiveSaturation,
-    isColorNeutral,
-    type ColorSettings
-} from '../../../common/stellar/StellarColor';
-import {
-    clipSourceKind,
-    contentTime,
-    resolveClip,
-    transitionAmounts,
-    type ResolvedClip
-} from '../../../common/stellar/StellarEvaluate';
+import {buildColorLuts, effectiveSaturation, isColorNeutral, type ColorSettings} from '../../../common/stellar/StellarColor';
+import {clipSourceKind, contentTime, resolveClip, transitionAmounts, type ResolvedClip} from '../../../common/stellar/StellarEvaluate';
 import {activeMasks} from '../../../common/stellar/StellarMask';
 import {clamp, dbToGain} from '../../../common/utils/StellarTimeHelper';
 import {editorStore, getMedia, getShownSequence, type EditorState} from '../project/StellarEditor.Store';
@@ -63,12 +52,7 @@ interface DrawContext {
 
 let filterCounter = 0;
 
-function fitRect(sourceWidth: number, sourceHeight: number, stageWidth: number, stageHeight: number): {
-    x: number;
-    y: number;
-    width: number;
-    height: number
-} {
+function fitRect(sourceWidth: number, sourceHeight: number, stageWidth: number, stageHeight: number): { x: number; y: number; width: number; height: number } {
     if (sourceWidth <= 0 || sourceHeight <= 0) {
         return {x: 0, y: 0, width: stageWidth, height: stageHeight};
     }
@@ -129,8 +113,7 @@ export class StellarPreviewEngine {
     private lastState: EditorState | null = null;
     private svg: SVGSVGElement | null = null;
 
-    constructor(private layer: HTMLElement, private options: EngineOptions = {video: true, audio: true}) {
-    }
+    constructor(private layer: HTMLElement, private options: EngineOptions = {video: true, audio: true}) {}
 
     start(): void {
         this.unsubscribe = editorStore.subscribe(() => this.render());
@@ -557,19 +540,8 @@ export class StellarPreviewEngine {
         }
 
         const slot: Slot = {
-            clipId: clip.id,
-            kind,
-            trackType,
-            url,
-            element: null,
-            wrapper: null,
-            vignette: null,
-            dip: null,
-            child: null,
-            output: null,
-            filterId: `stellar-color-${(filterCounter += 1)}`,
-            filterKey: '',
-            maskKey: ''
+            clipId: clip.id, kind, trackType, url, element: null, wrapper: null, vignette: null, dip: null, child: null, output: null,
+            filterId: `stellar-color-${(filterCounter += 1)}`, filterKey: '', maskKey: ''
         };
 
         if (trackType === 'video') {
@@ -584,10 +556,7 @@ export class StellarPreviewEngine {
 
             childLayer.style.cssText = 'position:absolute;inset:0;overflow:hidden;';
             (slot.wrapper ?? this.layer).appendChild(childLayer);
-            slot.child = new StellarPreviewEngine(childLayer, {
-                video: trackType === 'video',
-                audio: trackType === 'audio'
-            });
+            slot.child = new StellarPreviewEngine(childLayer, {video: trackType === 'video', audio: trackType === 'audio'});
             slot.element = null;
         } else {
             slot.element = this.createElement(media, kind, trackType);

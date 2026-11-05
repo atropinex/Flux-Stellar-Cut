@@ -6,16 +6,7 @@ import {StellarPreviewEngine} from '../../controller/playback/StellarPreviewEngi
 import {seekTo, stepFrames, togglePlay, toggleLoop} from '../../controller/playback/StellarPlayback.Controller';
 import {sequenceDuration} from '../../controller/timeline/StellarTimeline.Controller';
 import {
-    addEditAtPlayhead,
-    goToIn,
-    goToNextEdit,
-    goToOut,
-    goToPreviousEdit,
-    markIn,
-    markOut,
-    removeInOutRange,
-    clearInOut,
-    addMarker
+    addEditAtPlayhead, goToIn, goToNextEdit, goToOut, goToPreviousEdit, markIn, markOut, removeInOutRange, clearInOut, addMarker
 } from '../../controller/timeline/StellarTimelineActions.Controller';
 import {openContextMenu, separator} from '../../controller/contextmenu/StellarContextMenu.Controller';
 import StellarIcon from '../common/StellarIcon';
@@ -23,6 +14,7 @@ import StellarMonitorStage from './StellarMonitorStage';
 import StellarMaskOverlay from './StellarMaskOverlay';
 import StellarScrubBar from './StellarScrubBar';
 import StellarTransportBar from './StellarTransportBar';
+import styles from './StellarProgramMonitor.module.css';
 
 /** The picture of the sequence at the playhead. The preview engine fills it with the clips. */
 export default function StellarProgramMonitor() {
@@ -55,12 +47,10 @@ export default function StellarProgramMonitor() {
 
     if (!sequence) {
         return (
-            <div className="flex h-full flex-col items-center justify-center gap-3 text-dim">
-                <StellarIcon name="sequence" size={30}/>
-                <p className="text-[12px]">There is no sequence yet.</p>
-                <button type="button"
-                        className="rounded-lg bg-accent px-3 py-1.5 text-[12px] font-semibold text-accent-ink"
-                        onClick={() => editorStore.set({dialog: 'newSequence'})}>
+            <div className={styles.column}>
+                <StellarIcon name="sequence" size={30} />
+                <p className={styles.textP}>There is no sequence yet.</p>
+                <button type="button" className={styles.textButton} onClick={() => editorStore.set({dialog: 'newSequence'})}>
                     New Sequence
                 </button>
             </div>
@@ -77,7 +67,7 @@ export default function StellarProgramMonitor() {
 
     return (
         <div
-            className="flex h-full flex-col"
+            className={styles.panel}
             data-theme="StellarProgramMonitor.panel"
             onContextMenu={(event) =>
                 openContextMenu(event, [
@@ -99,46 +89,36 @@ export default function StellarProgramMonitor() {
                 }}
                 overlay={
                     <>
-                        <StellarMaskOverlay stageWidth={stageWidth} stageHeight={stageWidth / aspect}/>
+                        <StellarMaskOverlay stageWidth={stageWidth} stageHeight={stageWidth / aspect} />
                         {showSafe ? (
-                            <div className="pointer-events-none absolute inset-0">
-                                <div className="absolute inset-[5%] border border-ink/40"/>
-                                <div className="absolute inset-[10%] border border-ink/25"/>
+                            <div className={styles.overlay}>
+                                <div className={styles.overlay2} />
+                                <div className={styles.overlay3} />
                             </div>
                         ) : null}
                         {isBuilding ? (
-                            <div
-                                className="absolute left-2 top-2 flex items-center gap-1.5 rounded-md bg-black/60 px-2 py-1 text-[11px] text-warning">
-                                <StellarIcon name="clock" size={12} className="stellar-spin"/> Preparing media for
-                                playback...
+                            <div className={styles.row}>
+                                <StellarIcon name="clock" size={12} className="stellar-spin" /> Preparing media for playback...
                             </div>
                         ) : null}
                     </>
                 }
             >
-                <div ref={layerRef} className="absolute inset-0"/>
+                <div ref={layerRef} className={styles.overlay4} />
             </StellarMonitorStage>
 
-            <StellarScrubBar time={playhead} duration={Math.max(duration, 1)} inPoint={sequence.inPoint}
-                             outPoint={sequence.outPoint} onSeek={seekTo}/>
+            <StellarScrubBar time={playhead} duration={Math.max(duration, 1)} inPoint={sequence.inPoint} outPoint={sequence.outPoint} onSeek={seekTo} />
 
             <StellarTransportBar
-                left={<span className="timecode text-[15px] text-accent"
-                            data-theme="StellarProgramMonitor.timecode">{formatTimecode(playhead, sequence.settings.frameRate)}</span>}
-                right={<span
-                    className="timecode text-[12px] text-dim">{formatTimecode(duration, sequence.settings.frameRate)}</span>}
+                left={<span className={`${styles.timecode} timecode`} data-theme="StellarProgramMonitor.timecode">{formatTimecode(playhead, sequence.settings.frameRate)}</span>}
+                right={<span className={`${styles.textSpan} timecode`}>{formatTimecode(duration, sequence.settings.frameRate)}</span>}
                 buttons={[
                     {icon: 'markIn', title: 'Mark In (I)', onClick: markIn},
                     {icon: 'markOut', title: 'Mark Out (O)', onClick: markOut},
                     null,
                     {icon: 'goStart', title: 'Previous Edit (Up)', onClick: goToPreviousEdit},
                     {icon: 'stepBack', title: 'Step Back (Left)', onClick: () => stepFrames(-1)},
-                    {
-                        icon: playing ? 'pause' : 'play',
-                        title: 'Play / Pause (Space)',
-                        onClick: togglePlay,
-                        active: playing
-                    },
+                    {icon: playing ? 'pause' : 'play', title: 'Play / Pause (Space)', onClick: togglePlay, active: playing},
                     {icon: 'stepForward', title: 'Step Forward (Right)', onClick: () => stepFrames(1)},
                     {icon: 'goEnd', title: 'Next Edit (Down)', onClick: goToNextEdit},
                     null,

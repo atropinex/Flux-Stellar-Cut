@@ -9,7 +9,7 @@ async function startApp() {
 
     createRoot(document.getElementById('root')!).render(
         <StrictMode>
-            <StellarApp/>
+            <StellarApp />
         </StrictMode>
     );
 }

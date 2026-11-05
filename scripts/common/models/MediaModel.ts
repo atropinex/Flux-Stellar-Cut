@@ -32,14 +32,14 @@ interface ProbeStream {
     duration?: string;
     sample_rate?: string;
     channels?: number;
-    disposition?: { attached_pic?: number };
+    disposition?: {attached_pic?: number};
     tags?: Record<string, string>;
-    side_data_list?: { rotation?: number }[];
+    side_data_list?: {rotation?: number}[];
 }
 
 interface ProbeOutput {
     streams?: ProbeStream[];
-    format?: { format_name?: string; duration?: string; size?: string; tags?: Record<string, string> };
+    format?: {format_name?: string; duration?: string; size?: string; tags?: Record<string, string>};
 }
 
 function extensionOf(path: string): string {
@@ -121,11 +121,7 @@ export class MediaModel {
         ]);
 
         if (output.code !== 0) {
-            return {
-                path,
-                media: null,
-                error: knownType ? 'The file is damaged or cannot be read.' : 'This file type is not supported.'
-            };
+            return {path, media: null, error: knownType ? 'The file is damaged or cannot be read.' : 'This file type is not supported.'};
         }
 
         let data: ProbeOutput;

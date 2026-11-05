@@ -1,10 +1,8 @@
 import {useLayoutEffect, useRef, useState, type ReactNode, type RefObject} from 'react';
+import styles from './StellarMonitorStage.module.css';
 
 /** Finds the biggest box with a given shape that fits in a container. */
-export function useFitBox(containerRef: RefObject<HTMLElement | null>, aspect: number): {
-    width: number;
-    height: number
-} {
+export function useFitBox(containerRef: RefObject<HTMLElement | null>, aspect: number): {width: number; height: number} {
     const [box, setBox] = useState({width: 0, height: 0});
 
     useLayoutEffect(() => {
@@ -52,11 +50,10 @@ export default function StellarMonitorStage({aspect, children, stageRef, overlay
     }, [box.width, onSize]);
 
     return (
-        <div ref={containerRef} className="relative flex min-h-0 flex-1 items-center justify-center p-3"
-             data-theme="StellarMonitor.stage">
+        <div ref={containerRef} className={styles.stage} data-theme="StellarMonitor.stage">
             <div
                 ref={stageRef}
-                className="relative overflow-hidden rounded-md bg-black shadow-[0_6px_30px_rgba(0,0,0,0.5)]"
+                className={styles.div}
                 style={{width: box.width, height: box.height}}
             >
                 {children}

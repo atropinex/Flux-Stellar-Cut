@@ -1,0 +1,29 @@
+/* ------ create ------ */
+
+.column {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+}
+
+.row {
+    display: flex;
+    gap: 7px;
+}
+
+.textP {
+    margin-top: 5px;
+
+    font-size: 11px;
+    color: var(--sc-dim);
+}
+
+.textP2 {
+    padding: 7px 10px;
+
+    font-size: 12px;
+    color: var(--sc-danger);
+
+    border-radius: 7px;
+    background-color: color-mix(in oklab, var(--sc-danger) 15%, transparent);
+}

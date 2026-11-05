@@ -16,21 +16,13 @@ const MIME_TYPES: Record<string, string> = {
 export function registerMediaScheme(): void {
     protocol.registerSchemesAsPrivileged([{
         scheme: MEDIA_SCHEME,
-        privileges: {
-            standard: true,
-            secure: true,
-            supportFetchAPI: true,
-            stream: true,
-            bypassCSP: true,
-            corsEnabled: true
-        }
+        privileges: {standard: true, secure: true, supportFetchAPI: true, stream: true, bypassCSP: true, corsEnabled: true}
     }]);
 }
 
 /** Serves local media files to the page, with the Range support that video seeking needs. */
 export class StellarProtocolController {
-    constructor(private cacheFolder: string) {
-    }
+    constructor(private cacheFolder: string) {}
 
     register(): void {
         protocol.handle(MEDIA_SCHEME, (request) => this.serve(request));

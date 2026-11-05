@@ -1,3 +1,4 @@
+import styles from './StellarIcon.module.css';
 // Small line icons (24x24 grid). Each one is a list of SVG paths.
 const ICONS = {
     play: 'M7 4.5v15l12-7.5z',
@@ -84,7 +85,7 @@ interface IconProps {
 export default function StellarIcon({name, size = 16, className = '', filled = false}: IconProps) {
     return (
         <svg
-            className={`shrink-0 ${className}`}
+            className={`${styles.boxSvg} ${className}`}
             width={size}
             height={size}
             viewBox="0 0 24 24"
@@ -95,7 +96,7 @@ export default function StellarIcon({name, size = 16, className = '', filled = f
             strokeLinejoin="round"
             aria-hidden="true"
         >
-            <path d={ICONS[name]}/>
+            <path d={ICONS[name]} />
         </svg>
     );
 }

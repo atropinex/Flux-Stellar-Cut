@@ -8,6 +8,7 @@ import {findClip, findTrack} from '../../controller/timeline/StellarTimeline.Con
 import {addMask, updateMask} from '../../controller/timeline/StellarClipEdit.Controller';
 import {maskUiStore, selectMask} from '../../controller/timeline/StellarMaskUi.Controller';
 import {setTool} from '../../controller/timeline/StellarTimelineActions.Controller';
+import styles from './StellarMaskOverlay.module.css';
 
 // Shows the masks of the selected clip on top of the Program monitor, and lets you draw and edit them.
 // Mask positions are fractions of the clip's own picture, so everything here is converted between the screen,
@@ -39,12 +40,7 @@ function geometryOf(clip: Clip, sequence: Sequence, stageWidth: number, stageHei
     return {
         stageWidth, stageHeight,
         picture: {x: (stageWidth - width) / 2, y: (stageHeight - height) / 2, width, height},
-        motion: {
-            x: resolved.motion.x * unit,
-            y: resolved.motion.y * unit,
-            scale: resolved.motion.scale / 100,
-            rotation: resolved.motion.rotation
-        },
+        motion: {x: resolved.motion.x * unit, y: resolved.motion.y * unit, scale: resolved.motion.scale / 100, rotation: resolved.motion.rotation},
         sequenceWidth: sequence.settings.width
     };
 }
@@ -59,19 +55,16 @@ function toPicture(geometry: Geometry, stageX: number, stageY: number): MaskPoin
     const localX = rotatedX / geometry.motion.scale + geometry.stageWidth / 2;
     const localY = rotatedY / geometry.motion.scale + geometry.stageHeight / 2;
 
-    return {
-        x: (localX - geometry.picture.x) / geometry.picture.width,
-        y: (localY - geometry.picture.y) / geometry.picture.height
-    };
+    return {x: (localX - geometry.picture.x) / geometry.picture.width, y: (localY - geometry.picture.y) / geometry.picture.height};
 }
 
 function clamp01(value: number): number {
     return Math.min(1.5, Math.max(-0.5, value));
 }
 
-type DragKind = { type: 'move' } | { type: 'point'; index: number } | { type: 'corner'; sx: number; sy: number };
+type DragKind = {type: 'move'} | {type: 'point'; index: number} | {type: 'corner'; sx: number; sy: number};
 
-export default function StellarMaskOverlay({stageWidth, stageHeight}: { stageWidth: number; stageHeight: number }) {
+export default function StellarMaskOverlay({stageWidth, stageHeight}: {stageWidth: number; stageHeight: number}) {
     const sequence = useStore(editorStore, (state) => getShownSequence(state));
     const selection = useStore(editorStore, (state) => state.selection);
     const tool = useStore(editorStore, (state) => state.tool);
@@ -79,7 +72,7 @@ export default function StellarMaskOverlay({stageWidth, stageHeight}: { stageWid
     const selectedMaskId = useStore(maskUiStore, (state) => state.selectedMaskId);
     const [drawing, setDrawing] = useState<MaskPoint[] | null>(null);
     const [hover, setHover] = useState<MaskPoint | null>(null);
-    const drag = useRef<{ kind: DragKind; start: MaskPoint; original: Mask } | null>(null);
+    const drag = useRef<{kind: DragKind; start: MaskPoint; original: Mask} | null>(null);
     const svgRef = useRef<SVGSVGElement | null>(null);
     const clip = sequence && selection[0] ? findClip(sequence, selection[0]) : undefined;
     const track = sequence && clip ? findTrack(sequence, clip.trackId) : undefined;
@@ -119,7 +112,7 @@ export default function StellarMaskOverlay({stageWidth, stageHeight}: { stageWid
     const masks = activeClip.masks ?? [];
     void playhead;
 
-    function stagePoint(event: ReactPointerEvent): { x: number; y: number } {
+    function stagePoint(event: ReactPointerEvent): {x: number; y: number} {
         const box = (svgRef.current as SVGSVGElement).getBoundingClientRect();
 
         return {x: event.clientX - box.left, y: event.clientY - box.top};
@@ -172,12 +165,7 @@ export default function StellarMaskOverlay({stageWidth, stageHeight}: { stageWid
         if (current.kind.type === 'point') {
             const index = current.kind.index;
 
-            return {
-                points: mask.points.map((item, position) => (position === index ? {
-                    x: clamp01(point.x),
-                    y: clamp01(point.y)
-                } : item))
-            };
+            return {points: mask.points.map((item, position) => (position === index ? {x: clamp01(point.x), y: clamp01(point.y)} : item))};
         }
 
         // A corner: the opposite corner stays where it is.
@@ -199,18 +187,12 @@ export default function StellarMaskOverlay({stageWidth, stageHeight}: { stageWid
 
     function outline(mask: Mask, isSelected: boolean) {
         const stroke = isSelected ? accent : 'rgba(255,255,255,0.7)';
-        const common = {
-            fill: isSelected ? 'rgba(106,167,255,0.08)' : 'none',
-            stroke,
-            strokeWidth: isSelected ? 1.6 : 1,
-            vectorEffect: 'non-scaling-stroke' as const
-        };
+        const common = {fill: isSelected ? 'rgba(106,167,255,0.08)' : 'none', stroke, strokeWidth: isSelected ? 1.6 : 1, vectorEffect: 'non-scaling-stroke' as const};
 
         if (mask.shape === 'polygon') {
             const points = mask.points.map((point) => `${toScreenX(point.x)},${toScreenY(point.y)}`).join(' ');
 
-            return <polygon points={points} {...common}
-                            onPointerDown={(event) => startDrag(event, mask, {type: 'move'})}/>;
+            return <polygon points={points} {...common} onPointerDown={(event) => startDrag(event, mask, {type: 'move'})} />;
         }
 
         const cx = toScreenX(mask.cx);
@@ -220,19 +202,16 @@ export default function StellarMaskOverlay({stageWidth, stageHeight}: { stageWid
         const rotate = `rotate(${mask.rotation} ${cx} ${cy})`;
 
         return mask.shape === 'ellipse'
-            ? <ellipse cx={cx} cy={cy} rx={width / 2} ry={height / 2} transform={rotate} {...common}
-                       onPointerDown={(event) => startDrag(event, mask, {type: 'move'})}/>
-            : <rect x={cx - width / 2} y={cy - height / 2} width={width} height={height} transform={rotate} {...common}
-                    onPointerDown={(event) => startDrag(event, mask, {type: 'move'})}/>;
+            ? <ellipse cx={cx} cy={cy} rx={width / 2} ry={height / 2} transform={rotate} {...common} onPointerDown={(event) => startDrag(event, mask, {type: 'move'})} />
+            : <rect x={cx - width / 2} y={cy - height / 2} width={width} height={height} transform={rotate} {...common} onPointerDown={(event) => startDrag(event, mask, {type: 'move'})} />;
     }
 
     function handles(mask: Mask) {
         if (mask.shape === 'polygon') {
             return mask.points.map((point, index) => (
                 <rect
-                    key={index} x={toScreenX(point.x) - HANDLE} y={toScreenY(point.y) - HANDLE} width={HANDLE * 2}
-                    height={HANDLE * 2}
-                    fill="white" stroke={accent} className="cursor-move"
+                    key={index} x={toScreenX(point.x) - HANDLE} y={toScreenY(point.y) - HANDLE} width={HANDLE * 2} height={HANDLE * 2}
+                    fill="white" stroke={accent} className={styles.rect}
                     onPointerDown={(event) => startDrag(event, mask, {type: 'point', index})}
                     onDoubleClick={() => {
                         if (mask.points.length > 3) {
@@ -257,8 +236,7 @@ export default function StellarMaskOverlay({stageWidth, stageHeight}: { stageWid
 
             return (
                 <rect
-                    key={`${sx}${sy}`} x={x - HANDLE} y={y - HANDLE} width={HANDLE * 2} height={HANDLE * 2} fill="white"
-                    stroke={accent} className="cursor-nwse-resize"
+                    key={`${sx}${sy}`} x={x - HANDLE} y={y - HANDLE} width={HANDLE * 2} height={HANDLE * 2} fill="white" stroke={accent} className={styles.rect2}
                     onPointerDown={(event) => startDrag(event, mask, {type: 'corner', sx, sy})}
                 />
             );
@@ -268,7 +246,7 @@ export default function StellarMaskOverlay({stageWidth, stageHeight}: { stageWid
     return (
         <svg
             ref={svgRef}
-            className={`absolute inset-0 h-full w-full ${isPen ? 'cursor-crosshair' : ''}`}
+            className={`${styles.overlay} ${isPen ? styles.overlayIsPen : ''}`}
             style={{pointerEvents: isPen || masks.length > 0 ? 'auto' : 'none'}}
             data-theme="StellarMaskOverlay.overlay"
             onPointerDown={(event) => {
@@ -319,19 +297,16 @@ export default function StellarMaskOverlay({stageWidth, stageHeight}: { stageWid
                 {masks.map((mask) => (
                     <g key={mask.id} opacity={mask.enabled ? 1 : 0.35}>{outline(mask, mask.id === selectedMaskId)}</g>
                 ))}
-                {masks.filter((mask) => mask.id === selectedMaskId).map((mask) => <g
-                    key={`h-${mask.id}`}>{handles(mask)}</g>)}
+                {masks.filter((mask) => mask.id === selectedMaskId).map((mask) => <g key={`h-${mask.id}`}>{handles(mask)}</g>)}
 
                 {drawing ? (
                     <g>
                         <polyline
                             points={[...drawing, ...(hover ? [hover] : [])].map((point) => `${toScreenX(point.x)},${toScreenY(point.y)}`).join(' ')}
-                            fill="none" stroke={accent} strokeWidth="1.5" strokeDasharray="4 3"
-                            vectorEffect="non-scaling-stroke"
+                            fill="none" stroke={accent} strokeWidth="1.5" strokeDasharray="4 3" vectorEffect="non-scaling-stroke"
                         />
                         {drawing.map((point, index) => (
-                            <rect key={index} x={toScreenX(point.x) - 3} y={toScreenY(point.y) - 3} width="6" height="6"
-                                  fill={index === 0 ? accent : 'white'} stroke={accent}/>
+                            <rect key={index} x={toScreenX(point.x) - 3} y={toScreenY(point.y) - 3} width="6" height="6" fill={index === 0 ? accent : 'white'} stroke={accent} />
                         ))}
                     </g>
                 ) : null}

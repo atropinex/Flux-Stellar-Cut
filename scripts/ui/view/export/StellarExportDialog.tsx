@@ -1,32 +1,18 @@
 import {useEffect, useMemo, useState, type ReactNode} from 'react';
 import type {ExportSettings} from '../../../common/stellar/StellarContract';
-import {
-    AUDIO_BITRATES,
-    AUDIO_SAMPLE_RATES,
-    ENCODE_SPEEDS,
-    EXPORT_FORMATS,
-    EXPORT_PRESETS,
-    findExportFormat
-} from '../../../common/stellar/StellarExportFormats';
+import {AUDIO_BITRATES, AUDIO_SAMPLE_RATES, ENCODE_SPEEDS, EXPORT_FORMATS, EXPORT_PRESETS, findExportFormat} from '../../../common/stellar/StellarExportFormats';
 import {formatBytes, formatDuration} from '../../../common/utils/StellarTimeHelper';
 import {editorStore, getActiveSequence} from '../../controller/project/StellarEditor.Store';
 import {useStore} from '../../controller/store/StellarStore';
 import {
-    applyPreset,
-    cancelExport,
-    defaultExportSettings,
-    exportLength,
-    exportStore,
-    isExportRunning,
-    presetsFor,
-    resetExportState,
-    startExport
+    applyPreset, cancelExport, defaultExportSettings, exportLength, exportStore, isExportRunning, presetsFor, resetExportState, startExport
 } from '../../controller/project/StellarExport.Controller';
 import StellarDialog from '../common/StellarDialog';
 import StellarIcon from '../common/StellarIcon';
 import {BUTTON, BUTTON_PRIMARY, INPUT, LABEL} from '../common/StellarStyles';
+import styles from './StellarExportDialog.module.css';
 
-function Field({label, children}: { label: string; children: ReactNode }) {
+function Field({label, children}: {label: string; children: ReactNode}) {
     return (
         <div>
             <label className={LABEL}>{label}</label>
@@ -135,7 +121,7 @@ export default function StellarExportDialog() {
     if (!settings || !sequence || !format) {
         return (
             <StellarDialog title="Export" onClose={close}>
-                <p className="text-dim">Open a sequence to export it.</p>
+                <p className={styles.textP}>Open a sequence to export it.</p>
             </StellarDialog>
         );
     }
@@ -157,43 +143,36 @@ export default function StellarExportDialog() {
                     <button type="button" className={BUTTON} onClick={cancelExport}>Cancel Export</button>
                 ) : (
                     <>
-                        <button type="button" className={BUTTON}
-                                onClick={close}>{finished ? 'Close' : 'Cancel'}</button>
+                        <button type="button" className={BUTTON} onClick={close}>{finished ? 'Close' : 'Cancel'}</button>
                         <button
                             type="button"
                             className={BUTTON_PRIMARY}
                             disabled={!hasClips || !settings.outputPath || isExportRunning()}
                             onClick={() => void startExport(settings)}
                         >
-                            <StellarIcon name="export" size={14}/> Export
+                            <StellarIcon name="export" size={14} /> Export
                         </button>
                     </>
                 )
             }
         >
-            <div className="flex flex-col gap-4" data-theme="StellarExport.panel">
-                {!hasClips ?
-                    <p className="rounded-lg bg-warning/15 px-3 py-2 text-[12px] text-warning">The sequence is empty.
-                        Add clips to the timeline first.</p> : null}
+            <div className={styles.panel} data-theme="StellarExport.panel">
+                {!hasClips ? <p className={styles.textP2}>The sequence is empty. Add clips to the timeline first.</p> : null}
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className={styles.grid}>
                     <Field label="Format">
-                        <select className={INPUT} value={settings.formatId} disabled={running}
-                                onChange={(event) => changeFormat(event.target.value)}>
+                        <select className={INPUT} value={settings.formatId} disabled={running} onChange={(event) => changeFormat(event.target.value)}>
                             <optgroup label="Video">
-                                {EXPORT_FORMATS.filter((item) => item.type === 'video').map((item) => <option
-                                    key={item.id} value={item.id}>{item.label} (.{item.extension})</option>)}
+                                {EXPORT_FORMATS.filter((item) => item.type === 'video').map((item) => <option key={item.id} value={item.id}>{item.label} (.{item.extension})</option>)}
                             </optgroup>
                             <optgroup label="Animation">
-                                {EXPORT_FORMATS.filter((item) => item.type === 'animation').map((item) => <option
-                                    key={item.id} value={item.id}>{item.label} (.{item.extension})</option>)}
+                                {EXPORT_FORMATS.filter((item) => item.type === 'animation').map((item) => <option key={item.id} value={item.id}>{item.label} (.{item.extension})</option>)}
                             </optgroup>
                             <optgroup label="Audio only">
-                                {EXPORT_FORMATS.filter((item) => item.type === 'audio').map((item) => <option
-                                    key={item.id} value={item.id}>{item.label} (.{item.extension})</option>)}
+                                {EXPORT_FORMATS.filter((item) => item.type === 'audio').map((item) => <option key={item.id} value={item.id}>{item.label} (.{item.extension})</option>)}
                             </optgroup>
                         </select>
-                        <p className="mt-1 text-[11px] text-dim">{format.description}</p>
+                        <p className={styles.textP3}>{format.description}</p>
                     </Field>
                     <Field label="Preset">
                         <select
@@ -211,74 +190,56 @@ export default function StellarExportDialog() {
                 </div>
 
                 <Field label="Output file">
-                    <div className="flex gap-2">
-                        <input className={INPUT} readOnly value={settings.outputPath}
-                               placeholder="Choose where to save..." onClick={() => void chooseFile()}/>
+                    <div className={styles.row}>
+                        <input className={INPUT} readOnly value={settings.outputPath} placeholder="Choose where to save..." onClick={() => void chooseFile()} />
                         <button type="button" className={BUTTON} disabled={running} onClick={() => void chooseFile()}>
-                            <StellarIcon name="folder" size={14}/> Browse
+                            <StellarIcon name="folder" size={14} /> Browse
                         </button>
                     </div>
                 </Field>
 
                 <Field label="Range">
-                    <select className={INPUT} value={settings.range} disabled={running}
-                            onChange={(event) => update({range: event.target.value as ExportSettings['range']})}>
+                    <select className={INPUT} value={settings.range} disabled={running} onChange={(event) => update({range: event.target.value as ExportSettings['range']})}>
                         <option value="sequence">Entire sequence</option>
-                        <option value="inOut" disabled={!hasRange}>Sequence In to
-                            Out{hasRange ? '' : ' (set In and Out marks first)'}</option>
+                        <option value="inOut" disabled={!hasRange}>Sequence In to Out{hasRange ? '' : ' (set In and Out marks first)'}</option>
                     </select>
                 </Field>
 
                 {isVideoFormat ? (
-                    <section className="rounded-xl border border-line p-3">
-                        <h3 className="mb-3 text-[12px] font-semibold">Video</h3>
-                        <div className="grid grid-cols-4 gap-3">
+                    <section className={styles.section}>
+                        <h3 className={styles.textH3}>Video</h3>
+                        <div className={styles.grid2}>
                             <Field label="Width">
-                                <input type="number" className={INPUT} min={16} max={8192} step={2}
-                                       value={settings.width} disabled={running}
-                                       onChange={(event) => update({width: Math.max(16, Number(event.target.value))})}/>
+                                <input type="number" className={INPUT} min={16} max={8192} step={2} value={settings.width} disabled={running} onChange={(event) => update({width: Math.max(16, Number(event.target.value))})} />
                             </Field>
                             <Field label="Height">
-                                <input type="number" className={INPUT} min={16} max={8192} step={2}
-                                       value={settings.height} disabled={running}
-                                       onChange={(event) => update({height: Math.max(16, Number(event.target.value))})}/>
+                                <input type="number" className={INPUT} min={16} max={8192} step={2} value={settings.height} disabled={running} onChange={(event) => update({height: Math.max(16, Number(event.target.value))})} />
                             </Field>
                             <Field label="Frame rate">
-                                <input type="number" className={INPUT} min={1} max={120} step={0.001}
-                                       value={Number(settings.frameRate.toFixed(3))} disabled={running}
-                                       onChange={(event) => update({frameRate: Math.max(1, Number(event.target.value))})}/>
+                                <input type="number" className={INPUT} min={1} max={120} step={0.001} value={Number(settings.frameRate.toFixed(3))} disabled={running} onChange={(event) => update({frameRate: Math.max(1, Number(event.target.value))})} />
                             </Field>
                             <Field label="Encoding">
-                                <select className={INPUT} value={settings.encodeSpeed}
-                                        disabled={running || format.type === 'animation'}
-                                        onChange={(event) => update({encodeSpeed: event.target.value as ExportSettings['encodeSpeed']})}>
-                                    {ENCODE_SPEEDS.map((speed) => <option key={speed.id}
-                                                                          value={speed.id}>{speed.label}</option>)}
+                                <select className={INPUT} value={settings.encodeSpeed} disabled={running || format.type === 'animation'} onChange={(event) => update({encodeSpeed: event.target.value as ExportSettings['encodeSpeed']})}>
+                                    {ENCODE_SPEEDS.map((speed) => <option key={speed.id} value={speed.id}>{speed.label}</option>)}
                                 </select>
                             </Field>
                         </div>
 
                         {format.supportsCrf || format.supportsBitrate ? (
-                            <div className="mt-3 grid grid-cols-[160px_1fr] items-end gap-3">
+                            <div className={styles.grid3}>
                                 <Field label="Rate control">
-                                    <select className={INPUT} value={settings.rateControl} disabled={running}
-                                            onChange={(event) => update({rateControl: event.target.value as ExportSettings['rateControl']})}>
+                                    <select className={INPUT} value={settings.rateControl} disabled={running} onChange={(event) => update({rateControl: event.target.value as ExportSettings['rateControl']})}>
                                         {format.supportsCrf ? <option value="crf">Quality (CRF)</option> : null}
-                                        {format.supportsBitrate ?
-                                            <option value="bitrate">Target bitrate</option> : null}
+                                        {format.supportsBitrate ? <option value="bitrate">Target bitrate</option> : null}
                                     </select>
                                 </Field>
                                 {settings.rateControl === 'crf' && format.supportsCrf ? (
                                     <Field label={`Quality: ${settings.crf} (lower is better)`}>
-                                        <input type="range" className="w-full" min={format.crfMin} max={format.crfMax}
-                                               value={settings.crf} disabled={running}
-                                               onChange={(event) => update({crf: Number(event.target.value)})}/>
+                                        <input type="range" className={styles.boxInput} min={format.crfMin} max={format.crfMax} value={settings.crf} disabled={running} onChange={(event) => update({crf: Number(event.target.value)})} />
                                     </Field>
                                 ) : (
                                     <Field label="Bitrate (kbps)">
-                                        <input type="number" className={INPUT} min={100} max={200000} step={100}
-                                               value={settings.videoKbps} disabled={running}
-                                               onChange={(event) => update({videoKbps: Math.max(100, Number(event.target.value))})}/>
+                                        <input type="number" className={INPUT} min={100} max={200000} step={100} value={settings.videoKbps} disabled={running} onChange={(event) => update({videoKbps: Math.max(100, Number(event.target.value))})} />
                                     </Field>
                                 )}
                             </div>
@@ -287,9 +248,9 @@ export default function StellarExportDialog() {
                 ) : null}
 
                 {isVideoFormat && format.type !== 'animation' ? (
-                    <section className="rounded-xl border border-line p-3" data-theme="StellarExport.render">
-                        <h3 className="mb-3 text-[12px] font-semibold">Render settings</h3>
-                        <div className="grid grid-cols-[220px_1fr] items-start gap-4">
+                    <section className={styles.section} data-theme="StellarExport.render">
+                        <h3 className={styles.textH3}>Render settings</h3>
+                        <div className={styles.grid4}>
                             <Field label="Frame interpolation">
                                 <select
                                     className={INPUT}
@@ -301,21 +262,18 @@ export default function StellarExportDialog() {
                                     <option value="blending">Frame Blending</option>
                                     <option value="opticalFlow">Optical Flow</option>
                                 </select>
-                                <p className="mt-1 text-[11px] text-dim">Used when the frame rate of a clip is not the
-                                    frame rate of the export.</p>
+                                <p className={styles.textP3}>Used when the frame rate of a clip is not the frame rate of the export.</p>
                             </Field>
-                            <div className="flex flex-col gap-2 pt-5 text-[12px]">
-                                <label className="flex items-center gap-2">
-                                    <input type="checkbox" checked={settings.maxDepth} disabled={running}
-                                           onChange={(event) => update({maxDepth: event.target.checked})}/>
+                            <div className={styles.column}>
+                                <label className={styles.rowLabel}>
+                                    <input type="checkbox" checked={settings.maxDepth} disabled={running} onChange={(event) => update({maxDepth: event.target.checked})} />
                                     Render at Maximum Depth
-                                    <span className="text-dim">(10-bit, for ProRes 4444 and DNxHR HQX)</span>
+                                    <span className={styles.textP}>(10-bit, for ProRes 4444 and DNxHR HQX)</span>
                                 </label>
-                                <label className="flex items-center gap-2">
-                                    <input type="checkbox" checked={settings.maxQuality} disabled={running}
-                                           onChange={(event) => update({maxQuality: event.target.checked})}/>
+                                <label className={styles.rowLabel}>
+                                    <input type="checkbox" checked={settings.maxQuality} disabled={running} onChange={(event) => update({maxQuality: event.target.checked})} />
                                     Use Maximum Render Quality
-                                    <span className="text-dim">(best scaling, slower)</span>
+                                    <span className={styles.textP}>(best scaling, slower)</span>
                                 </label>
                             </div>
                         </div>
@@ -323,27 +281,22 @@ export default function StellarExportDialog() {
                 ) : null}
 
                 {isAudioFormat ? (
-                    <section className="rounded-xl border border-line p-3">
-                        <h3 className="mb-3 text-[12px] font-semibold">Audio</h3>
-                        <div className="grid grid-cols-3 gap-3">
+                    <section className={styles.section}>
+                        <h3 className={styles.textH3}>Audio</h3>
+                        <div className={styles.grid5}>
                             <Field label="Sample rate">
-                                <select className={INPUT} value={settings.sampleRate} disabled={running}
-                                        onChange={(event) => update({sampleRate: Number(event.target.value)})}>
-                                    {AUDIO_SAMPLE_RATES.map((rate) => <option key={rate}
-                                                                              value={rate}>{rate / 1000} kHz</option>)}
+                                <select className={INPUT} value={settings.sampleRate} disabled={running} onChange={(event) => update({sampleRate: Number(event.target.value)})}>
+                                    {AUDIO_SAMPLE_RATES.map((rate) => <option key={rate} value={rate}>{rate / 1000} kHz</option>)}
                                 </select>
                             </Field>
                             <Field label="Channels">
-                                <select className={INPUT} value={settings.channels} disabled={running}
-                                        onChange={(event) => update({channels: Number(event.target.value) as 1 | 2})}>
+                                <select className={INPUT} value={settings.channels} disabled={running} onChange={(event) => update({channels: Number(event.target.value) as 1 | 2})}>
                                     <option value={2}>Stereo</option>
                                     <option value={1}>Mono</option>
                                 </select>
                             </Field>
                             <Field label="Bitrate">
-                                <select className={INPUT} value={settings.audioKbps}
-                                        disabled={running || !format.supportsAudioBitrate}
-                                        onChange={(event) => update({audioKbps: Number(event.target.value)})}>
+                                <select className={INPUT} value={settings.audioKbps} disabled={running || !format.supportsAudioBitrate} onChange={(event) => update({audioKbps: Number(event.target.value)})}>
                                     {AUDIO_BITRATES.map((rate) => <option key={rate} value={rate}>{rate} kbps</option>)}
                                 </select>
                             </Field>
@@ -351,39 +304,35 @@ export default function StellarExportDialog() {
                     </section>
                 ) : null}
 
-                <p className="text-[12px] text-dim">
+                <p className={styles.textP4}>
                     Length {formatDuration(seconds)} · about {formatBytes(estimateBytes(settings, seconds))}
                 </p>
 
                 {job.progress || job.error ? (
-                    <section className="rounded-xl border border-line p-3" data-theme="StellarExport.progress">
+                    <section className={styles.section} data-theme="StellarExport.progress">
                         {job.progress ? (
                             <>
-                                <div className="mb-2 flex items-center justify-between text-[12px]">
+                                <div className={styles.row2}>
                                     <span>
                                         {job.progress.status === 'running' ? 'Exporting...' : job.progress.status === 'done' ? 'Export finished' : job.progress.status === 'cancelled' ? 'Export cancelled' : 'Export failed'}
                                     </span>
-                                    <span className="text-dim">
+                                    <span className={styles.textP}>
                                         {Math.round(job.progress.percent)}%
                                         {job.progress.etaSeconds !== null && job.progress.status === 'running' ? ` · ${formatDuration(job.progress.etaSeconds)} left` : ''}
                                         {job.progress.speed ? ` · ${job.progress.speed.toFixed(1)}x` : ''}
                                     </span>
                                 </div>
-                                <div className="h-2 overflow-hidden rounded-full bg-ink/10">
-                                    <div
-                                        className={`h-full rounded-full transition-[width] ${job.progress.status === 'error' ? 'bg-danger' : 'bg-accent'}`}
-                                        style={{width: `${job.progress.percent}%`}}/>
+                                <div className={styles.div}>
+                                    <div className={`${styles.div2} ${job.progress.status === 'error' ? styles.divVariant : styles.divVariant2}`} style={{width: `${job.progress.percent}%`}} />
                                 </div>
                                 {job.progress.status === 'done' ? (
-                                    <button type="button" className={`${BUTTON} mt-3`}
-                                            onClick={() => window.api.revealInFolder(job.progress?.outputPath ?? '')}>
-                                        <StellarIcon name="reveal" size={14}/> Show in Folder
+                                    <button type="button" className={`${styles.button} ${BUTTON}`} onClick={() => window.api.revealInFolder(job.progress?.outputPath ?? '')}>
+                                        <StellarIcon name="reveal" size={14} /> Show in Folder
                                     </button>
                                 ) : null}
                             </>
                         ) : null}
-                        {job.error ?
-                            <p className="mt-2 whitespace-pre-wrap text-[12px] text-danger">{job.error}</p> : null}
+                        {job.error ? <p className={styles.textP5}>{job.error}</p> : null}
                     </section>
                 ) : null}
             </div>

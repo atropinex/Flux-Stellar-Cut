@@ -5,31 +5,9 @@ import {createId, snapToFrame} from '../../../common/utils/StellarTimeHelper';
 import {editorStore, getActiveSequence, getMedia, type ToolId} from '../project/StellarEditor.Store';
 import {commitSequence, showToast} from '../project/StellarProject.Controller';
 import {
-    addClips,
-    addTrack,
-    clearRange,
-    clipsUnderTime,
-    extractRange,
-    findClip,
-    findTrack,
-    liftClips,
-    liftRange,
-    linkClips,
-    nextEditPoint,
-    pasteClips,
-    placeMedia,
-    previousEditPoint,
-    removeTrack,
-    rippleDeleteClips,
-    rippleTrimToTime,
-    sequenceDuration,
-    splitAllTracksAt,
-    splitClipsAt,
-    tracksOfType,
-    unlinkClips,
-    updateClips,
-    updateTrack,
-    withLinkedClips
+    addClips, addTrack, clearRange, clipsUnderTime, extractRange, findClip, findTrack, liftClips, liftRange, linkClips, nextEditPoint, pasteClips,
+    placeMedia, previousEditPoint, removeTrack, rippleDeleteClips, rippleTrimToTime, sequenceDuration, splitAllTracksAt,
+    splitClipsAt, tracksOfType, unlinkClips, updateClips, updateTrack, withLinkedClips
 } from './StellarTimeline.Controller';
 import {seekTo} from '../playback/StellarPlayback.Controller';
 import {addTransition, applySpeed} from './StellarClipEdit.Controller';
@@ -278,14 +256,7 @@ export function addMarker(color: string = MARKER_COLORS[0].color, time: number =
 
     commitSequence('Add marker', (current) => ({
         ...current,
-        markers: [...current.markers, {
-            id,
-            time,
-            duration: 0,
-            name: `Marker ${current.markers.length + 1}`,
-            comment: '',
-            color
-        }]
+        markers: [...current.markers, {id, time, duration: 0, name: `Marker ${current.markers.length + 1}`, comment: '', color}]
     }));
 
     return id;
@@ -299,10 +270,7 @@ export function updateMarker(id: string, changes: Partial<Marker>): void {
 }
 
 export function deleteMarker(id: string): void {
-    commitSequence('Delete marker', (current) => ({
-        ...current,
-        markers: current.markers.filter((marker) => marker.id !== id)
-    }));
+    commitSequence('Delete marker', (current) => ({...current, markers: current.markers.filter((marker) => marker.id !== id)}));
 }
 
 export function goToNextMarker(direction: 'previous' | 'next'): void {
@@ -431,10 +399,7 @@ export function toggleClipsEnabled(): void {
         return;
     }
 
-    commitSequence('Enable / disable clip', (current) => updateClips(current, ids, (clip) => ({
-        ...clip,
-        enabled: !clip.enabled
-    })));
+    commitSequence('Enable / disable clip', (current) => updateClips(current, ids, (clip) => ({...clip, enabled: !clip.enabled})));
 }
 
 export function nudgeSelection(direction: -1 | 1): void {
@@ -452,10 +417,7 @@ export function nudgeSelection(direction: -1 | 1): void {
     commitSequence('Nudge', (current) => {
         const moving = new Set(ids);
         let clips = current.clips.filter((clip) => !moving.has(clip.id));
-        const moved = current.clips.filter((clip) => moving.has(clip.id)).map((clip) => ({
-            ...clip,
-            start: clip.start + delta
-        }));
+        const moved = current.clips.filter((clip) => moving.has(clip.id)).map((clip) => ({...clip, start: clip.start + delta}));
 
         clips = addClips({...current, clips}, moved, 'overwrite', 0, 0).clips;
 
@@ -559,14 +521,7 @@ export function deleteTrack(trackId: string): void {
     commitSequence('Delete track', (current) => removeTrack(current, trackId));
 }
 
-export function changeTrack(trackId: string, changes: Partial<{
-    muted: boolean;
-    locked: boolean;
-    solo: boolean;
-    name: string;
-    volumeDb: number;
-    pan: number
-}>): void {
+export function changeTrack(trackId: string, changes: Partial<{ muted: boolean; locked: boolean; solo: boolean; name: string; volumeDb: number; pan: number }>): void {
     commitSequence('Track settings', (current) => updateTrack(current, trackId, changes));
 }
 
@@ -617,10 +572,7 @@ export function zoomToFit(viewportWidth: number = timelineViewportWidth): void {
     const sequence = sequenceOrNull();
     const length = sequence ? Math.max(sequenceDuration(sequence), 5) : 30;
 
-    editorStore.set({
-        pixelsPerSecond: Math.max(MIN_PIXELS_PER_SECOND, Math.min(MAX_PIXELS_PER_SECOND, (viewportWidth - 40) / length)),
-        scrollX: 0
-    });
+    editorStore.set({pixelsPerSecond: Math.max(MIN_PIXELS_PER_SECOND, Math.min(MAX_PIXELS_PER_SECOND, (viewportWidth - 40) / length)), scrollX: 0});
 }
 
 // === Changes that show while dragging, then become one undo step === //

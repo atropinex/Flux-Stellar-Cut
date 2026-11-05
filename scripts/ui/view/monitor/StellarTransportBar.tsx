@@ -1,5 +1,6 @@
 import type {ReactNode} from 'react';
 import StellarIcon, {type IconName} from '../common/StellarIcon';
+import styles from './StellarTransportBar.module.css';
 
 export interface TransportButton {
     icon: IconName;
@@ -10,15 +11,11 @@ export interface TransportButton {
 }
 
 /** A row of round buttons under a monitor. Gaps in the list are spaces. */
-export default function StellarTransportBar({buttons, left, right}: {
-    buttons: (TransportButton | null)[];
-    left?: ReactNode;
-    right?: ReactNode
-}) {
+export default function StellarTransportBar({buttons, left, right}: {buttons: (TransportButton | null)[]; left?: ReactNode; right?: ReactNode}) {
     return (
-        <div className="flex items-center gap-2 px-3 pb-3" data-theme="StellarMonitor.transport">
-            <div className="flex min-w-0 flex-1 items-center">{left}</div>
-            <div className="flex items-center gap-0.5">
+        <div className={styles.transport} data-theme="StellarMonitor.transport">
+            <div className={styles.row}>{left}</div>
+            <div className={styles.row2}>
                 {buttons.map((button, index) =>
                     button ? (
                         <button
@@ -27,19 +24,18 @@ export default function StellarTransportBar({buttons, left, right}: {
                             title={button.title}
                             disabled={button.disabled}
                             onClick={button.onClick}
-                            className={`flex h-8 w-8 items-center justify-center rounded-lg transition-colors disabled:opacity-35 ${
-                                button.active ? 'bg-accent text-accent-ink' : 'text-ink hover:bg-surface-hover'
+                            className={`${styles.rowButton} ${
+                                button.active ? styles.textButtonActive : styles.textButtonNotActive
                             }`}
                         >
-                            <StellarIcon name={button.icon} size={16}
-                                         filled={button.icon === 'play' || button.icon === 'pause'}/>
+                            <StellarIcon name={button.icon} size={16} filled={button.icon === 'play' || button.icon === 'pause'} />
                         </button>
                     ) : (
-                        <span key={`gap-${index}`} className="mx-1 h-4 w-px bg-line"/>
+                        <span key={`gap-${index}`} className={styles.span} />
                     )
                 )}
             </div>
-            <div className="flex min-w-0 flex-1 items-center justify-end">{right}</div>
+            <div className={styles.row3}>{right}</div>
         </div>
     );
 }

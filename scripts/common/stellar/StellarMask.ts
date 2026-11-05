@@ -73,12 +73,7 @@ export function maskBounds(mask: Mask): { left: number; top: number; right: numb
         return {left: Math.min(...xs), top: Math.min(...ys), right: Math.max(...xs), bottom: Math.max(...ys)};
     }
 
-    return {
-        left: mask.cx - mask.width / 2,
-        top: mask.cy - mask.height / 2,
-        right: mask.cx + mask.width / 2,
-        bottom: mask.cy + mask.height / 2
-    };
+    return {left: mask.cx - mask.width / 2, top: mask.cy - mask.height / 2, right: mask.cx + mask.width / 2, bottom: mask.cy + mask.height / 2};
 }
 
 /** A mask with fewer than three points cannot be drawn. */

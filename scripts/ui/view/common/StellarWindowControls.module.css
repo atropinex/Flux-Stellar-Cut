@@ -1,0 +1,48 @@
+/* ------ StellarWindowControls ------ */
+
+.root {
+    display: flex;
+    align-items: center;
+}
+
+.rowButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 26px;
+    width: 33px;
+
+    color: var(--sc-dim);
+
+    transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+}
+
+.rowButton:hover {
+    color: var(--sc-ink);
+
+    background-color: var(--sc-surfaceHover);
+}
+
+.rowButton2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 26px;
+    width: 33px;
+
+    color: var(--sc-dim);
+
+    transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+}
+
+.rowButton2:hover {
+    color: #fff;
+
+    background-color: var(--sc-danger);
+}

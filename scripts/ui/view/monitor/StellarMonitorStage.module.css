@@ -1,0 +1,24 @@
+/* ------ StellarMonitorStage ------ */
+
+.stage {
+    position: relative;
+
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 0;
+
+    padding: 10px;
+}
+
+.div {
+    position: relative;
+
+    overflow: hidden;
+
+    border-radius: 5px;
+    background-color: #000;
+    box-shadow: 0 6px 30px rgba(0,0,0,0.5);
+}

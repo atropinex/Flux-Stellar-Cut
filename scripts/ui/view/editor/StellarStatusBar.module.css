@@ -1,0 +1,26 @@
+/* ------ StellarStatusBar ------ */
+
+.root {
+    position: relative;
+    z-index: 10;
+
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 13px;
+
+    height: 23px;
+
+    padding-inline: 13px;
+
+    font-size: 11px;
+    color: var(--sc-dim);
+}
+
+.textSpan {
+    color: var(--sc-warning);
+}
+
+.span {
+    margin-left: auto;
+}

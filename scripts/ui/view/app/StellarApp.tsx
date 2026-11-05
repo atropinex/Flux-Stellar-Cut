@@ -16,8 +16,8 @@ export default function StellarApp() {
     }
 
     if (context.view === 'editor' && context.projectPath) {
-        return <StellarEditor projectPath={context.projectPath}/>;
+        return <StellarEditor projectPath={context.projectPath} />;
     }
 
-    return <StellarLauncher/>;
+    return <StellarLauncher />;
 }

@@ -7,6 +7,7 @@ import {addMarker, deleteMarker, updateMarker} from '../../controller/timeline/S
 import {BUTTON, INPUT} from '../common/StellarStyles';
 import StellarIcon from '../common/StellarIcon';
 import {EmptyPanel} from '../common/StellarFields';
+import styles from './StellarMarkersPanel.module.css';
 
 // Every marker of the sequence. Click one to go there. The color, name and comment are edited here.
 
@@ -15,42 +16,35 @@ export default function StellarMarkersPanel() {
     const playhead = useStore(editorStore, (state) => state.playhead);
 
     if (!sequence) {
-        return <EmptyPanel icon={<StellarIcon name="marker" size={28}/>}>Open a sequence to see its
-            markers.</EmptyPanel>;
+        return <EmptyPanel icon={<StellarIcon name="marker" size={28} />}>Open a sequence to see its markers.</EmptyPanel>;
     }
 
     const markers = [...sequence.markers].sort((first, second) => first.time - second.time);
     const frameRate = sequence.settings.frameRate;
 
     return (
-        <div className="flex h-full flex-col" data-theme="StellarMarkers.panel">
-            <div className="flex items-center gap-2 border-b border-line p-2">
-                <span
-                    className="text-[12px] text-dim">{markers.length} {markers.length === 1 ? 'marker' : 'markers'}</span>
-                <button type="button" className={`${BUTTON} ml-auto`} onClick={() => addMarker()}>
-                    <StellarIcon name="marker" size={13}/> Add Marker
+        <div className={styles.panel} data-theme="StellarMarkers.panel">
+            <div className={styles.row}>
+                <span className={styles.textSpan}>{markers.length} {markers.length === 1 ? 'marker' : 'markers'}</span>
+                <button type="button" className={`${styles.button} ${BUTTON}`} onClick={() => addMarker()}>
+                    <StellarIcon name="marker" size={13} /> Add Marker
                 </button>
             </div>
 
-            <div className="min-h-0 flex-1 overflow-auto">
-                {markers.length === 0 ?
-                    <p className="p-4 text-center text-[12px] text-dim">Press M on the timeline to add a marker at the
-                        playhead.</p> : null}
+            <div className={styles.div}>
+                {markers.length === 0 ? <p className={styles.textP}>Press M on the timeline to add a marker at the playhead.</p> : null}
                 {markers.map((marker) => {
                     const isHere = Math.abs(marker.time - playhead) < 0.5 / frameRate;
 
                     return (
-                        <div key={marker.id}
-                             className={`flex flex-col gap-1.5 border-b border-line px-3 py-2 ${isHere ? 'bg-accent/10' : ''}`}
-                             data-theme="StellarMarkers.row">
-                            <div className="flex items-center gap-2">
-                                <span className="size-3 shrink-0 rounded-sm" style={{background: marker.color}}/>
-                                <button type="button" className="timecode text-[12px] text-accent hover:underline"
-                                        onClick={() => seekTo(marker.time)}>
+                        <div key={marker.id} className={`${styles.row2} ${isHere ? styles.rowIsHere : ''}`} data-theme="StellarMarkers.row">
+                            <div className={styles.row3}>
+                                <span className={styles.span} style={{background: marker.color}} />
+                                <button type="button" className={`${styles.textButton} timecode`} onClick={() => seekTo(marker.time)}>
                                     {formatTimecode(marker.time, frameRate)}
                                 </button>
                                 <input
-                                    className={`${INPUT} py-0.5`} placeholder="Name" defaultValue={marker.name}
+                                    className={`${styles.input} ${INPUT}`} placeholder="Name" defaultValue={marker.name}
                                     key={`${marker.id}-${marker.name}`}
                                     onBlur={(event) => {
                                         if (event.target.value !== marker.name) {
@@ -63,27 +57,24 @@ export default function StellarMarkersPanel() {
                                         }
                                     }}
                                 />
-                                <button type="button" title="Delete marker"
-                                        className="rounded p-1 text-dim hover:text-danger"
-                                        onClick={() => deleteMarker(marker.id)}>
-                                    <StellarIcon name="trash" size={13}/>
+                                <button type="button" title="Delete marker" className={styles.textButton2} onClick={() => deleteMarker(marker.id)}>
+                                    <StellarIcon name="trash" size={13} />
                                 </button>
                             </div>
-                            <div className="flex items-center gap-1 pl-5">
+                            <div className={styles.row4}>
                                 {MARKER_COLORS.map((choice) => (
                                     <button
                                         key={choice.id}
                                         type="button"
                                         title={choice.label}
-                                        className={`size-4 rounded-full border ${marker.color === choice.color ? 'border-white' : 'border-transparent'}`}
+                                        className={`${styles.button2} ${marker.color === choice.color ? styles.buttonColor : styles.buttonNotColor}`}
                                         style={{background: choice.color}}
                                         onClick={() => updateMarker(marker.id, {color: choice.color})}
                                     />
                                 ))}
                             </div>
                             <textarea
-                                className={`${INPUT} ml-5 min-h-[36px] w-[calc(100%-20px)] resize-y py-1`}
-                                placeholder="Comment" defaultValue={marker.comment}
+                                className={`${styles.textarea} ${INPUT}`} placeholder="Comment" defaultValue={marker.comment}
                                 key={`${marker.id}-c-${marker.comment}`}
                                 onBlur={(event) => {
                                     if (event.target.value !== marker.comment) {

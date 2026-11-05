@@ -19,8 +19,7 @@ interface RunningJob {
 export class ExportModel {
     private job: RunningJob | null = null;
 
-    constructor(private ffmpeg: FfmpegModel) {
-    }
+    constructor(private ffmpeg: FfmpegModel) {}
 
     isBusy(): boolean {
         return this.job !== null;
@@ -51,11 +50,7 @@ export class ExportModel {
                 }
             }
 
-            command = buildExportCommand({
-                ...request,
-                assets,
-                inlineAssets: undefined
-            }, await this.ffmpeg.getCapabilities());
+            command = buildExportCommand({...request, assets, inlineAssets: undefined}, await this.ffmpeg.getCapabilities());
             mkdirSync(dirname(request.settings.outputPath), {recursive: true});
         } catch (error) {
             this.removeTempFolder(tempFolder);

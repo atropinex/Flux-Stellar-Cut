@@ -1,4 +1,4 @@
-import type {ElectronApi} from "./common/CommonInteface";
+import type { ElectronApi } from "./common/CommonInteface";
 
 declare global {
     interface Window {

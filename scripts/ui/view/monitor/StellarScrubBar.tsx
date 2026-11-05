@@ -1,4 +1,5 @@
 import {useRef} from 'react';
+import styles from './StellarScrubBar.module.css';
 
 interface ScrubBarProps {
     time: number;
@@ -25,10 +26,10 @@ export default function StellarScrubBar({time, duration, inPoint, outPoint, onSe
     }
 
     return (
-        <div className="px-3 pb-2">
+        <div className={styles.div}>
             <div
                 ref={barRef}
-                className="group relative h-4 cursor-pointer"
+                className={`${styles.div2} group`}
                 onPointerDown={(event) => {
                     dragging.current = true;
                     event.currentTarget.setPointerCapture(event.pointerId);
@@ -44,18 +45,14 @@ export default function StellarScrubBar({time, duration, inPoint, outPoint, onSe
                     event.currentTarget.releasePointerCapture(event.pointerId);
                 }}
             >
-                <div className="absolute inset-x-0 top-1.5 h-1 rounded-full bg-ink/10"/>
+                <div className={styles.overlay} />
                 {inPoint !== null || outPoint !== null ? (
                     <div
-                        className="absolute top-1.5 h-1 rounded-full bg-accent/60"
-                        style={{
-                            left: `${((inPoint ?? 0) / safeDuration) * 100}%`,
-                            right: `${100 - ((outPoint ?? safeDuration) / safeDuration) * 100}%`
-                        }}
+                        className={styles.div3}
+                        style={{left: `${((inPoint ?? 0) / safeDuration) * 100}%`, right: `${100 - ((outPoint ?? safeDuration) / safeDuration) * 100}%`}}
                     />
                 ) : null}
-                <div className="absolute top-0.5 h-3 w-1.5 -translate-x-1/2 rounded-sm bg-playhead"
-                     style={{left: `${Math.min(1, time / safeDuration) * 100}%`}}/>
+                <div className={styles.div4} style={{left: `${Math.min(1, time / safeDuration) * 100}%`}} />
             </div>
         </div>
     );

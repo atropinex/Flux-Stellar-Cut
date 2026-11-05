@@ -3,6 +3,7 @@ import {SEQUENCE_PRESETS} from '../../../common/stellar/StellarConfig';
 import StellarDialog from '../common/StellarDialog';
 import StellarIcon from '../common/StellarIcon';
 import {BUTTON, BUTTON_PRIMARY, INPUT, LABEL} from '../common/StellarStyles';
+import styles from './StellarNewProjectDialog.module.css';
 
 interface NewProjectDialogProps {
     onClose: () => void;
@@ -43,13 +44,7 @@ export default function StellarNewProjectDialog({onClose, onCreate}: NewProjectD
             const path = await window.api.createProject({
                 name: name.trim(),
                 folder,
-                sequence: preset ? {
-                    name: 'Sequence 01',
-                    width: preset.width,
-                    height: preset.height,
-                    frameRate: preset.frameRate,
-                    sampleRate: 48000
-                } : null
+                sequence: preset ? {name: 'Sequence 01', width: preset.width, height: preset.height, frameRate: preset.frameRate, sampleRate: 48000} : null
             });
 
             onCreate(path);
@@ -67,28 +62,24 @@ export default function StellarNewProjectDialog({onClose, onCreate}: NewProjectD
             footer={
                 <>
                     <button type="button" className={BUTTON} onClick={onClose}>Cancel</button>
-                    <button type="button" className={BUTTON_PRIMARY} disabled={busy}
-                            onClick={() => void create()}>Create
-                    </button>
+                    <button type="button" className={BUTTON_PRIMARY} disabled={busy} onClick={() => void create()}>Create</button>
                 </>
             }
         >
-            <div className="flex flex-col gap-4">
+            <div className={styles.column}>
                 <div>
                     <label className={LABEL}>Project name</label>
-                    <input className={INPUT} value={name} onChange={(event) => setName(event.target.value)} autoFocus/>
+                    <input className={INPUT} value={name} onChange={(event) => setName(event.target.value)} autoFocus />
                 </div>
                 <div>
                     <label className={LABEL}>Location</label>
-                    <div className="flex gap-2">
-                        <input className={INPUT} value={folder} readOnly placeholder="Choose a folder..."
-                               onClick={() => void chooseFolder()}/>
+                    <div className={styles.row}>
+                        <input className={INPUT} value={folder} readOnly placeholder="Choose a folder..." onClick={() => void chooseFolder()} />
                         <button type="button" className={BUTTON} onClick={() => void chooseFolder()}>
-                            <StellarIcon name="folder" size={14}/> Browse
+                            <StellarIcon name="folder" size={14} /> Browse
                         </button>
                     </div>
-                    <p className="mt-1.5 text-[11px] text-dim">A folder named after the project is made here. It holds
-                        the project file and its auto-saves.</p>
+                    <p className={styles.textP}>A folder named after the project is made here. It holds the project file and its auto-saves.</p>
                 </div>
                 <div>
                     <label className={LABEL}>First sequence</label>
@@ -99,7 +90,7 @@ export default function StellarNewProjectDialog({onClose, onCreate}: NewProjectD
                         <option value="">Start with no sequence</option>
                     </select>
                 </div>
-                {error ? <p className="rounded-lg bg-danger/15 px-3 py-2 text-[12px] text-danger">{error}</p> : null}
+                {error ? <p className={styles.textP2}>{error}</p> : null}
             </div>
         </StellarDialog>
     );

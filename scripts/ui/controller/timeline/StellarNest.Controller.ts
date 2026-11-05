@@ -50,23 +50,13 @@ export function nestSelection(): void {
         const inner = createSequence(name, sequence.settings);
         const trackMap = new Map<string, string>();
         const tracks = sequence.tracks.map((track) => {
-            const copy: Track = {
-                ...track,
-                id: createId(track.type === 'video' ? 'v' : 'a'),
-                muted: false,
-                solo: false,
-                locked: false
-            };
+            const copy: Track = {...track, id: createId(track.type === 'video' ? 'v' : 'a'), muted: false, solo: false, locked: false};
 
             trackMap.set(track.id, copy.id);
 
             return copy;
         });
-        const innerClips = chosen.map((clip) => ({
-            ...clip,
-            trackId: trackMap.get(clip.trackId) as string,
-            start: clip.start - first
-        }));
+        const innerClips = chosen.map((clip) => ({...clip, trackId: trackMap.get(clip.trackId) as string, start: clip.start - first}));
         const nested: Sequence = {...inner, tracks, clips: innerClips};
 
         const videoHost = lowestTrack(sequence, chosen, 'video');

@@ -1,0 +1,135 @@
+/* ------ Group ------ */
+
+.section {
+    padding-block: 3px;
+
+    border-bottom: 1px solid var(--sc-line);
+}
+
+.rowButton {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    width: 100%;
+
+    padding: 3px 10px;
+
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.rowButton:hover {
+    color: var(--sc-accent);
+}
+
+
+/* ------ replace ------ */
+
+.div {
+    padding: 7px 10px;
+}
+
+.curve {
+    touch-action: none;
+    border-radius: 5px;
+    background-color: var(--sc-deep);
+}
+
+.circle {
+    cursor: grab;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    margin-top: 3px;
+
+    font-size: 11px;
+    color: var(--sc-dim);
+}
+
+.button {
+    margin-left: auto;
+    padding: 1.6px 7px;
+
+    border-radius: 5px;
+    background-color: var(--sc-surface);
+}
+
+.button:hover {
+    background-color: var(--sc-surfaceHover);
+}
+
+
+/* ------ StellarLumetriPanel ------ */
+
+.panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+
+    height: 100%;
+
+    padding-inline: 20px;
+
+    text-align: center;
+    color: var(--sc-dim);
+}
+
+.textP {
+    font-size: 12px;
+}
+
+.panel2 {
+    overflow: auto;
+
+    height: 100%;
+}
+
+.row2 {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    padding: 7px 10px;
+
+    border-bottom: 1px solid var(--sc-line);
+}
+
+.textSpan {
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.rowLabel {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    margin-left: auto;
+
+    font-size: 12px;
+}
+
+.textButton {
+    padding: 1.6px 7px;
+
+    font-size: 11px;
+
+    border-radius: 5px;
+    background-color: var(--sc-surface);
+}
+
+.textButton:hover {
+    background-color: var(--sc-surfaceHover);
+}

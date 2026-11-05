@@ -1,0 +1,74 @@
+/* ------ StellarTransportBar ------ */
+
+.transport {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    padding-inline: 10px;
+    padding-bottom: 10px;
+}
+
+.row {
+    display: flex;
+    flex: 1;
+    align-items: center;
+
+    min-width: 0;
+}
+
+.row2 {
+    display: flex;
+    align-items: center;
+    gap: 1.6px;
+}
+
+.rowButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 26px;
+    width: 26px;
+
+    border-radius: 7px;
+    transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+}
+
+.rowButton:disabled {
+    opacity: 35%;
+}
+
+.textButtonActive {
+    color: var(--sc-accentInk);
+
+    background-color: var(--sc-accent);
+}
+
+.textButtonNotActive {
+    color: var(--sc-ink);
+}
+
+.textButtonNotActive:hover {
+    background-color: var(--sc-surfaceHover);
+}
+
+.span {
+    height: 13px;
+    width: 1px;
+
+    margin-inline: 3px;
+
+    background-color: var(--sc-line);
+}
+
+.row3 {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: flex-end;
+
+    min-width: 0;
+}

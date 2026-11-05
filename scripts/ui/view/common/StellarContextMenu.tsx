@@ -1,23 +1,16 @@
 import {useEffect, useLayoutEffect, useRef, useState, type ReactNode} from 'react';
-import {
-    closeContextMenu,
-    contextMenuStore,
-    type ContextMenuItem
-} from '../../controller/contextmenu/StellarContextMenu.Controller';
+import {closeContextMenu, contextMenuStore, type ContextMenuItem} from '../../controller/contextmenu/StellarContextMenu.Controller';
 import {useStore} from '../../controller/store/StellarStore';
 import {describeCombo} from '../../../common/utils/StellarKeybindHelper';
 import StellarIcon from './StellarIcon';
+import styles from './StellarContextMenu.module.css';
 
 const isMac = navigator.userAgent.includes('Mac');
 
 /** A sub menu next to its item. It moves up when it would go below the window, flips to the left at the right edge, and scrolls if it is taller than the window. */
-function Submenu({children}: { children: ReactNode }) {
+function Submenu({children}: {children: ReactNode}) {
     const ref = useRef<HTMLDivElement>(null);
-    const [place, setPlace] = useState<{ top: number; flip: boolean; maxHeight: number }>({
-        top: 0,
-        flip: false,
-        maxHeight: window.innerHeight - 8
-    });
+    const [place, setPlace] = useState<{top: number; flip: boolean; maxHeight: number}>({top: 0, flip: false, maxHeight: window.innerHeight - 8});
 
     useLayoutEffect(() => {
         const element = ref.current;
@@ -41,7 +34,7 @@ function Submenu({children}: { children: ReactNode }) {
     return (
         <div
             ref={ref}
-            className={`absolute overflow-y-auto ${place.flip ? 'right-full pr-1' : 'left-full pl-1'}`}
+            className={`${styles.div} ${place.flip ? styles.divFlip : styles.divNotFlip}`}
             style={{top: place.top, maxHeight: place.maxHeight}}
         >
             {children}
@@ -49,21 +42,20 @@ function Submenu({children}: { children: ReactNode }) {
     );
 }
 
-function MenuList({items, onClose}: { items: ContextMenuItem[]; onClose: () => void }) {
+function MenuList({items, onClose}: {items: ContextMenuItem[]; onClose: () => void}) {
     const [openChild, setOpenChild] = useState<string | null>(null);
 
     return (
-        <div className="glass stellar-pop min-w-[210px] p-1 text-[12.5px]" data-theme="StellarContextMenu.panel">
+        <div className={`${styles.panel} glass stellar-pop`} data-theme="StellarContextMenu.panel">
             {items.map((item) => {
                 if (item.separator) {
-                    return <div key={item.id} className="my-1 h-px bg-line"/>;
+                    return <div key={item.id} className={styles.div2} />;
                 }
 
                 const hasChildren = Boolean(item.children?.length);
 
                 return (
-                    <div key={item.id} className="relative"
-                         onPointerEnter={() => setOpenChild(hasChildren ? item.id : null)}>
+                    <div key={item.id} className={styles.div3} onPointerEnter={() => setOpenChild(hasChildren ? item.id : null)}>
                         <button
                             type="button"
                             disabled={item.disabled}
@@ -75,20 +67,18 @@ function MenuList({items, onClose}: { items: ContextMenuItem[]; onClose: () => v
                                 onClose();
                                 item.action?.();
                             }}
-                            className={`flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left transition-colors disabled:opacity-35 ${
-                                item.danger ? 'text-danger hover:bg-danger/15' : 'text-ink hover:bg-surface-hover'
+                            className={`${styles.rowButton} ${
+                                item.danger ? styles.textButtonDanger : styles.textButtonNotDanger
                             }`}
                         >
-                            <span className="flex w-4 justify-center">{item.checked ?
-                                <StellarIcon name="check" size={13}/> : null}</span>
-                            <span className="flex-1 truncate">{item.label}</span>
-                            {item.hotkey ? <span
-                                className="pl-4 text-[11px] text-dim">{describeCombo(item.hotkey, isMac)}</span> : null}
-                            {hasChildren ? <StellarIcon name="chevronRight" size={12} className="text-dim"/> : null}
+                            <span className={styles.rowSpan}>{item.checked ? <StellarIcon name="check" size={13} /> : null}</span>
+                            <span className={styles.textSpan}>{item.label}</span>
+                            {item.hotkey ? <span className={styles.textSpan2}>{describeCombo(item.hotkey, isMac)}</span> : null}
+                            {hasChildren ? <StellarIcon name="chevronRight" size={12} className={styles.textStellarIcon} /> : null}
                         </button>
                         {hasChildren && openChild === item.id ? (
                             <Submenu>
-                                <MenuList items={item.children ?? []} onClose={onClose}/>
+                                <MenuList items={item.children ?? []} onClose={onClose} />
                             </Submenu>
                         ) : null}
                     </div>
@@ -138,16 +128,15 @@ export default function StellarContextMenu() {
 
     return (
         <div
-            className="fixed inset-0 z-[1000]"
+            className={styles.overlay}
             onPointerDown={() => closeContextMenu()}
             onContextMenu={(event) => {
                 event.preventDefault();
                 closeContextMenu();
             }}
         >
-            <div ref={ref} className="absolute" style={{left: position.x, top: position.y}}
-                 onPointerDown={(event) => event.stopPropagation()}>
-                <MenuList items={state.items} onClose={closeContextMenu}/>
+            <div ref={ref} className={styles.div4} style={{left: position.x, top: position.y}} onPointerDown={(event) => event.stopPropagation()}>
+                <MenuList items={state.items} onClose={closeContextMenu} />
             </div>
         </div>
     );

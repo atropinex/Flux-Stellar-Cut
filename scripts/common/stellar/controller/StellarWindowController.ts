@@ -14,8 +14,7 @@ export class StellarWindowController {
     private forceClose = new Set<number>();               // editor windows that may close without asking
     private isQuitting = false;
 
-    constructor(private themes: ThemeModel, private settings: SettingsModel) {
-    }
+    constructor(private themes: ThemeModel, private settings: SettingsModel) {}
 
     register(): void {
         ipcMain.on(StellarIPC.windowMinimize, (event) => this.windowOf(event.sender.id)?.minimize());
@@ -53,13 +52,7 @@ export class StellarWindowController {
             return;
         }
 
-        const window = this.createWindow({
-            width: 1120,
-            height: 720,
-            minWidth: 900,
-            minHeight: 600,
-            center: true
-        }, {view: 'launcher', projectPath: null});
+        const window = this.createWindow({width: 1120, height: 720, minWidth: 900, minHeight: 600, center: true}, {view: 'launcher', projectPath: null});
         this.launcher = window;
         window.on('closed', () => {
             this.launcher = null;
@@ -153,13 +146,26 @@ export class StellarWindowController {
             }
         });
 
-        this.contexts.set(window.webContents.id, context);
+        // A closed window is destroyed, and touching window.webContents then throws "Object has been destroyed".
+        // The id is kept here while the window is still alive.
+        const webContentsId = window.webContents.id;
+
+        this.contexts.set(webContentsId, context);
         this.applyMaterial(window, material, theme?.base ?? '#0b0d14');
 
         window.once('ready-to-show', () => window.show());
-        window.on('maximize', () => window.webContents.send(StellarIPC.windowMaximizeChanged, true));
-        window.on('unmaximize', () => window.webContents.send(StellarIPC.windowMaximizeChanged, false));
-        window.on('closed', () => this.contexts.delete(window.webContents.id));
+        const sendMaximized = (maximized: boolean) => {
+            if (!window.isDestroyed()) {
+                window.webContents.send(StellarIPC.windowMaximizeChanged, maximized);
+            }
+        };
+
+        window.on('maximize', () => sendMaximized(true));
+        window.on('unmaximize', () => sendMaximized(false));
+        window.on('closed', () => {
+            this.contexts.delete(webContentsId);
+            this.forceClose.delete(webContentsId);
+        });
 
         // While developing, electron-vite serves the page from a local dev server.
         const devServerUrl = process.env['ELECTRON_RENDERER_URL'];

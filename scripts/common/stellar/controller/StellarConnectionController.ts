@@ -13,8 +13,7 @@ export class StellarConnectionController {
         private themes: ThemeModel,
         private keybinds: KeybindModel,
         private windows: StellarWindowController
-    ) {
-    }
+    ) {}
 
     register(): void {
         ipcMain.handle(StellarIPC.getSettings, () => this.settings.get());

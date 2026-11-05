@@ -1,5 +1,6 @@
 import type {ReactNode} from 'react';
 import {editorStore} from '../../controller/project/StellarEditor.Store';
+import styles from './StellarIsland.module.css';
 
 export interface IslandTab {
     id: string;
@@ -19,35 +20,24 @@ interface IslandProps {
 }
 
 /** One floating, glass panel of the editor. */
-export default function StellarIsland({
-                                          panelId,
-                                          title,
-                                          tabs,
-                                          activeTab,
-                                          onTabChange,
-                                          actions,
-                                          children,
-                                          className = '',
-                                          bodyClassName = ''
-                                      }: IslandProps) {
+export default function StellarIsland({panelId, title, tabs, activeTab, onTabChange, actions, children, className = '', bodyClassName = ''}: IslandProps) {
     return (
         <section
             data-panel={panelId}
             data-theme={`StellarIsland.${panelId}`}
-            className={`glass flex min-h-0 min-w-0 flex-col overflow-hidden ${className}`}
+            className={`${styles.columnSection} glass ${className}`}
             onPointerEnter={() => editorStore.set({hoveredPanel: panelId})}
         >
-            <header className="glass-header flex h-9 shrink-0 items-center gap-1 px-2"
-                    data-theme="StellarIsland.header">
+            <header className={`${styles.header} glass-header`} data-theme="StellarIsland.header">
                 {tabs ? (
-                    <div className="flex items-center gap-0.5">
+                    <div className={styles.row}>
                         {tabs.map((tab) => (
                             <button
                                 key={tab.id}
                                 type="button"
                                 onClick={() => onTabChange?.(tab.id)}
-                                className={`whitespace-nowrap rounded-md px-2.5 py-1 text-[12px] font-medium transition-colors ${
-                                    tab.id === activeTab ? 'bg-surface-hover text-ink' : 'text-dim hover:bg-surface hover:text-ink'
+                                className={`${styles.textButton} ${
+                                    tab.id === activeTab ? styles.textButtonActiveTab : styles.textButtonNotActiveTab
                                 }`}
                             >
                                 {tab.label}
@@ -55,11 +45,11 @@ export default function StellarIsland({
                         ))}
                     </div>
                 ) : (
-                    <span className="px-1.5 text-[12px] font-medium text-ink">{title}</span>
+                    <span className={styles.textSpan}>{title}</span>
                 )}
-                <div className="ml-auto flex items-center gap-1">{actions}</div>
+                <div className={styles.row2}>{actions}</div>
             </header>
-            <div className={`min-h-0 flex-1 ${bodyClassName}`}>{children}</div>
+            <div className={`${styles.div} ${bodyClassName}`}>{children}</div>
         </section>
     );
 }

@@ -1,5 +1,6 @@
 import {useEffect, useRef} from 'react';
 import {audioEngine, gainToDb} from '../../controller/playback/StellarAudioEngine';
+import styles from './StellarAudioMeter.module.css';
 
 // A stereo level meter. It reads the mixing desk many times a second and moves the bars by hand,
 // so the rest of the page does not need to redraw.
@@ -77,20 +78,18 @@ export default function StellarAudioMeter({busId, className = '', showScale = fa
     }, [busId]);
 
     return (
-        <div className={`flex h-full gap-0.5 ${className}`} data-theme="StellarMeter.meter">
+        <div className={`${styles.meter} ${className}`} data-theme="StellarMeter.meter">
             {showScale ? (
-                <div className="relative mr-0.5 w-6 shrink-0 text-right text-[9px] tabular-nums text-dim">
+                <div className={styles.text}>
                     {METER_MARKS.map((mark) => (
-                        <span key={mark} className="absolute right-0 -translate-y-1/2"
-                              style={{bottom: `${positionOf(mark) * 100}%`}}>{mark}</span>
+                        <span key={mark} className={styles.span} style={{bottom: `${positionOf(mark) * 100}%`}}>{mark}</span>
                     ))}
                 </div>
             ) : null}
             {([[barLeft, holdLeft], [barRight, holdRight]] as const).map(([bar, hold], side) => (
-                <div key={side} className="relative h-full w-2 overflow-hidden rounded-sm bg-black/40">
-                    <div ref={bar} className="absolute inset-x-0 bottom-0 h-full origin-bottom"
-                         style={{transform: 'scaleY(0)'}}/>
-                    <div ref={hold} className="absolute inset-x-0 h-px opacity-0"/>
+                <div key={side} className={styles.div}>
+                    <div ref={bar} className={styles.overlay} style={{transform: 'scaleY(0)'}} />
+                    <div ref={hold} className={styles.overlay2} />
                 </div>
             ))}
         </div>

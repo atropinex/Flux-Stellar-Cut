@@ -1,0 +1,59 @@
+/* ------ tick ------ */
+
+.meter {
+    display: flex;
+    gap: 1.6px;
+
+    height: 100%;
+}
+
+.text {
+    position: relative;
+
+    flex-shrink: 0;
+
+    width: 20px;
+
+    margin-right: 1.6px;
+
+    text-align: right;
+    font-size: 9px;
+    color: var(--sc-dim);
+    font-variant-numeric: tabular-nums;
+}
+
+.span {
+    position: absolute;
+    right: 0;
+    translate: 0 calc(calc(1 / 2 * 100%) * -1);
+}
+
+.div {
+    position: relative;
+
+    overflow: hidden;
+
+    height: 100%;
+    width: 7px;
+
+    border-radius: 3px;
+    background-color: color-mix(in oklab, #000 40%, transparent);
+}
+
+.overlay {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    transform-origin: bottom;
+
+    height: 100%;
+}
+
+.overlay2 {
+    position: absolute;
+    inset-inline: 0;
+
+    height: 1px;
+
+    opacity: 0%;
+}

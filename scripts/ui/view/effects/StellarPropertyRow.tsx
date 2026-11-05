@@ -8,23 +8,14 @@ import {useStore} from '../../controller/store/StellarStore';
 import {openContextMenu} from '../../controller/contextmenu/StellarContextMenu.Controller';
 import {seekTo} from '../../controller/playback/StellarPlayback.Controller';
 import {
-    commitProperty,
-    deleteKeyframeOf,
-    jumpToKeyframe,
-    moveKeyframeOf,
-    previewProperty,
-    resetProperty,
-    setEasingOf,
-    toggleAnimationOf,
-    toggleKeyframeOf,
+    commitProperty, deleteKeyframeOf, jumpToKeyframe, moveKeyframeOf, previewProperty, resetProperty, setEasingOf, toggleAnimationOf, toggleKeyframeOf,
     valueOfProperty
 } from '../../controller/timeline/StellarClipEdit.Controller';
 import StellarScrubNumber from '../common/StellarScrubNumber';
+import styles from './StellarPropertyRow.module.css';
 
 // One line of the Effect Controls: stopwatch, name, number, keyframe buttons and the small timeline beside it.
 // The numbers are never sliders. Drag them sideways or click and type.
-
-export const LANE_WIDTH_CLASS = 'min-w-[56px] flex-1';
 
 interface PropertyRowProps {
     clip: Clip;
@@ -35,29 +26,27 @@ interface PropertyRowProps {
     indent?: boolean;
 }
 
-function Stopwatch({active}: { active: boolean }) {
+function Stopwatch({active}: {active: boolean}) {
     return (
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"
-             strokeLinecap="round" className={active ? 'text-accent' : 'text-dim'}>
-            <circle cx="8" cy="9" r="5" fill={active ? 'currentColor' : 'none'} fillOpacity={0.25}/>
-            <path d="M8 9V6M6.5 2h3"/>
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" className={active ? styles.textSvgActive : styles.textSvgNotActive}>
+            <circle cx="8" cy="9" r="5" fill={active ? 'currentColor' : 'none'} fillOpacity={0.25} />
+            <path d="M8 9V6M6.5 2h3" />
         </svg>
     );
 }
 
-function Diamond({filled, size = 10}: { filled: boolean; size?: number }) {
+function Diamond({filled, size = 10}: {filled: boolean; size?: number}) {
     return (
         <svg width={size} height={size} viewBox="0 0 10 10">
-            <path d="M5 0.8 9.2 5 5 9.2 0.8 5Z" fill={filled ? 'currentColor' : 'none'} stroke="currentColor"
-                  strokeWidth="1.2"/>
+            <path d="M5 0.8 9.2 5 5 9.2 0.8 5Z" fill={filled ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.2" />
         </svg>
     );
 }
 
-function Arrow({direction}: { direction: 'previous' | 'next' }) {
+function Arrow({direction}: {direction: 'previous' | 'next'}) {
     return (
         <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor">
-            <path d={direction === 'previous' ? 'M7.5 1 2.5 5l5 4Z' : 'M2.5 1l5 4-5 4Z'}/>
+            <path d={direction === 'previous' ? 'M7.5 1 2.5 5l5 4Z' : 'M2.5 1l5 4-5 4Z'} />
         </svg>
     );
 }
@@ -102,33 +91,26 @@ export default function StellarPropertyRow({clip, ids, path, label, showLane = t
                 action: () => setEasingOf(clip.id, path, keyframeContentTime, easing.id)
             })),
             {id: 'sep', label: '', separator: true},
-            {
-                id: 'delete',
-                label: 'Delete Keyframe',
-                danger: true,
-                action: () => deleteKeyframeOf(clip.id, path, keyframeContentTime)
-            }
+            {id: 'delete', label: 'Delete Keyframe', danger: true, action: () => deleteKeyframeOf(clip.id, path, keyframeContentTime)}
         ]);
     }
 
     const currentKeyframe = onKeyframe ? keyframes[findKeyframeIndex(keyframes, now)] : null;
 
     return (
-        <div className={`flex items-center gap-1.5 py-0.5 pr-2 ${indent ? 'pl-3' : 'pl-1'}`}
-             data-theme="StellarEffectControls.row">
+        <div className={`${styles.row} ${indent ? styles.rowIndent : styles.rowNotIndent}`} data-theme="StellarEffectControls.row">
             <button
                 type="button"
                 title={animated ? 'Stop animating (removes all keyframes)' : 'Start animating this value'}
-                className="rounded p-1 hover:bg-surface-hover"
+                className={styles.button}
                 onClick={() => toggleAnimationOf(clip.id, path)}
             >
-                <Stopwatch active={animated}/>
+                <Stopwatch active={animated} />
             </button>
 
-            <span className="w-[76px] shrink-0 truncate text-[12px] text-dim"
-                  title={label ?? info.label}>{label ?? info.label}</span>
+            <span className={styles.textSpan} title={label ?? info.label}>{label ?? info.label}</span>
 
-            <div className="w-[76px] shrink-0">
+            <div className={styles.box}>
                 <StellarScrubNumber
                     value={value}
                     min={info.min}
@@ -142,35 +124,31 @@ export default function StellarPropertyRow({clip, ids, path, label, showLane = t
                 />
             </div>
 
-            <div className="flex w-[54px] shrink-0 items-center justify-center gap-0.5 text-dim">
+            <div className={styles.row2}>
                 {animated ? (
-                    <button type="button" title="Previous keyframe"
-                            className="rounded p-1 hover:bg-surface-hover hover:text-ink"
-                            onClick={() => jumpToKeyframe(clip.id, path, 'previous')}>
-                        <Arrow direction="previous"/>
+                    <button type="button" title="Previous keyframe" className={styles.button2} onClick={() => jumpToKeyframe(clip.id, path, 'previous')}>
+                        <Arrow direction="previous" />
                     </button>
-                ) : <span className="w-[18px]"/>}
+                ) : <span className={styles.boxSpan} />}
                 <button
                     type="button"
                     title={onKeyframe ? 'Remove the keyframe here' : 'Add a keyframe here'}
-                    className={`rounded p-1 hover:bg-surface-hover ${onKeyframe ? 'text-accent' : 'hover:text-ink'}`}
+                    className={`${styles.button} ${onKeyframe ? styles.textSvgActive : styles.buttonNotOnKeyframe}`}
                     onClick={() => toggleKeyframeOf(clip.id, path)}
                 >
-                    <Diamond filled={onKeyframe}/>
+                    <Diamond filled={onKeyframe} />
                 </button>
                 {animated ? (
-                    <button type="button" title="Next keyframe"
-                            className="rounded p-1 hover:bg-surface-hover hover:text-ink"
-                            onClick={() => jumpToKeyframe(clip.id, path, 'next')}>
-                        <Arrow direction="next"/>
+                    <button type="button" title="Next keyframe" className={styles.button2} onClick={() => jumpToKeyframe(clip.id, path, 'next')}>
+                        <Arrow direction="next" />
                     </button>
-                ) : <span className="w-[18px]"/>}
+                ) : <span className={styles.boxSpan} />}
             </div>
 
             {showLane ? (
                 <div
                     ref={laneRef}
-                    className={`relative h-6 cursor-pointer rounded bg-deep ${LANE_WIDTH_CLASS}`}
+                    className={styles.lane}
                     data-theme="StellarEffectControls.lane"
                     title="Click to move the playhead"
                     onPointerDown={(event) => {
@@ -181,7 +159,7 @@ export default function StellarPropertyRow({clip, ids, path, label, showLane = t
                 >
                     {animated && keyframes.length > 1 ? (
                         <div
-                            className="absolute top-1/2 h-px bg-accent/40"
+                            className={styles.div}
                             style={{
                                 left: `${Math.min(...keyframes.map((item) => fractionOf(keyframeTimelineTime(clip, item.time)))) * 100}%`,
                                 right: `${(1 - Math.max(...keyframes.map((item) => fractionOf(keyframeTimelineTime(clip, item.time))))) * 100}%`
@@ -198,7 +176,7 @@ export default function StellarPropertyRow({clip, ids, path, label, showLane = t
                                 key={keyframe.time}
                                 type="button"
                                 title={`${EASINGS.find((easing) => easing.id === keyframe.easing)?.label ?? 'Linear'}. Drag to move, right-click for easing.`}
-                                className={`absolute top-1/2 -translate-x-1/2 -translate-y-1/2 cursor-ew-resize rounded-sm p-0.5 ${isHere ? 'text-accent' : 'text-ink'}`}
+                                className={`${styles.button3} ${isHere ? styles.textSvgActive : styles.textButtonNotIsHere}`}
                                 style={{left: `${position * 100}%`}}
                                 onPointerDown={(event) => {
                                     event.stopPropagation();
@@ -228,28 +206,27 @@ export default function StellarPropertyRow({clip, ids, path, label, showLane = t
                                 }}
                                 onContextMenu={(event) => easingMenu(event, keyframe.time, keyframe.easing)}
                             >
-                                <Diamond filled size={9}/>
+                                <Diamond filled size={9} />
                             </button>
                         );
                     })}
 
                     {playheadInside ? (
-                        <div className="pointer-events-none absolute inset-y-0 w-px bg-playhead"
-                             style={{left: `${fractionOf(playhead) * 100}%`}}/>
+                        <div className={styles.overlay} style={{left: `${fractionOf(playhead) * 100}%`}} />
                     ) : null}
                 </div>
             ) : null}
 
             {showLane && currentKeyframe ? (
                 <select
-                    className="w-[78px] shrink-0 rounded-md border border-line bg-deep px-1 py-0.5 text-[11px] text-ink outline-none focus:border-accent"
+                    className={styles.textSelect}
                     title="How the value moves from this keyframe to the next one"
                     value={currentKeyframe.easing}
                     onChange={(event) => setEasingOf(clip.id, path, currentKeyframe.time, event.target.value as EasingId)}
                 >
                     {EASINGS.map((easing) => <option key={easing.id} value={easing.id}>{easing.label}</option>)}
                 </select>
-            ) : showLane ? <span className="w-[78px] shrink-0"/> : null}
+            ) : showLane ? <span className={styles.boxSpan2} /> : null}
         </div>
     );
 }

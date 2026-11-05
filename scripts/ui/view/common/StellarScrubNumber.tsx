@@ -1,4 +1,5 @@
 import {useRef, useState} from 'react';
+import styles from './StellarScrubNumber.module.css';
 
 interface ScrubNumberProps {
     value: number;
@@ -13,17 +14,7 @@ interface ScrubNumberProps {
 }
 
 /** A number that you change by dragging sideways (like in Premiere), or by clicking and typing. */
-export default function StellarScrubNumber({
-                                               value,
-                                               min,
-                                               max,
-                                               step = 1,
-                                               unit = '',
-                                               decimals = 0,
-                                               onChange,
-                                               onCommit,
-                                               onReset
-                                           }: ScrubNumberProps) {
+export default function StellarScrubNumber({value, min, max, step = 1, unit = '', decimals = 0, onChange, onCommit, onReset}: ScrubNumberProps) {
     const [editing, setEditing] = useState(false);
     const drag = useRef<{ startX: number; startValue: number; moved: boolean; latest: number } | null>(null);
 
@@ -38,7 +29,7 @@ export default function StellarScrubNumber({
             <input
                 autoFocus
                 defaultValue={value.toFixed(decimals)}
-                className="w-20 rounded-md border border-accent bg-deep px-1.5 py-0.5 text-right text-[12px] outline-none"
+                className={styles.textInput}
                 onFocus={(event) => event.currentTarget.select()}
                 onBlur={(event) => {
                     const typed = parseFloat(event.currentTarget.value);
@@ -64,7 +55,7 @@ export default function StellarScrubNumber({
 
     return (
         <span
-            className="cursor-ew-resize select-none rounded-md px-1.5 py-0.5 text-[12px] tabular-nums text-accent hover:bg-surface-hover"
+            className={styles.textSpan}
             title="Drag to change. Click to type. Double-click to reset."
             onPointerDown={(event) => {
                 event.currentTarget.setPointerCapture(event.pointerId);

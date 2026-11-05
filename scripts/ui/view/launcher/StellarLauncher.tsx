@@ -8,6 +8,7 @@ import StellarWindowControls from '../common/StellarWindowControls';
 import StellarContextMenu from '../common/StellarContextMenu';
 import {BUTTON, BUTTON_PRIMARY, INPUT} from '../common/StellarStyles';
 import StellarNewProjectDialog from './StellarNewProjectDialog';
+import styles from './StellarLauncher.module.css';
 
 type SortMode = 'recent' | 'name';
 
@@ -82,20 +83,10 @@ export default function StellarLauncher() {
     function showMenu(event: React.MouseEvent, project: RecentProject) {
         openContextMenu(event, [
             {id: 'open', label: 'Open', disabled: !project.exists, action: () => void open(project.path)},
-            {
-                id: 'reveal',
-                label: 'Show in Folder',
-                disabled: !project.exists,
-                action: () => window.api.revealInFolder(project.path)
-            },
+            {id: 'reveal', label: 'Show in Folder', disabled: !project.exists, action: () => window.api.revealInFolder(project.path)},
             {id: 'copy', label: 'Copy Path', action: () => void navigator.clipboard.writeText(project.path)},
             separator('s1'),
-            {
-                id: 'remove',
-                label: 'Remove from List',
-                danger: true,
-                action: () => void window.api.removeRecentProject(project.path).then(setProjects)
-            }
+            {id: 'remove', label: 'Remove from List', danger: true, action: () => void window.api.removeRecentProject(project.path).then(setProjects)}
         ]);
     }
 
@@ -114,7 +105,7 @@ export default function StellarLauncher() {
 
     return (
         <div
-            className="relative flex h-full flex-col"
+            className={styles.column}
             onDragOver={(event) => {
                 event.preventDefault();
                 setIsDragging(true);
@@ -122,68 +113,63 @@ export default function StellarLauncher() {
             onDragLeave={() => setIsDragging(false)}
             onDrop={handleDrop}
         >
-            <StellarBackground/>
+            <StellarBackground />
 
-            <div className="drag-region relative z-10 flex h-9 shrink-0 items-center justify-between pl-4">
-                <span className="text-[12px] font-semibold tracking-wide text-dim">FLUX-STELLAR-CUT</span>
-                <StellarWindowControls/>
+            <div className={`${styles.row} drag-region`}>
+                <span className={styles.textSpan}>FLUX-STELLAR-CUT</span>
+                <StellarWindowControls />
             </div>
 
-            <div className="relative z-10 flex min-h-0 flex-1 gap-(--sc-gap) p-(--sc-gap) pt-0">
+            <div className={styles.row2}>
                 {/* Sidebar */}
-                <aside className="glass flex w-64 shrink-0 flex-col gap-3 p-5" data-theme="StellarLauncher.sidebar">
-                    <div className="mb-4">
-                        <div
-                            className="mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-accent text-accent-ink">
-                            <StellarIcon name="sparkle" size={24} filled/>
+                <aside className={`${styles.sidebar} glass`} data-theme="StellarLauncher.sidebar">
+                    <div className={styles.div}>
+                        <div className={styles.row3}>
+                            <StellarIcon name="sparkle" size={24} filled />
                         </div>
-                        <h1 className="text-[18px] font-semibold leading-tight">Flux-Stellar-Cut</h1>
-                        <p className="mt-1 text-[12px] text-dim">Cut, color and finish your story.</p>
+                        <h1 className={styles.textH1}>Flux-Stellar-Cut</h1>
+                        <p className={styles.textP}>Cut, color and finish your story.</p>
                     </div>
-                    <button type="button" className={`${BUTTON_PRIMARY} justify-start py-2.5`}
-                            onClick={() => setShowNew(true)}>
-                        <StellarIcon name="plus" size={15}/> New Project
+                    <button type="button" className={`${styles.button} ${BUTTON_PRIMARY}`} onClick={() => setShowNew(true)}>
+                        <StellarIcon name="plus" size={15} /> New Project
                     </button>
-                    <button type="button" className={`${BUTTON} justify-start py-2.5`} onClick={() => void browse()}>
-                        <StellarIcon name="folder" size={15}/> Open Project
+                    <button type="button" className={`${styles.button} ${BUTTON}`} onClick={() => void browse()}>
+                        <StellarIcon name="folder" size={15} /> Open Project
                     </button>
-                    <p className="mt-auto text-[11px] leading-relaxed text-dim">
-                        Tip: drop a <span className="text-ink">.{PROJECT_EXTENSION}</span> file anywhere on this window
-                        to open it.
+                    <p className={styles.textP2}>
+                        Tip: drop a <span className={styles.textSpan2}>.{PROJECT_EXTENSION}</span> file anywhere on this window to open it.
                     </p>
                 </aside>
 
                 {/* Recent projects */}
-                <main className="glass flex min-w-0 flex-1 flex-col" data-theme="StellarLauncher.recent">
-                    <div className="flex items-center gap-3 p-5 pb-3">
-                        <h2 className="shrink-0 whitespace-nowrap text-[15px] font-semibold">Recent projects</h2>
-                        <div className="relative ml-auto w-64">
-                            <StellarIcon name="search" size={14} className="absolute left-2.5 top-2 text-dim"/>
-                            <input className={`${INPUT} pl-8`} placeholder="Search projects" value={query}
-                                   onChange={(event) => setQuery(event.target.value)}/>
+                <main className={`${styles.recent} glass`} data-theme="StellarLauncher.recent">
+                    <div className={styles.row4}>
+                        <h2 className={styles.textH2}>Recent projects</h2>
+                        <div className={styles.div2}>
+                            <StellarIcon name="search" size={14} className={styles.textStellarIcon} />
+                            <input className={`${styles.input} ${INPUT}`} placeholder="Search projects" value={query} onChange={(event) => setQuery(event.target.value)} />
                         </div>
-                        <select className={`${INPUT} w-36`} value={sort}
-                                onChange={(event) => setSort(event.target.value as SortMode)}>
+                        <select className={`${styles.boxSelect} ${INPUT}`} value={sort} onChange={(event) => setSort(event.target.value as SortMode)}>
                             <option value="recent">Last opened</option>
                             <option value="name">Name</option>
                         </select>
                     </div>
 
-                    <div className="min-h-0 flex-1 overflow-auto p-5 pt-2">
+                    <div className={styles.div3}>
                         {visible.length === 0 ? (
-                            <div className="flex h-full flex-col items-center justify-center gap-2 text-dim">
-                                <StellarIcon name="film" size={36}/>
-                                <p className="text-[13px]">{projects.length === 0 ? 'No projects yet. Create your first one.' : 'No project matches your search.'}</p>
+                            <div className={styles.column2}>
+                                <StellarIcon name="film" size={36} />
+                                <p className={styles.textP3}>{projects.length === 0 ? 'No projects yet. Create your first one.' : 'No project matches your search.'}</p>
                             </div>
                         ) : (
-                            <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-4">
+                            <div className={styles.grid}>
                                 {visible.map((project) => (
                                     <button
                                         key={project.path}
                                         type="button"
                                         disabled={!project.exists}
                                         data-theme="StellarLauncher.card"
-                                        className="group overflow-hidden rounded-xl border border-line bg-surface text-left transition-all hover:-translate-y-0.5 hover:border-accent/60 hover:bg-surface-hover disabled:opacity-50"
+                                        className={`${styles.card} group`}
                                         onDoubleClick={() => void open(project.path)}
                                         onContextMenu={(event) => showMenu(event, project)}
                                         onKeyDown={(event) => {
@@ -192,36 +178,31 @@ export default function StellarLauncher() {
                                             }
                                         }}
                                     >
-                                        <div className="flex h-28 items-center justify-center"
-                                             style={{background: cardGradient(project.name)}}>
-                                            <StellarIcon name="film" size={30} className="text-ink/70"/>
+                                        <div className={styles.row5} style={{background: cardGradient(project.name)}}>
+                                            <StellarIcon name="film" size={30} className={styles.textStellarIcon2} />
                                         </div>
-                                        <div className="p-3">
-                                            <div className="truncate text-[13px] font-medium">{project.name}</div>
-                                            <div
-                                                className="mt-0.5 truncate text-[11px] text-dim">{project.exists ? project.path : 'File not found'}</div>
-                                            <div className="mt-2 text-[11px] text-dim">{timeAgo(project.openedAt)}</div>
+                                        <div className={styles.div4}>
+                                            <div className={styles.text}>{project.name}</div>
+                                            <div className={styles.text2}>{project.exists ? project.path : 'File not found'}</div>
+                                            <div className={styles.text3}>{timeAgo(project.openedAt)}</div>
                                         </div>
                                     </button>
                                 ))}
                             </div>
                         )}
                     </div>
-                    {message ?
-                        <p className="mx-5 mb-4 rounded-lg bg-danger/15 px-3 py-2 text-[12px] text-danger">{message}</p> : null}
+                    {message ? <p className={styles.textP4}>{message}</p> : null}
                 </main>
             </div>
 
             {isDragging ? (
-                <div
-                    className="pointer-events-none absolute inset-3 z-20 flex items-center justify-center rounded-2xl border-2 border-dashed border-accent bg-accent/10 text-[15px] font-medium">
+                <div className={styles.overlay}>
                     Drop a project to open it
                 </div>
             ) : null}
 
-            {showNew ? <StellarNewProjectDialog onClose={() => setShowNew(false)}
-                                                onCreate={(path) => void open(path)}/> : null}
-            <StellarContextMenu/>
+            {showNew ? <StellarNewProjectDialog onClose={() => setShowNew(false)} onCreate={(path) => void open(path)} /> : null}
+            <StellarContextMenu />
         </div>
     );
 }

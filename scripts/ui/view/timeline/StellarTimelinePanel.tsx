@@ -6,14 +6,7 @@ import {useStore} from '../../controller/store/StellarStore';
 import {activateSequence} from '../../controller/project/StellarProject.Controller';
 import {sequenceDuration, tracksOfType} from '../../controller/timeline/StellarTimeline.Controller';
 import {
-    addMarker,
-    applyEffect,
-    dropMediaOnTimeline,
-    setTimelineViewportWidth,
-    setZoom,
-    toggleLinkedSelection,
-    toggleSnapping,
-    zoomToFit
+    addMarker, applyEffect, dropMediaOnTimeline, setTimelineViewportWidth, setZoom, toggleLinkedSelection, toggleSnapping, zoomToFit
 } from '../../controller/timeline/StellarTimelineActions.Controller';
 import {openContextMenu, openMenuAt} from '../../controller/contextmenu/StellarContextMenu.Controller';
 import StellarAudioMeter from '../mixer/StellarAudioMeter';
@@ -24,23 +17,12 @@ import StellarTimelineClip from './StellarTimelineClip';
 import StellarTimelineRuler from './StellarTimelineRuler';
 import StellarTimelineTrackHeader from './StellarTimelineTrackHeader';
 import {clipMenu, laneMenu, rulerMenu} from './StellarTimelineMenus';
-import {
-    EFFECT_DRAG_TYPE,
-    EMPTY_TAIL_SECONDS,
-    HEADER_WIDTH,
-    RULER_HEIGHT,
-    TRACK_HEIGHT
-} from './StellarTimelineConstants';
+import {EFFECT_DRAG_TYPE, EMPTY_TAIL_SECONDS, HEADER_WIDTH, RULER_HEIGHT, TRACK_HEIGHT} from './StellarTimelineConstants';
 import {useStellarTimelineInteraction} from './useStellarTimelineInteraction';
+import styles from './StellarTimelinePanel.module.css';
 
 const CURSORS: Record<ToolId, string> = {
-    selection: 'default',
-    trackSelect: 'e-resize',
-    ripple: 'col-resize',
-    razor: 'crosshair',
-    hand: 'grab',
-    zoom: 'zoom-in',
-    pen: 'crosshair'
+    selection: 'default', trackSelect: 'e-resize', ripple: 'col-resize', razor: 'crosshair', hand: 'grab', zoom: 'zoom-in', pen: 'crosshair'
 };
 
 /** The timeline: tracks, clips, ruler and playhead. */
@@ -145,9 +127,9 @@ export default function StellarTimelinePanel() {
 
     if (!sequence || !document) {
         return (
-            <div className="flex h-full flex-col items-center justify-center gap-2 text-dim">
-                <StellarIcon name="sequence" size={28}/>
-                <p className="text-[12px]">Create a sequence to start editing.</p>
+            <div className={styles.column}>
+                <StellarIcon name="sequence" size={28} />
+                <p className={styles.textP}>Create a sequence to start editing.</p>
             </div>
         );
     }
@@ -222,211 +204,170 @@ export default function StellarTimelinePanel() {
     }
 
     return (
-        <div className="flex h-full flex-col" data-theme="StellarTimeline.panel">
+        <div className={styles.panel} data-theme="StellarTimeline.panel">
             {/* Toolbar */}
-            <div className="flex h-9 shrink-0 items-center gap-1 border-b border-line px-2"
-                 data-theme="StellarTimeline.toolbar">
+            <div className={styles.toolbar} data-theme="StellarTimeline.toolbar">
                 {document.sequences.map((item) => (
                     <button
                         key={item.id}
                         type="button"
                         onClick={() => activateSequence(item.id)}
-                        className={`max-w-40 truncate rounded-md px-2.5 py-1 text-[12px] ${item.id === sequence.id ? 'bg-surface-hover text-ink' : 'text-dim hover:text-ink'}`}
+                        className={`${styles.textButton} ${item.id === sequence.id ? styles.textButtonId : styles.textButtonNotId}`}
                     >
                         {item.name}
                     </button>
                 ))}
-                <button type="button" className={BUTTON_GHOST} title="New sequence"
-                        onClick={() => editorStore.set({dialog: 'newSequence'})}>
-                    <StellarIcon name="plus" size={14}/>
+                <button type="button" className={BUTTON_GHOST} title="New sequence" onClick={() => editorStore.set({dialog: 'newSequence'})}>
+                    <StellarIcon name="plus" size={14} />
                 </button>
 
-                <span
-                    className="timecode ml-3 text-[13px] text-accent">{formatTimecode(playhead, sequence.settings.frameRate)}</span>
+                <span className={`${styles.textSpan} timecode`}>{formatTimecode(playhead, sequence.settings.frameRate)}</span>
 
-                <div className="ml-auto flex items-center gap-1">
-                    <button type="button" className={`${BUTTON_GHOST} ${snapping ? 'bg-accent/20 text-accent' : ''}`}
-                            title="Snap (S)" onClick={toggleSnapping}>
-                        <StellarIcon name="magnet" size={15}/>
+                <div className={styles.row}>
+                    <button type="button" className={`${BUTTON_GHOST} ${snapping ? styles.textButtonSnapping : ''}`} title="Snap (S)" onClick={toggleSnapping}>
+                        <StellarIcon name="magnet" size={15} />
                     </button>
-                    <button type="button" className={`${BUTTON_GHOST} ${linked ? 'bg-accent/20 text-accent' : ''}`}
-                            title="Linked selection" onClick={toggleLinkedSelection}>
-                        <StellarIcon name="link" size={15}/>
+                    <button type="button" className={`${BUTTON_GHOST} ${linked ? styles.textButtonSnapping : ''}`} title="Linked selection" onClick={toggleLinkedSelection}>
+                        <StellarIcon name="link" size={15} />
                     </button>
-                    <button type="button" className={BUTTON_GHOST} title="Add marker (M)"
-                            onClick={() => addMarker(markerColor)}>
-                        <StellarIcon name="marker" size={15}/>
+                    <button type="button" className={BUTTON_GHOST} title="Add marker (M)" onClick={() => addMarker(markerColor)}>
+                        <StellarIcon name="marker" size={15} />
                     </button>
                     <button
                         type="button"
-                        className="size-4 rounded-full border border-ink/40"
+                        className={styles.button}
                         style={{background: markerColor}}
                         title="Color of new markers"
                         onClick={(event) => {
                             const box = event.currentTarget.getBoundingClientRect();
 
-                            openMenuAt(box.left, box.bottom + 4, MARKER_COLORS.map((choice) => ({
-                                id: choice.id,
-                                label: choice.label,
-                                checked: choice.color === markerColor,
-                                action: () => setMarkerColor(choice.color)
-                            })));
+                            openMenuAt(box.left, box.bottom + 4, MARKER_COLORS.map((choice) => ({id: choice.id, label: choice.label, checked: choice.color === markerColor, action: () => setMarkerColor(choice.color)})));
                         }}
                     />
-                    <span className="mx-1 h-4 w-px bg-line"/>
-                    <button type="button" className={BUTTON_GHOST} title="Zoom out"
-                            onClick={() => setZoom(pixelsPerSecond / 1.35)}><StellarIcon name="minus" size={14}/>
-                    </button>
+                    <span className={styles.span} />
+                    <button type="button" className={BUTTON_GHOST} title="Zoom out" onClick={() => setZoom(pixelsPerSecond / 1.35)}><StellarIcon name="minus" size={14} /></button>
                     <input
                         type="range"
                         min={0}
                         max={100}
                         value={(Math.log(pixelsPerSecond / MIN_PIXELS_PER_SECOND) / Math.log(MAX_PIXELS_PER_SECOND / MIN_PIXELS_PER_SECOND)) * 100}
                         onChange={(event) => setZoom(MIN_PIXELS_PER_SECOND * Math.pow(MAX_PIXELS_PER_SECOND / MIN_PIXELS_PER_SECOND, Number(event.target.value) / 100))}
-                        className="w-24"
+                        className={styles.boxInput}
                     />
-                    <button type="button" className={BUTTON_GHOST} title="Zoom in"
-                            onClick={() => setZoom(pixelsPerSecond * 1.35)}><StellarIcon name="plus" size={14}/>
-                    </button>
-                    <button type="button" className={BUTTON_GHOST} title="Zoom to sequence (\)"
-                            onClick={() => zoomToFit()}><StellarIcon name="expand" size={14}/></button>
+                    <button type="button" className={BUTTON_GHOST} title="Zoom in" onClick={() => setZoom(pixelsPerSecond * 1.35)}><StellarIcon name="plus" size={14} /></button>
+                    <button type="button" className={BUTTON_GHOST} title="Zoom to sequence (\)" onClick={() => zoomToFit()}><StellarIcon name="expand" size={14} /></button>
                 </div>
             </div>
 
             {/* Tracks, and the audio meter on the right */}
-            <div className="flex min-h-0 flex-1">
-                <div className="relative min-h-0 min-w-0 flex-1">
+            <div className={styles.row2}>
+            <div className={styles.div}>
+                <div
+                    ref={scrollerRef}
+                    className={styles.overlay}
+                    onScroll={(event) => {
+                        const left = event.currentTarget.scrollLeft;
+
+                        if (Math.abs(left - editorStore.get().scrollX) > 1) {
+                            editorStore.set({scrollX: left});
+                        }
+                    }}
+                >
                     <div
-                        ref={scrollerRef}
-                        className="absolute inset-0 overflow-auto"
-                        onScroll={(event) => {
-                            const left = event.currentTarget.scrollLeft;
-
-                            if (Math.abs(left - editorStore.get().scrollX) > 1) {
-                                editorStore.set({scrollX: left});
-                            }
+                        ref={contentRef}
+                        className={styles.div2}
+                        style={{width: HEADER_WIDTH + contentWidth, minHeight: '100%', cursor: CURSORS[tool]}}
+                        onPointerDown={interaction.onPointerDown}
+                        onPointerMove={interaction.onPointerMove}
+                        onPointerUp={interaction.onPointerUp}
+                        onContextMenu={handleContextMenu}
+                        onDragOver={(event) => {
+                            event.preventDefault();
+                            setDropActive(true);
                         }}
+                        onDragLeave={() => setDropActive(false)}
+                        onDrop={handleDrop}
                     >
-                        <div
-                            ref={contentRef}
-                            className="relative"
-                            style={{width: HEADER_WIDTH + contentWidth, minHeight: '100%', cursor: CURSORS[tool]}}
-                            onPointerDown={interaction.onPointerDown}
-                            onPointerMove={interaction.onPointerMove}
-                            onPointerUp={interaction.onPointerUp}
-                            onContextMenu={handleContextMenu}
-                            onDragOver={(event) => {
-                                event.preventDefault();
-                                setDropActive(true);
-                            }}
-                            onDragLeave={() => setDropActive(false)}
-                            onDrop={handleDrop}
-                        >
-                            {/* Ruler row */}
-                            <div
-                                className="sticky top-0 z-30 flex bg-[color-mix(in_srgb,var(--sc-base)_75%,transparent)] backdrop-blur-md"
-                                style={{height: RULER_HEIGHT}}>
-                                <div
-                                    className="sticky left-0 z-40 shrink-0 border-b border-r border-line bg-[color-mix(in_srgb,var(--sc-base)_80%,transparent)]"
-                                    style={{width: HEADER_WIDTH}} data-header="true"/>
-                                <StellarTimelineRuler sequence={sequence} pixelsPerSecond={pixelsPerSecond}
-                                                      scrollX={scrollX} viewportWidth={viewportWidth}
-                                                      width={contentWidth}/>
-                            </div>
-
-                            {/* Track rows */}
-                            {rows.map((track, index) => {
-                                const isFirstAudio = track.type === 'audio' && rows[index - 1]?.type === 'video';
-
-                                return (
-                                    <div key={track.id}
-                                         className={`flex ${isFirstAudio ? 'border-t-2 border-t-line' : ''}`}
-                                         data-track-row={track.id}>
-                                        <div data-header="true">
-                                            <StellarTimelineTrackHeader track={track}
-                                                                        isTarget={track.id === (track.type === 'video' ? targetVideo : targetAudio)}/>
-                                        </div>
-                                        <div
-                                            className={`relative border-b border-line/60 ${track.locked ? 'bg-deep' : index % 2 === 0 ? 'bg-ink/[0.015]' : ''} ${track.muted ? 'opacity-60' : ''}`}
-                                            style={{width: contentWidth, height: TRACK_HEIGHT}}
-                                            data-theme="StellarTimeline.lane"
-                                        >
-                                            {sequence.clips
-                                                .filter((clip) => clip.trackId === track.id)
-                                                .map((clip) => {
-                                                    const media = document.media.find((item) => item.id === clip.mediaId);
-
-                                                    return (
-                                                        <StellarTimelineClip
-                                                            key={clip.id}
-                                                            clip={clip}
-                                                            media={media}
-                                                            trackType={track.type}
-                                                            pixelsPerSecond={pixelsPerSecond}
-                                                            selected={selection.includes(clip.id)}
-                                                            offline={media ? Boolean(offline[media.id]) : true}
-                                                            thumbnail={media ? thumbnails[media.path] : undefined}
-                                                            locked={track.locked}
-                                                        />
-                                                    );
-                                                })}
-                                        </div>
-                                    </div>
-                                );
-                            })}
-
-                            {/* In / out range over the tracks */}
-                            {sequence.inPoint !== null && sequence.outPoint !== null ? (
-                                <div
-                                    className="pointer-events-none absolute bottom-0 z-[5] bg-accent/10"
-                                    style={{
-                                        left: HEADER_WIDTH + sequence.inPoint * pixelsPerSecond,
-                                        width: (sequence.outPoint - sequence.inPoint) * pixelsPerSecond,
-                                        top: RULER_HEIGHT
-                                    }}
-                                />
-                            ) : null}
-
-                            {/* Snap guide */}
-                            {snapGuide !== null ?
-                                <div className="pointer-events-none absolute bottom-0 top-0 z-[25] w-px bg-warning"
-                                     style={{left: HEADER_WIDTH + snapGuide * pixelsPerSecond}}/> : null}
-
-                            {/* Playhead */}
-                            <div className="pointer-events-none absolute bottom-0 top-0 z-[26]"
-                                 style={{left: HEADER_WIDTH + playhead * pixelsPerSecond}}
-                                 data-theme="StellarTimeline.playhead">
-                                <div
-                                    className="absolute top-0 h-0 w-0 -translate-x-1/2 border-x-[6px] border-t-[10px] border-x-transparent border-t-playhead"/>
-                                <div className="absolute bottom-0 top-0 w-px -translate-x-1/2 bg-playhead"/>
-                            </div>
-
-                            {/* Marquee */}
-                            {interaction.marquee ? (
-                                <div
-                                    className="pointer-events-none absolute z-[40] border border-accent bg-accent/15"
-                                    style={{
-                                        left: interaction.marquee.left,
-                                        top: interaction.marquee.top,
-                                        width: interaction.marquee.width,
-                                        height: interaction.marquee.height
-                                    }}
-                                />
-                            ) : null}
+                        {/* Ruler row */}
+                        <div className={styles.row3} style={{height: RULER_HEIGHT}}>
+                            <div className={styles.div3} style={{width: HEADER_WIDTH}} data-header="true" />
+                            <StellarTimelineRuler sequence={sequence} pixelsPerSecond={pixelsPerSecond} scrollX={scrollX} viewportWidth={viewportWidth} width={contentWidth} />
                         </div>
-                    </div>
 
-                    {dropActive ? <div
-                        className="pointer-events-none absolute inset-1 rounded-xl border-2 border-dashed border-accent/60"/> : null}
+                        {/* Track rows */}
+                        {rows.map((track, index) => {
+                            const isFirstAudio = track.type === 'audio' && rows[index - 1]?.type === 'video';
+
+                            return (
+                                <div key={track.id} className={`${styles.row4} ${isFirstAudio ? styles.divIsFirstAudio : ''}`} data-track-row={track.id}>
+                                    <div data-header="true">
+                                        <StellarTimelineTrackHeader track={track} isTarget={track.id === (track.type === 'video' ? targetVideo : targetAudio)} />
+                                    </div>
+                                    <div
+                                        className={`${styles.lane} ${track.locked ? styles.laneLocked : index % 2 === 0 ? styles.lane0 : ''} ${track.muted ? styles.laneMuted : ''}`}
+                                        style={{width: contentWidth, height: TRACK_HEIGHT}}
+                                        data-theme="StellarTimeline.lane"
+                                    >
+                                        {sequence.clips
+                                            .filter((clip) => clip.trackId === track.id)
+                                            .map((clip) => {
+                                                const media = document.media.find((item) => item.id === clip.mediaId);
+
+                                                return (
+                                                    <StellarTimelineClip
+                                                        key={clip.id}
+                                                        clip={clip}
+                                                        media={media}
+                                                        trackType={track.type}
+                                                        pixelsPerSecond={pixelsPerSecond}
+                                                        selected={selection.includes(clip.id)}
+                                                        offline={media ? Boolean(offline[media.id]) : true}
+                                                        thumbnail={media ? thumbnails[media.path] : undefined}
+                                                        locked={track.locked}
+                                                    />
+                                                );
+                                            })}
+                                    </div>
+                                </div>
+                            );
+                        })}
+
+                        {/* In / out range over the tracks */}
+                        {sequence.inPoint !== null && sequence.outPoint !== null ? (
+                            <div
+                                className={styles.div4}
+                                style={{left: HEADER_WIDTH + sequence.inPoint * pixelsPerSecond, width: (sequence.outPoint - sequence.inPoint) * pixelsPerSecond, top: RULER_HEIGHT}}
+                            />
+                        ) : null}
+
+                        {/* Snap guide */}
+                        {snapGuide !== null ? <div className={styles.div5} style={{left: HEADER_WIDTH + snapGuide * pixelsPerSecond}} /> : null}
+
+                        {/* Playhead */}
+                        <div className={styles.playhead} style={{left: HEADER_WIDTH + playhead * pixelsPerSecond}} data-theme="StellarTimeline.playhead">
+                            <div className={styles.div6} />
+                            <div className={styles.div7} />
+                        </div>
+
+                        {/* Marquee */}
+                        {interaction.marquee ? (
+                            <div
+                                className={styles.div8}
+                                style={{left: interaction.marquee.left, top: interaction.marquee.top, width: interaction.marquee.width, height: interaction.marquee.height}}
+                            />
+                        ) : null}
+                    </div>
                 </div>
 
-                <div className="flex w-[52px] shrink-0 flex-col items-center border-l border-line pb-2 pt-1"
-                     data-theme="StellarTimeline.meter" title="Master level">
-                    <div className="mb-1 text-[9px] uppercase tracking-wide text-dim">dB</div>
-                    <div className="min-h-0 flex-1" style={{marginTop: RULER_HEIGHT - 14}}>
-                        <StellarAudioMeter showScale/>
-                    </div>
+                {dropActive ? <div className={styles.overlay2} /> : null}
+            </div>
+
+            <div className={styles.meter} data-theme="StellarTimeline.meter" title="Master level">
+                <div className={styles.text}>dB</div>
+                <div className={styles.div9} style={{marginTop: RULER_HEIGHT - 14}}>
+                    <StellarAudioMeter showScale />
                 </div>
+            </div>
             </div>
         </div>
     );

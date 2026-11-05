@@ -10,8 +10,7 @@ import type {MediaModel} from '../../models/MediaModel';
 
 /** Answers the media requests: import, probing, thumbnails, playback copies and waveforms. */
 export class StellarMediaController {
-    constructor(private media: MediaModel) {
-    }
+    constructor(private media: MediaModel) {}
 
     register(): void {
         ipcMain.handle(StellarIPC.importDialog, (event) => this.importDialog(event.sender.id));
@@ -43,13 +42,7 @@ export class StellarMediaController {
             {name: 'Downloads', path: join(home, 'Downloads')}
         ].filter((root) => existsSync(root.path));
         const folder = resolve(path && path.length > 0 ? path : home);
-        const listing: DirectoryListing = {
-            path: folder,
-            parent: parse(folder).root === folder ? null : dirname(folder),
-            entries: [],
-            roots,
-            error: null
-        };
+        const listing: DirectoryListing = {path: folder, parent: parse(folder).root === folder ? null : dirname(folder), entries: [], roots, error: null};
 
         try {
             const entries: DirectoryEntry[] = [];

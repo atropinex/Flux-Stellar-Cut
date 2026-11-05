@@ -4,29 +4,10 @@ import {SNAP_DISTANCE_PX} from '../../../common/stellar/StellarConfig';
 import {clamp, snapToFrame} from '../../../common/utils/StellarTimeHelper';
 import {editorStore, getActiveSequence, getMedia} from '../../controller/project/StellarEditor.Store';
 import {
-    allowedTrackShift,
-    clipEnd,
-    clipsAtOrAfter,
-    clipsInRegion,
-    editPoints,
-    findClip,
-    findTrack,
-    moveClips,
-    snapPoints,
-    snapToPoints,
-    tracksOfType,
-    trimClip,
-    trimLimits,
-    withLinkedClips
+    allowedTrackShift, clipEnd, clipsAtOrAfter, clipsInRegion, editPoints, findClip, findTrack, moveClips, snapPoints, snapToPoints,
+    tracksOfType, trimClip, trimLimits, withLinkedClips
 } from '../../controller/timeline/StellarTimeline.Controller';
-import {
-    cancelPreview,
-    commitPreview,
-    razorAt,
-    selectClips,
-    deselectAll,
-    setZoom
-} from '../../controller/timeline/StellarTimelineActions.Controller';
+import {cancelPreview, commitPreview, razorAt, selectClips, deselectAll, setZoom} from '../../controller/timeline/StellarTimelineActions.Controller';
 import {pause, seekTo} from '../../controller/playback/StellarPlayback.Controller';
 import {HEADER_WIDTH} from './StellarTimelineConstants';
 
@@ -34,11 +15,11 @@ import {HEADER_WIDTH} from './StellarTimelineConstants';
 // While a clip is dragged, the new layout is only a preview. It becomes one undo step when the mouse is released.
 
 type Drag =
-    | { kind: 'scrub' }
-    | { kind: 'pan'; startX: number; startY: number; scrollLeft: number; scrollTop: number }
-    | { kind: 'move'; base: Sequence; ids: string[]; grabTime: number; originTrackId: string; moved: boolean }
-    | { kind: 'trim'; base: Sequence; clipId: string; edge: 'start' | 'end'; ripple: boolean; moved: boolean }
-    | { kind: 'marquee'; startX: number; startY: number; baseSelection: string[] };
+    | {kind: 'scrub'}
+    | {kind: 'pan'; startX: number; startY: number; scrollLeft: number; scrollTop: number}
+    | {kind: 'move'; base: Sequence; ids: string[]; grabTime: number; originTrackId: string; moved: boolean}
+    | {kind: 'trim'; base: Sequence; clipId: string; edge: 'start' | 'end'; ripple: boolean; moved: boolean}
+    | {kind: 'marquee'; startX: number; startY: number; baseSelection: string[]};
 
 export interface MarqueeRect {
     left: number;
@@ -120,13 +101,7 @@ export function useStellarTimelineInteraction(scrollerRef: RefObject<HTMLDivElem
         const scroller = scrollerRef.current;
 
         if (state.tool === 'hand' && scroller) {
-            drag.current = {
-                kind: 'pan',
-                startX: event.clientX,
-                startY: event.clientY,
-                scrollLeft: scroller.scrollLeft,
-                scrollTop: scroller.scrollTop
-            };
+            drag.current = {kind: 'pan', startX: event.clientX, startY: event.clientY, scrollLeft: scroller.scrollLeft, scrollTop: scroller.scrollTop};
             return;
         }
 
@@ -153,12 +128,7 @@ export function useStellarTimelineInteraction(scrollerRef: RefObject<HTMLDivElem
                 deselectAll();
             }
 
-            drag.current = {
-                kind: 'marquee',
-                startX: event.clientX,
-                startY: event.clientY,
-                baseSelection: event.shiftKey ? state.selection : []
-            };
+            drag.current = {kind: 'marquee', startX: event.clientX, startY: event.clientY, baseSelection: event.shiftKey ? state.selection : []};
             return;
         }
 
@@ -213,7 +183,7 @@ export function useStellarTimelineInteraction(scrollerRef: RefObject<HTMLDivElem
 
     // === Moving === //
 
-    function moveDelta(d: Extract<Drag, { kind: 'move' }>, raw: number): { delta: number; guide: number | null } {
+    function moveDelta(d: Extract<Drag, {kind: 'move'}>, raw: number): {delta: number; guide: number | null} {
         const state = editorStore.get();
         const frameRate = d.base.settings.frameRate;
 
@@ -223,7 +193,7 @@ export function useStellarTimelineInteraction(scrollerRef: RefObject<HTMLDivElem
 
         const points = snapPoints(d.base, state.playhead, new Set(d.ids));
         const threshold = snapThreshold();
-        let best: { adjust: number; point: number } | null = null;
+        let best: {adjust: number; point: number} | null = null;
 
         for (const clip of d.base.clips.filter((item) => d.ids.includes(item.id))) {
             for (const edge of [clip.start + raw, clipEnd(clip) + raw]) {

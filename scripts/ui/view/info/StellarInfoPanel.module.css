@@ -1,0 +1,62 @@
+/* ------ Fact ------ */
+
+.row {
+    display: flex;
+    gap: 7px;
+
+    padding: 1.6px 10px;
+
+    font-size: 12px;
+}
+
+.textSpan {
+    flex-shrink: 0;
+
+    width: 110px;
+
+    color: var(--sc-dim);
+}
+
+.span {
+    flex: 1;
+    overflow-wrap: break-word;
+
+    min-width: 0;
+}
+
+
+/* ------ save ------ */
+
+.panel {
+    overflow: auto;
+
+    height: 100%;
+}
+
+.textP {
+    padding-inline: 10px;
+    padding-bottom: 3px;
+
+    font-size: 11px;
+    color: var(--sc-dim);
+}
+
+.div {
+    padding-inline: 10px;
+    padding-bottom: 7px;
+}
+
+.textLabel {
+    display: block;
+
+    margin-bottom: 1.6px;
+
+    font-size: 11px;
+    color: var(--sc-dim);
+}
+
+.textarea {
+    min-height: 52px;
+
+    resize: vertical;
+}

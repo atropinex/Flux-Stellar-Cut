@@ -2,12 +2,7 @@ import type {Clip, ExportProgress, ExportSettings, MediaItem, Sequence} from '..
 import {collectGeneratedClips} from '../../../common/stellar/StellarExportCommand';
 import {activeMasks} from '../../../common/stellar/StellarMask';
 import {renderMaskCanvas, renderTextCanvas, toBase64Png} from '../graphics/StellarGraphics';
-import {
-    EXPORT_PRESETS,
-    findExportFormat,
-    type ExportFormat,
-    type ExportPreset
-} from '../../../common/stellar/StellarExportFormats';
+import {EXPORT_PRESETS, findExportFormat, type ExportFormat, type ExportPreset} from '../../../common/stellar/StellarExportFormats';
 import {createStore} from '../store/StellarStore';
 import {editorStore, getActiveSequence} from './StellarEditor.Store';
 import {sequenceDuration} from '../timeline/StellarTimeline.Controller';
@@ -123,10 +118,7 @@ function sequencesById(sequences: Sequence[]): Record<string, Sequence> {
 }
 
 /** The size of the picture a mask is drawn for: the same shape as the clip's picture. */
-function maskSizeFor(clip: Clip, media: Record<string, MediaItem>, sequences: Record<string, Sequence>, settings: ExportSettings): {
-    width: number;
-    height: number
-} {
+function maskSizeFor(clip: Clip, media: Record<string, MediaItem>, sequences: Record<string, Sequence>, settings: ExportSettings): { width: number; height: number } {
     const item = media[clip.mediaId];
     const inner = clip.nestId ? sequences[clip.nestId]?.settings : undefined;
     const sourceWidth = clip.text ? settings.width : item?.width ?? inner?.width ?? settings.width;
@@ -211,10 +203,7 @@ export async function startExport(settings: ExportSettings): Promise<void> {
     try {
         inlineAssets = drawInlineAssets(sequence, media, sequences, settings);
     } catch (error) {
-        exportStore.set({
-            starting: false,
-            error: `The text and masks could not be drawn: ${error instanceof Error ? error.message : String(error)}`
-        });
+        exportStore.set({starting: false, error: `The text and masks could not be drawn: ${error instanceof Error ? error.message : String(error)}`});
         return;
     }
 
@@ -228,15 +217,7 @@ export async function startExport(settings: ExportSettings): Promise<void> {
     exportStore.set({
         jobId: result.jobId,
         starting: false,
-        progress: {
-            jobId: result.jobId,
-            status: 'running',
-            percent: 0,
-            etaSeconds: null,
-            speed: null,
-            outputPath: settings.outputPath,
-            message: null
-        }
+        progress: {jobId: result.jobId, status: 'running', percent: 0, etaSeconds: null, speed: null, outputPath: settings.outputPath, message: null}
     });
 }
 

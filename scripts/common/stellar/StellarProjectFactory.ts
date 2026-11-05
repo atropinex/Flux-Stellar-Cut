@@ -1,14 +1,6 @@
 import {
-    PROJECT_FILE_VERSION,
-    type Bin,
-    type Clip,
-    type ClipMotion,
-    type MediaItem,
-    type ProjectDocument,
-    type Sequence,
-    type SequenceSettings,
-    type Track,
-    type TrackType
+    PROJECT_FILE_VERSION, type Bin, type Clip, type ClipMotion, type MediaItem, type ProjectDocument, type Sequence, type SequenceSettings,
+    type Track, type TrackType
 } from './StellarContract';
 import {defaultColor, normalizeColor} from './StellarColor';
 import {normalizeMask} from './StellarMask';
@@ -86,7 +78,7 @@ export function createEmptyProject(name: string, sequence: Sequence | null): Pro
 }
 
 export function defaultMotion(): ClipMotion {
-    return {x: 0, y: 0, scale: 100, rotation: 0, opacity: 100};
+    return { x: 0, y: 0, scale: 100, rotation: 0, opacity: 100 };
 }
 
 export function createClip(fields: Pick<Clip, 'trackId' | 'mediaId' | 'name' | 'start' | 'inPoint' | 'duration'> & Partial<Clip>): Clip {
@@ -126,11 +118,7 @@ function normalizeKeyframes(raw: unknown): Record<string, Keyframe[]> {
 
         const keyframes = list
             .filter((item) => item && typeof item.time === 'number' && typeof item.value === 'number')
-            .map((item) => ({
-                time: item.time,
-                value: item.value,
-                easing: isEasingId(item.easing) ? item.easing : 'linear'
-            } as Keyframe));
+            .map((item) => ({time: item.time, value: item.value, easing: isEasingId(item.easing) ? item.easing : 'linear'} as Keyframe));
 
         if (keyframes.length > 0) {
             result[path] = sortKeyframes(keyframes);
@@ -155,11 +143,7 @@ export function normalizeProject(raw: unknown): ProjectDocument {
 
     const sequences = (Array.isArray(source.sequences) ? source.sequences : []).map((sequence) => ({
         ...sequence,
-        tracks: (Array.isArray(sequence.tracks) ? sequence.tracks : []).map((track) => ({
-            ...track,
-            volumeDb: track.volumeDb ?? 0,
-            pan: track.pan ?? 0
-        })),
+        tracks: (Array.isArray(sequence.tracks) ? sequence.tracks : []).map((track) => ({...track, volumeDb: track.volumeDb ?? 0, pan: track.pan ?? 0})),
         masterDb: typeof sequence.masterDb === 'number' ? sequence.masterDb : 0,
         clips: (Array.isArray(sequence.clips) ? sequence.clips : []).map((clip) => ({
             ...createClip({
@@ -167,18 +151,14 @@ export function normalizeProject(raw: unknown): ProjectDocument {
                 start: clip.start, inPoint: clip.inPoint, duration: clip.duration
             }),
             ...clip,
-            motion: {...defaultMotion(), ...(clip.motion ?? {})},
+            motion: { ...defaultMotion(), ...(clip.motion ?? {}) },
             effects: Array.isArray(clip.effects) ? clip.effects : [],
             keyframes: normalizeKeyframes(clip.keyframes),
             color: normalizeColor(clip.color),
             masks: (Array.isArray(clip.masks) ? clip.masks : []).map(normalizeMask),
             text: normalizeText(clip.text)
         })),
-        markers: (Array.isArray(sequence.markers) ? sequence.markers : []).map((marker) => ({
-            ...marker,
-            duration: marker.duration ?? 0,
-            comment: marker.comment ?? ''
-        })),
+        markers: (Array.isArray(sequence.markers) ? sequence.markers : []).map((marker) => ({...marker, duration: marker.duration ?? 0, comment: marker.comment ?? ''})),
         inPoint: sequence.inPoint ?? null,
         outPoint: sequence.outPoint ?? null,
         playhead: sequence.playhead ?? 0

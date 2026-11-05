@@ -4,6 +4,7 @@ import {editorStore} from '../../controller/project/StellarEditor.Store';
 import {addSequence} from '../../controller/project/StellarProject.Controller';
 import StellarDialog from '../common/StellarDialog';
 import {BUTTON, BUTTON_PRIMARY, INPUT, LABEL} from '../common/StellarStyles';
+import styles from './StellarNewSequenceDialog.module.css';
 
 export default function StellarNewSequenceDialog() {
     const count = editorStore.get().document?.sequences.length ?? 0;
@@ -37,40 +38,34 @@ export default function StellarNewSequenceDialog() {
             onClose={() => editorStore.set({dialog: null})}
             footer={
                 <>
-                    <button type="button" className={BUTTON} onClick={() => editorStore.set({dialog: null})}>Cancel
-                    </button>
+                    <button type="button" className={BUTTON} onClick={() => editorStore.set({dialog: null})}>Cancel</button>
                     <button type="button" className={BUTTON_PRIMARY} onClick={create}>Create</button>
                 </>
             }
         >
-            <div className="flex flex-col gap-4">
+            <div className={styles.column}>
                 <div>
                     <label className={LABEL}>Name</label>
-                    <input className={INPUT} value={name} autoFocus onChange={(event) => setName(event.target.value)}/>
+                    <input className={INPUT} value={name} autoFocus onChange={(event) => setName(event.target.value)} />
                 </div>
                 <div>
                     <label className={LABEL}>Preset</label>
                     <select className={INPUT} value={presetId} onChange={(event) => choosePreset(event.target.value)}>
-                        {SEQUENCE_PRESETS.map((preset) => <option key={preset.id}
-                                                                  value={preset.id}>{preset.label}</option>)}
+                        {SEQUENCE_PRESETS.map((preset) => <option key={preset.id} value={preset.id}>{preset.label}</option>)}
                     </select>
                 </div>
-                <div className="grid grid-cols-3 gap-3">
+                <div className={styles.grid}>
                     <div>
                         <label className={LABEL}>Width</label>
-                        <input type="number" className={INPUT} value={width} min={16} step={2}
-                               onChange={(event) => setWidth(Math.max(16, Number(event.target.value)))}/>
+                        <input type="number" className={INPUT} value={width} min={16} step={2} onChange={(event) => setWidth(Math.max(16, Number(event.target.value)))} />
                     </div>
                     <div>
                         <label className={LABEL}>Height</label>
-                        <input type="number" className={INPUT} value={height} min={16} step={2}
-                               onChange={(event) => setHeight(Math.max(16, Number(event.target.value)))}/>
+                        <input type="number" className={INPUT} value={height} min={16} step={2} onChange={(event) => setHeight(Math.max(16, Number(event.target.value)))} />
                     </div>
                     <div>
                         <label className={LABEL}>Frame rate</label>
-                        <input type="number" className={INPUT} value={Number(frameRate.toFixed(3))} min={1} max={120}
-                               step={0.001}
-                               onChange={(event) => setFrameRate(Math.max(1, Number(event.target.value)))}/>
+                        <input type="number" className={INPUT} value={Number(frameRate.toFixed(3))} min={1} max={120} step={0.001} onChange={(event) => setFrameRate(Math.max(1, Number(event.target.value)))} />
                     </div>
                 </div>
             </div>

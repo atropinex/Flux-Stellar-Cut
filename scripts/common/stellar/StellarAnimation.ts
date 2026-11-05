@@ -20,15 +20,15 @@ export interface EasingDefinition {
 }
 
 export const EASINGS: EasingDefinition[] = [
-    {id: 'linear', label: 'Linear', description: 'Constant speed'},
-    {id: 'hold', label: 'Hold', description: 'Stays until the next keyframe, then jumps'},
-    {id: 'easeIn', label: 'Ease In', description: 'Starts slow'},
-    {id: 'easeOut', label: 'Ease Out', description: 'Ends slow'},
-    {id: 'easeInOut', label: 'Ease In Out', description: 'Slow at both ends'},
-    {id: 'cubicIn', label: 'Cubic In', description: 'Starts very slow'},
-    {id: 'cubicOut', label: 'Cubic Out', description: 'Ends very slow'},
-    {id: 'cubicInOut', label: 'Cubic In Out', description: 'Very slow at both ends'},
-    {id: 'backOut', label: 'Overshoot', description: 'Goes past the value, then settles'}
+    { id: 'linear', label: 'Linear', description: 'Constant speed' },
+    { id: 'hold', label: 'Hold', description: 'Stays until the next keyframe, then jumps' },
+    { id: 'easeIn', label: 'Ease In', description: 'Starts slow' },
+    { id: 'easeOut', label: 'Ease Out', description: 'Ends slow' },
+    { id: 'easeInOut', label: 'Ease In Out', description: 'Slow at both ends' },
+    { id: 'cubicIn', label: 'Cubic In', description: 'Starts very slow' },
+    { id: 'cubicOut', label: 'Cubic Out', description: 'Ends very slow' },
+    { id: 'cubicInOut', label: 'Cubic In Out', description: 'Very slow at both ends' },
+    { id: 'backOut', label: 'Overshoot', description: 'Goes past the value, then settles' }
 ];
 
 export const DEFAULT_EASING: EasingId = 'linear';
@@ -176,10 +176,7 @@ export function moveKeyframe(keyframes: Keyframe[], fromTime: number, toTime: nu
 }
 
 export function setKeyframeEasing(keyframes: Keyframe[], time: number, easing: EasingId): Keyframe[] {
-    return keyframes.map((keyframe) => (Math.abs(keyframe.time - time) <= SAME_TIME ? {
-        ...keyframe,
-        easing
-    } : keyframe));
+    return keyframes.map((keyframe) => (Math.abs(keyframe.time - time) <= SAME_TIME ? {...keyframe, easing} : keyframe));
 }
 
 export function nextKeyframeTime(keyframes: Keyframe[] | undefined, time: number): number | null {

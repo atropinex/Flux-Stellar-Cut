@@ -1,4 +1,5 @@
 import {useRef, type RefObject} from 'react';
+import styles from './StellarSplitter.module.css';
 
 interface SplitterProps {
     axis: 'x' | 'y';                           // x = a vertical bar that resizes left and right
@@ -10,14 +11,7 @@ interface SplitterProps {
 }
 
 /** The gap between two panels. Dragging it resizes them. */
-export default function StellarSplitter({
-                                            axis,
-                                            containerRef,
-                                            onChange,
-                                            fromEnd = false,
-                                            min = 0.1,
-                                            max = 0.8
-                                        }: SplitterProps) {
+export default function StellarSplitter({axis, containerRef, onChange, fromEnd = false, min = 0.1, max = 0.8}: SplitterProps) {
     const dragging = useRef(false);
 
     function handleMove(clientX: number, clientY: number) {
@@ -37,7 +31,7 @@ export default function StellarSplitter({
         <div
             role="separator"
             data-theme="StellarSplitter"
-            className={`group relative shrink-0 ${axis === 'x' ? 'w-(--sc-gap) cursor-col-resize' : 'h-(--sc-gap) cursor-row-resize'}`}
+            className={`${styles.div} group ${axis === 'x' ? styles.divVariant : styles.divVariant2}`}
             onPointerDown={(event) => {
                 dragging.current = true;
                 event.currentTarget.setPointerCapture(event.pointerId);
@@ -53,8 +47,8 @@ export default function StellarSplitter({
             }}
         >
             <div
-                className={`absolute rounded-full bg-accent/0 transition-colors group-hover:bg-accent/60 group-active:bg-accent ${
-                    axis === 'x' ? 'inset-y-2 left-1/2 w-0.5 -translate-x-1/2' : 'inset-x-2 top-1/2 h-0.5 -translate-y-1/2'
+                className={`${styles.div2} ${
+                    axis === 'x' ? styles.divVariant3 : styles.divVariant4
                 }`}
             />
         </div>

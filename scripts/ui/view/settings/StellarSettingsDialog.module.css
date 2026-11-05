@@ -1,0 +1,380 @@
+/* ------ Section ------ */
+
+.section {
+    margin-bottom: 16px;
+}
+
+.textP {
+    margin-bottom: 7px;
+
+    font-size: 11.5px;
+    line-height: 1.375;
+    color: var(--sc-dim);
+}
+
+.div {
+    overflow: hidden;
+
+    border-radius: 10px;
+    border: 1px solid var(--sc-line);
+    background-color: var(--sc-deep);
+}
+
+.div > :not(:last-child) {
+    border-top: 0 solid var(--sc-line);
+    border-bottom: 1px solid;
+}
+
+
+/* ------ Row ------ */
+
+.row {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+
+    min-height: 36px;
+
+    padding: 7px 11px;
+}
+
+.box {
+    flex: 1;
+
+    min-width: 0;
+}
+
+.text {
+    font-size: 13px;
+    color: var(--sc-ink);
+}
+
+.text2 {
+    margin-top: 1.6px;
+
+    font-size: 11.5px;
+    line-height: 1.375;
+    color: var(--sc-dim);
+}
+
+.box2 {
+    flex-shrink: 0;
+}
+
+
+/* ------ Switch ------ */
+
+.button {
+    position: relative;
+
+    height: 16px;
+    width: 29px;
+
+    border-radius: calc(infinity * 1px);
+    border: 1px solid var(--sc-line);
+    transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+}
+
+.buttonValue {
+    background-color: var(--sc-accent);
+}
+
+.buttonNotValue {
+    background-color: var(--sc-surfaceHover);
+}
+
+.span {
+    position: absolute;
+    top: 1.6px;
+
+    width: 11px;
+    height: 11px;
+
+    border-radius: calc(infinity * 1px);
+    transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.spanValue {
+    left: 18px;
+
+    background-color: var(--sc-accentInk);
+}
+
+.spanNotValue {
+    left: 1.6px;
+
+    background-color: var(--sc-dim);
+}
+
+
+/* ------ NumberField ------ */
+
+.textInput {
+    width: 78px;
+
+    appearance: textfield;
+    text-align: right;
+}
+
+.textInput::-webkit-inner-spin-button {
+    appearance: none;
+}
+
+
+/* ------ choose ------ */
+
+.row2 {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    margin-bottom: 10px;
+}
+
+.h3 {
+    flex: 1;
+
+    margin-bottom: 0;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.textButton {
+    overflow: hidden;
+
+    text-align: left;
+
+    border-radius: 10px;
+    border: 1px solid;
+    transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+}
+
+.buttonId {
+    border-color: var(--sc-accent);
+}
+
+.buttonNotId {
+    border-color: var(--sc-line);
+}
+
+.buttonNotId:hover {
+    border-color: color-mix(in oklab, var(--sc-ink) 30%, transparent);
+}
+
+.div2 {
+    position: relative;
+
+    height: 52px;
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+}
+
+.overlay2 {
+    position: absolute;
+    inset: 10px;
+
+    border-radius: 7px;
+    border: 1px solid;
+}
+
+.div3 {
+    height: 5px;
+    width: 33px;
+
+    margin: 7px;
+
+    border-radius: calc(infinity * 1px);
+}
+
+.row3 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 7px 10px;
+
+    font-size: 12px;
+}
+
+.textSpan {
+    font-weight: 500;
+}
+
+.textStellarIcon {
+    color: var(--sc-accent);
+}
+
+.text3 {
+    margin-top: 10px;
+    padding: 10px;
+
+    font-size: 12px;
+    color: var(--sc-danger);
+
+    border-radius: 7px;
+    background-color: color-mix(in oklab, var(--sc-danger) 15%, transparent);
+}
+
+.textP2 {
+    margin-bottom: 3px;
+
+    font-weight: 500;
+}
+
+.textP3 {
+    margin-top: 10px;
+
+    font-size: 11px;
+    color: var(--sc-dim);
+}
+
+
+/* ------ clearKey ------ */
+
+.h32 {
+    margin-top: 13px;
+}
+
+.h32:first-child {
+    margin-top: 0;
+}
+
+.row4 {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    padding: 3px;
+
+    border-radius: 7px;
+}
+
+.row4:hover {
+    background-color: var(--sc-surface);
+}
+
+.textSpan2 {
+    flex: 1;
+
+    font-size: 13px;
+}
+
+.textButton2 {
+    flex-shrink: 0;
+
+    width: 130px;
+
+    padding: 3px 8px;
+
+    text-align: center;
+    font-size: 12px;
+
+    border-radius: 5px;
+    border: 1px solid;
+}
+
+.textButtonIsRecording {
+    color: var(--sc-accent);
+
+    border-color: var(--sc-accent);
+    background-color: color-mix(in oklab, var(--sc-accent) 20%, transparent);
+}
+
+.buttonNotIsRecording {
+    border-color: var(--sc-line);
+    background-color: var(--sc-deep);
+}
+
+.buttonNotIsRecording:hover {
+    border-color: color-mix(in oklab, var(--sc-ink) 30%, transparent);
+}
+
+.textButton3 {
+    padding: 3px;
+
+    color: var(--sc-dim);
+
+    border-radius: 3px;
+}
+
+.textButton3:hover {
+    color: var(--sc-danger);
+}
+
+.textButton3:disabled {
+    opacity: 30%;
+}
+
+.textP4 {
+    margin-bottom: 7px;
+
+    font-size: 11px;
+    color: var(--sc-dim);
+}
+
+
+/* ------ StellarSettingsDialog ------ */
+
+.row5 {
+    display: flex;
+    gap: 16px;
+}
+
+.columnNav {
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: column;
+    gap: 1.6px;
+
+    width: 117px;
+
+    padding-right: 10px;
+
+    border-right: 1px solid var(--sc-line);
+}
+
+.textButton4 {
+    padding: 7px 10px;
+
+    text-align: left;
+    font-size: 13px;
+
+    border-radius: 7px;
+}
+
+.textButtonId {
+    color: var(--sc-ink);
+
+    background-color: var(--sc-surfaceHover);
+}
+
+.textButtonNotId {
+    color: var(--sc-dim);
+}
+
+.textButtonNotId:hover {
+    color: var(--sc-ink);
+
+    background-color: var(--sc-surface);
+}
+
+.content {
+    flex: 1;
+    overflow: auto;
+
+    height: min(560px, 64vh);
+    min-width: 0;
+
+    padding-right: 7px;
+}

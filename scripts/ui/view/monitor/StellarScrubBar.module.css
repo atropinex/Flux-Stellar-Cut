@@ -1,0 +1,47 @@
+/* ------ seekFromEvent ------ */
+
+.div {
+    padding-inline: 10px;
+    padding-bottom: 7px;
+}
+
+.div2 {
+    position: relative;
+
+    height: 13px;
+
+    cursor: pointer;
+}
+
+.overlay {
+    position: absolute;
+    inset-inline: 0;
+    top: 5px;
+
+    height: 3px;
+
+    border-radius: calc(infinity * 1px);
+    background-color: color-mix(in oklab, var(--sc-ink) 10%, transparent);
+}
+
+.div3 {
+    position: absolute;
+    top: 5px;
+
+    height: 3px;
+
+    border-radius: calc(infinity * 1px);
+    background-color: color-mix(in oklab, var(--sc-accent) 60%, transparent);
+}
+
+.div4 {
+    position: absolute;
+    top: 1.6px;
+    translate: calc(calc(1 / 2 * 100%) * -1) 0;
+
+    height: 10px;
+    width: 5px;
+
+    border-radius: 3px;
+    background-color: var(--sc-playhead);
+}

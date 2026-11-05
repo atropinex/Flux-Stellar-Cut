@@ -105,11 +105,7 @@ export function clearRange(clips: Clip[], trackId: string, start: number, end: n
         const endsAfter = clipEnd(clip) > end + EPSILON;
 
         if (startsBefore) {
-            result.push({
-                ...clip,
-                duration: start - clip.start,
-                inPoint: inPointAfterTailCut(clip, clip.duration - (start - clip.start))
-            });
+            result.push({...clip, duration: start - clip.start, inPoint: inPointAfterTailCut(clip, clip.duration - (start - clip.start))});
         }
 
         if (endsAfter) {
@@ -134,11 +130,7 @@ export function clearRange(clips: Clip[], trackId: string, start: number, end: n
 /** Cuts one clip in two at a time. The second part gets a new id. */
 function splitOne(clip: Clip, time: number, rightLinkId: string | null): [Clip, Clip] {
     const leftDuration = time - clip.start;
-    const left: Clip = {
-        ...clip,
-        duration: leftDuration,
-        inPoint: inPointAfterTailCut(clip, clip.duration - leftDuration)
-    };
+    const left: Clip = {...clip, duration: leftDuration, inPoint: inPointAfterTailCut(clip, clip.duration - leftDuration)};
     const right: Clip = {
         ...clip,
         id: createId('clip'),
@@ -254,10 +246,7 @@ function shiftTrack(sequence: Sequence, trackId: string, delta: number): string 
 }
 
 /** Lowest and highest track shift that keeps every selected clip on a track of its own type. */
-export function allowedTrackShift(sequence: Sequence, ids: string[], onlyType?: Track['type']): {
-    min: number;
-    max: number
-} {
+export function allowedTrackShift(sequence: Sequence, ids: string[], onlyType?: Track['type']): { min: number; max: number } {
     let min = -Infinity;
     let max = Infinity;
 
@@ -334,12 +323,7 @@ export function trimClip(sequence: Sequence, clipId: string, edge: 'start' | 'en
         affectedTracks.add(item.trackId);
 
         if (edge === 'start') {
-            result.push({
-                ...item,
-                start: ripple ? item.start : item.start + delta,
-                inPoint: inPointAfterHeadCut(item, delta),
-                duration: item.duration - delta
-            });
+            result.push({...item, start: ripple ? item.start : item.start + delta, inPoint: inPointAfterHeadCut(item, delta), duration: item.duration - delta});
         } else {
             result.push({...item, duration: item.duration + delta, inPoint: inPointAfterTailCut(item, -delta)});
         }
@@ -468,10 +452,7 @@ export function placeMedia(sequence: Sequence, media: MediaItem, options: PlaceO
         return {sequence, clipIds: []};
     }
 
-    return {
-        sequence: addClips(sequence, newClips, options.mode, options.time, length),
-        clipIds: newClips.map((clip) => clip.id)
-    };
+    return {sequence: addClips(sequence, newClips, options.mode, options.time, length), clipIds: newClips.map((clip) => clip.id)};
 }
 
 /** Insert pushes everything after the time to the right. Overwrite replaces what is there. */
@@ -479,10 +460,7 @@ export function addClips(sequence: Sequence, newClips: Clip[], mode: 'insert' | 
     let clips = sequence.clips;
 
     if (mode === 'insert') {
-        const splitIds = clipsUnderTime({
-            ...sequence,
-            clips
-        }, time).filter((id) => !findTrack(sequence, findClip(sequence, id)?.trackId ?? '')?.locked);
+        const splitIds = clipsUnderTime({...sequence, clips}, time).filter((id) => !findTrack(sequence, findClip(sequence, id)?.trackId ?? '')?.locked);
         clips = splitClipsAt({...sequence, clips}, splitIds, time).clips;
         clips = clips.map((clip) => {
             const isLocked = findTrack(sequence, clip.trackId)?.locked ?? false;
@@ -523,10 +501,7 @@ export function pasteClips(sequence: Sequence, copied: Clip[], time: number, mod
             return {...clip, id: createId('clip'), linkId, start: time + (clip.start - earliest)};
         });
 
-    return {
-        sequence: addClips(sequence, pasted, mode, time, latest - earliest),
-        clipIds: pasted.map((clip) => clip.id)
-    };
+    return {sequence: addClips(sequence, pasted, mode, time, latest - earliest), clipIds: pasted.map((clip) => clip.id)};
 }
 
 // === Ripple trim to the playhead (Q and W) === //
@@ -615,23 +590,11 @@ export function nextEditPoint(sequence: Sequence, time: number): number {
 export function addTrack(sequence: Sequence, type: Track['type']): Sequence {
     const count = tracksOfType(sequence, type).length + 1;
     const prefix = type === 'video' ? 'V' : 'A';
-    const track: Track = {
-        id: createId(type === 'video' ? 'v' : 'a'),
-        type,
-        name: `${prefix}${count}`,
-        muted: false,
-        locked: false,
-        solo: false,
-        volumeDb: 0,
-        pan: 0
-    };
+    const track: Track = {id: createId(type === 'video' ? 'v' : 'a'), type, name: `${prefix}${count}`, muted: false, locked: false, solo: false, volumeDb: 0, pan: 0};
     const videoTracks = tracksOfType(sequence, 'video');
     const audioTracks = tracksOfType(sequence, 'audio');
 
-    return {
-        ...sequence,
-        tracks: type === 'video' ? [...videoTracks, track, ...audioTracks] : [...videoTracks, ...audioTracks, track]
-    };
+    return {...sequence, tracks: type === 'video' ? [...videoTracks, track, ...audioTracks] : [...videoTracks, ...audioTracks, track]};
 }
 
 export function removeTrack(sequence: Sequence, trackId: string): Sequence {
@@ -652,10 +615,7 @@ export function removeTrack(sequence: Sequence, trackId: string): Sequence {
 }
 
 export function updateTrack(sequence: Sequence, trackId: string, changes: Partial<Track>): Sequence {
-    return {
-        ...sequence,
-        tracks: sequence.tracks.map((track) => (track.id === trackId ? {...track, ...changes} : track))
-    };
+    return {...sequence, tracks: sequence.tracks.map((track) => (track.id === trackId ? {...track, ...changes} : track))};
 }
 
 export function updateClips(sequence: Sequence, ids: string[], change: (clip: Clip) => Clip): Sequence {

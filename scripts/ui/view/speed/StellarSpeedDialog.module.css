@@ -1,0 +1,90 @@
+/* ------ Row ------ */
+
+.row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    min-height: 29px;
+
+    padding-block: 3px;
+}
+
+.textSpan {
+    flex-shrink: 0;
+
+    width: 78px;
+
+    font-size: 12px;
+    color: var(--sc-dim);
+}
+
+.row2 {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: 10px;
+
+    min-width: 0;
+}
+
+
+/* ------ apply ------ */
+
+.textP {
+    overflow: hidden;
+
+    margin-bottom: 7px;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 12px;
+    color: var(--sc-dim);
+}
+
+.box {
+    flex-shrink: 0;
+
+    width: 65px;
+}
+
+.boxInput {
+    flex: 1;
+
+    min-width: 0;
+}
+
+.rowLabel {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    font-size: 12px;
+}
+
+.textSelect {
+    flex: 1;
+
+    min-width: 0;
+
+    padding: 3px 5px;
+
+    font-size: 12px;
+
+    border-radius: 5px;
+    border: 1px solid var(--sc-line);
+    background-color: var(--sc-deep);
+    outline-style: none;
+}
+
+.textSelect:focus {
+    border-color: var(--sc-accent);
+}
+
+.textP2 {
+    padding-left: 108px;
+
+    font-size: 11px;
+    line-height: 1.375;
+    color: var(--sc-dim);
+}

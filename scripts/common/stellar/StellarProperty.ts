@@ -120,12 +120,7 @@ export function writeBase(clip: Clip, path: string, value: number): Clip {
     if (path.startsWith('effect.')) {
         const [, effectId, key] = path.split('.');
 
-        return {...clip,
-            effects: clip.effects.map((item) => (item.id === effectId ? {
-                ...item,
-                params: {...item.params, [key]: value}
-            } : item))
-        };
+        return {...clip, effects: clip.effects.map((item) => (item.id === effectId ? {...item, params: {...item.params, [key]: value}} : item))};
     }
 
     return clip;

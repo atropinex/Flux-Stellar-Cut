@@ -1,0 +1,68 @@
+/* ------ StellarTextPanel ------ */
+
+.p {
+    margin-bottom: 10px;
+}
+
+
+/* ------ color ------ */
+
+.panel {
+    overflow: auto;
+
+    height: 100%;
+}
+
+.div {
+    padding-inline: 10px;
+    padding-bottom: 3px;
+}
+
+.textarea {
+    min-height: 64px;
+
+    resize: vertical;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+}
+
+.textButton {
+    min-width: 23px;
+
+    padding: 1.6px 5px;
+
+    font-size: 12px;
+
+    border-radius: 5px;
+}
+
+.textButtonVariant {
+    color: var(--sc-accentInk);
+
+    background-color: var(--sc-accent);
+}
+
+.buttonVariant {
+    background-color: var(--sc-surface);
+}
+
+.buttonVariant:hover {
+    background-color: var(--sc-surfaceHover);
+}
+
+.row2 {
+    display: flex;
+    gap: 3px;
+}
+
+.textButton2 {
+    padding: 1.6px 7px;
+
+    font-size: 12px;
+
+    border-radius: 5px;
+}

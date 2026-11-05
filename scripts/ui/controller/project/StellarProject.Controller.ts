@@ -1,11 +1,4 @@
-import type {
-    Bin,
-    Clip,
-    MediaItem,
-    ProjectDocument,
-    Sequence,
-    SequenceSettings
-} from '../../../common/stellar/StellarContract';
+import type {Bin, Clip, MediaItem, ProjectDocument, Sequence, SequenceSettings} from '../../../common/stellar/StellarContract';
 import {MAX_HISTORY_STEPS} from '../../../common/stellar/StellarConfig';
 import {createSequence} from '../../../common/stellar/StellarProjectFactory';
 import {createId} from '../../../common/utils/StellarTimeHelper';
@@ -226,10 +219,7 @@ export function commitSequence(label: string, change: (sequence: Sequence) => Se
             return document;
         }
 
-        return {
-            ...document,
-            sequences: document.sequences.map((sequence) => (sequence.id === active.id ? next : sequence))
-        };
+        return {...document, sequences: document.sequences.map((sequence) => (sequence.id === active.id ? next : sequence))};
     });
 }
 
@@ -297,17 +287,11 @@ export function addBin(name: string, parentId: string | null): string {
 }
 
 export function renameBin(id: string, name: string): void {
-    commit('Rename bin', (document) => ({
-        ...document,
-        bins: document.bins.map((bin) => (bin.id === id ? {...bin, name} : bin))
-    }));
+    commit('Rename bin', (document) => ({...document, bins: document.bins.map((bin) => (bin.id === id ? {...bin, name} : bin))}));
 }
 
 export function renameMedia(id: string, name: string): void {
-    commit('Rename', (document) => ({
-        ...document,
-        media: document.media.map((item) => (item.id === id ? {...item, name} : item))
-    }));
+    commit('Rename', (document) => ({...document, media: document.media.map((item) => (item.id === id ? {...item, name} : item))}));
 }
 
 /** Saves the fields from the metadata panel (title, description, scene...) on some media. An empty text removes the field. */
@@ -335,19 +319,13 @@ export function setMediaMetadata(mediaIds: string[], fields: Record<string, stri
 }
 
 export function renameSequence(id: string, name: string): void {
-    commit('Rename sequence', (document) => ({
-        ...document,
-        sequences: document.sequences.map((item) => (item.id === id ? {...item, name} : item))
-    }));
+    commit('Rename sequence', (document) => ({...document, sequences: document.sequences.map((item) => (item.id === id ? {...item, name} : item))}));
 }
 
 export function moveMediaToBin(mediaIds: string[], binId: string | null): void {
     const ids = new Set(mediaIds);
 
-    commit('Move to bin', (document) => ({
-        ...document,
-        media: document.media.map((item) => (ids.has(item.id) ? {...item, binId} : item))
-    }));
+    commit('Move to bin', (document) => ({...document, media: document.media.map((item) => (ids.has(item.id) ? {...item, binId} : item))}));
 }
 
 /** Deletes a bin. Its contents move up to the parent bin. */
@@ -361,10 +339,7 @@ export function deleteBin(id: string): void {
 
         return {
             ...document,
-            bins: document.bins.filter((item) => item.id !== id).map((item) => (item.parentId === id ? {
-                ...item,
-                parentId: bin.parentId
-            } : item)),
+            bins: document.bins.filter((item) => item.id !== id).map((item) => (item.parentId === id ? {...item, parentId: bin.parentId} : item)),
             media: document.media.map((item) => (item.binId === id ? {...item, binId: bin.parentId} : item))
         };
     });
@@ -377,10 +352,7 @@ export function deleteMedia(ids: string[]): void {
     commit('Delete media', (document) => ({
         ...document,
         media: document.media.filter((item) => !remove.has(item.id)),
-        sequences: document.sequences.map((sequence) => ({
-            ...sequence,
-            clips: sequence.clips.filter((clip) => !remove.has(clip.mediaId))
-        }))
+        sequences: document.sequences.map((sequence) => ({...sequence, clips: sequence.clips.filter((clip) => !remove.has(clip.mediaId))}))
     }));
 
     const state = editorStore.get();
@@ -394,11 +366,7 @@ export function deleteMedia(ids: string[]): void {
 export function addSequence(name: string, settings: SequenceSettings): string {
     const sequence = createSequence(name, settings);
 
-    commit('New sequence', (document) => ({
-        ...document,
-        sequences: [...document.sequences, sequence],
-        activeSequenceId: sequence.id
-    }));
+    commit('New sequence', (document) => ({...document, sequences: [...document.sequences, sequence], activeSequenceId: sequence.id}));
     activateSequence(sequence.id);
 
     return sequence.id;
@@ -437,11 +405,7 @@ export function deleteSequence(id: string): void {
     commit('Delete sequence', (current) => {
         const sequences = current.sequences.filter((item) => item.id !== id);
 
-        return {
-            ...current,
-            sequences,
-            activeSequenceId: current.activeSequenceId === id ? sequences[0].id : current.activeSequenceId
-        };
+        return {...current, sequences, activeSequenceId: current.activeSequenceId === id ? sequences[0].id : current.activeSequenceId};
     });
     activateSequence(editorStore.get().document?.activeSequenceId ?? '');
 }

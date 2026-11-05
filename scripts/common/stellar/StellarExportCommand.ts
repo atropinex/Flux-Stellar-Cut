@@ -450,10 +450,7 @@ function middleTime(planned: PlannedClip): number {
 }
 
 /** Either a plain number or, when the property is animated, an expression of the time variable. */
-function animatedValue(planned: PlannedClip, path: string, plain: number, timeVariable: string): {
-    animated: boolean;
-    text: string
-} {
+function animatedValue(planned: PlannedClip, path: string, plain: number, timeVariable: string): { animated: boolean; text: string } {
     const keyframes: Keyframe[] | undefined = planned.clip.keyframes?.[path];
 
     if (!keyframes || keyframes.length < 2) {

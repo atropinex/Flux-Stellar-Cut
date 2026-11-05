@@ -30,11 +30,7 @@ export async function importWithDialog(binId: string | null): Promise<void> {
 }
 
 /** Where a file goes when nobody picked a bin: audio to "Audio", pictures to "Graphics", video to "Footage". */
-function defaultBinFor(bins: {
-    id: string;
-    name: string;
-    parentId: string | null
-}[], kind: MediaKind, hasVideo: boolean): string | null {
+function defaultBinFor(bins: {id: string; name: string; parentId: string | null}[], kind: MediaKind, hasVideo: boolean): string | null {
     const wanted = kind === 'audio' ? 'Audio' : kind === 'image' ? 'Graphics' : hasVideo ? 'Footage' : 'Audio';
 
     return bins.find((bin) => bin.parentId === null && bin.name === wanted)?.id ?? null;
@@ -65,23 +61,14 @@ export async function importPaths(paths: string[], binId: string | null): Promis
         if (result.media) {
             const target = binId ?? defaultBinFor(state.document.bins, result.media.kind, result.media.hasVideo);
 
-            imported.push({
-                ...result.media,
-                id: createId('media'),
-                binId: target,
-                importedAt: new Date().toISOString(),
-                metadata: {}
-            });
+            imported.push({...result.media, id: createId('media'), binId: target, importedAt: new Date().toISOString(), metadata: {}});
         } else {
             failed.push(`${result.path}: ${result.error ?? 'unknown error'}`);
         }
     }
 
     if (imported.length > 0) {
-        commit(`Import ${imported.length} file${imported.length === 1 ? '' : 's'}`, (document) => ({
-            ...document,
-            media: [...document.media, ...imported]
-        }));
+        commit(`Import ${imported.length} file${imported.length === 1 ? '' : 's'}`, (document) => ({...document, media: [...document.media, ...imported]}));
         editorStore.set({selectedMediaIds: imported.map((item) => item.id)});
         void prepareMedia(imported);
         showToast(`Imported ${imported.length} file${imported.length === 1 ? '' : 's'}`);
@@ -152,11 +139,7 @@ export async function relinkMedia(mediaId: string): Promise<void> {
 
     commit('Relink media', (document) => ({
         ...document,
-        media: document.media.map((item) => (item.id === mediaId ? {
-            ...item, ...description,
-            name: item.name,
-            path: newPath
-        } : item))
+        media: document.media.map((item) => (item.id === mediaId ? {...item, ...description, name: item.name, path: newPath} : item))
     }));
 
     const updated = getMedia(editorStore.get(), mediaId);

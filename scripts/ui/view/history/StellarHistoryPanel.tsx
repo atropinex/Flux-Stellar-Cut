@@ -1,6 +1,7 @@
 import {editorStore} from '../../controller/project/StellarEditor.Store';
 import {useStore} from '../../controller/store/StellarStore';
 import {jumpToHistory} from '../../controller/project/StellarProject.Controller';
+import styles from './StellarHistoryPanel.module.css';
 
 /** Every change in the project, in order. Click one to go back (or forward) to that moment. */
 export default function StellarHistoryPanel() {
@@ -11,18 +12,18 @@ export default function StellarHistoryPanel() {
     const currentIndex = past.length;
 
     return (
-        <div className="h-full overflow-auto p-1.5" data-theme="StellarHistory.panel">
+        <div className={styles.panel} data-theme="StellarHistory.panel">
             {labels.map((label, index) => (
                 <button
                     key={index}
                     type="button"
                     onClick={() => jumpToHistory(index)}
-                    className={`flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-[12px] ${
-                        index === currentIndex ? 'bg-accent/25 text-ink' : index > currentIndex ? 'text-dim/60 hover:bg-surface' : 'text-dim hover:bg-surface hover:text-ink'
+                    className={`${styles.rowButton} ${
+                        index === currentIndex ? styles.textButtonCurrentIndex : index > currentIndex ? styles.textButtonCurrentIndex2 : styles.textButtonNotCurrentIndex
                     }`}
                 >
-                    <span className="w-5 text-right text-[10px] opacity-60">{index}</span>
-                    <span className="truncate">{label}</span>
+                    <span className={styles.textSpan}>{index}</span>
+                    <span className={styles.textSpan2}>{label}</span>
                 </button>
             ))}
         </div>

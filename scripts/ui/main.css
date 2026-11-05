@@ -1,30 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300..800&family=JetBrains+Mono:wght@400;500&display=swap');
-@import "tailwindcss";
 
-/* Tailwind color names that read their value from the theme variables (--sc-*). A YAML theme changes the variables. */
-@theme inline {
-    --color-ink: var(--sc-ink);
-    --color-dim: var(--sc-dim);
-    --color-accent: var(--sc-accent);
-    --color-accent-ink: var(--sc-accentInk);
-    --color-surface: var(--sc-surface);
-    --color-surface-hover: var(--sc-surfaceHover);
-    --color-line: var(--sc-line);
-    --color-deep: var(--sc-deep);
-    --color-danger: var(--sc-danger);
-    --color-success: var(--sc-success);
-    --color-warning: var(--sc-warning);
-    --color-video-clip: var(--sc-videoClip);
-    --color-audio-clip: var(--sc-audioClip);
-    --color-image-clip: var(--sc-imageClip);
-    --color-playhead: var(--sc-playhead);
-    --color-selection: var(--sc-selection);
+/* ------ Theme values ------ */
+/* Values used until the YAML theme is loaded. The real values come from the theme file. */
+
+:root {
     --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
     --font-mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
-}
 
-/* Values used until the YAML theme is loaded. The real values come from the theme file. */
-:root {
     --sc-ink: #eef1f8;
     --sc-dim: #98a2b8;
     --sc-accent: #7c9cff;
@@ -41,6 +23,7 @@
     --sc-imageClip: #b078ff;
     --sc-playhead: #ff5d73;
     --sc-selection: #ffffff;
+
     --sc-glass-island: rgba(24, 27, 38, 0.62);
     --sc-glass-header: rgba(255, 255, 255, 0.04);
     --sc-glass-blur: 28px;
@@ -48,16 +31,38 @@
     --sc-glass-border: rgba(255, 255, 255, 0.1);
     --sc-glass-highlight: rgba(255, 255, 255, 0.1);
     --sc-glass-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+
     --sc-radius: 14px;
     --sc-gap: 8px;
     --sc-base: #0b0d14;
 }
 
-html, body, #root {
+/* ------ Reset ------ */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0 solid;
+}
+
+html {
+    line-height: 1.5;
+    tab-size: 4;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body,
+#root {
     margin: 0;
     width: 100%;
     height: 100%;
     overflow: hidden;
+
     background: var(--sc-base);
     color: var(--sc-ink);
     font-family: var(--font-sans);
@@ -66,36 +71,80 @@ html, body, #root {
     -webkit-font-smoothing: antialiased;
 }
 
-/* A glass panel: a see-through layer that blurs what is behind it. */
-@utility glass {
-    background: var(--sc-glass-island);
-    backdrop-filter: blur(var(--sc-glass-blur)) saturate(var(--sc-glass-saturate));
-    -webkit-backdrop-filter: blur(var(--sc-glass-blur)) saturate(var(--sc-glass-saturate));
-    border: 1px solid var(--sc-glass-border);
-    border-radius: var(--sc-radius);
-    box-shadow: var(--sc-glass-shadow), inset 0 1px 0 var(--sc-glass-highlight);
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-size: inherit;
+    font-weight: inherit;
 }
 
-@utility glass-header {
-    background: var(--sc-glass-header);
-    border-bottom: 1px solid var(--sc-line);
+a {
+    color: inherit;
+    text-decoration: inherit;
 }
 
-@utility drag-region {
-    -webkit-app-region: drag;
+ol,
+ul,
+menu {
+    list-style: none;
 }
 
-@utility no-drag {
-    -webkit-app-region: no-drag;
+img,
+svg,
+video,
+canvas,
+audio,
+iframe {
+    display: block;
+    vertical-align: middle;
 }
 
-@utility timecode {
-    font-family: var(--font-mono);
-    font-variant-numeric: tabular-nums;
-    letter-spacing: 0.02em;
+img,
+video {
+    max-width: 100%;
+    height: auto;
 }
 
+button,
+input,
+select,
+optgroup,
+textarea {
+    font: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+    border-radius: 0;
+    background-color: transparent;
+    opacity: 1;
+}
+
+button:not(:disabled) {
+    cursor: pointer;
+}
+
+textarea {
+    resize: vertical;
+}
+
+::placeholder {
+    opacity: 1;
+    color: color-mix(in oklab, currentcolor 50%, transparent);
+}
+
+[hidden]:where(:not([hidden="until-found"])) {
+    display: none !important;
+}
+
+input[type="range"] {
+    accent-color: var(--sc-accent);
+}
+
+/* ------ Scroll bars ------ */
 /* Thin scroll bars that fit the glass look */
+
 * {
     scrollbar-width: thin;
     scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
@@ -123,20 +172,45 @@ html, body, #root {
     background: transparent;
 }
 
-input, select, textarea, button {
-    font: inherit;
-    color: inherit;
+/* ------ Shared classes ------ */
+
+/* A glass panel: a see-through layer that blurs what is behind it. */
+.glass {
+    background: var(--sc-glass-island);
+    backdrop-filter: blur(var(--sc-glass-blur)) saturate(var(--sc-glass-saturate));
+    -webkit-backdrop-filter: blur(var(--sc-glass-blur)) saturate(var(--sc-glass-saturate));
+    border: 1px solid var(--sc-glass-border);
+    border-radius: var(--sc-radius);
+    box-shadow: var(--sc-glass-shadow), inset 0 1px 0 var(--sc-glass-highlight);
 }
 
-input[type="range"] {
-    accent-color: var(--sc-accent);
+.glass-header {
+    background: var(--sc-glass-header);
+    border-bottom: 1px solid var(--sc-line);
 }
+
+.drag-region {
+    -webkit-app-region: drag;
+}
+
+.no-drag {
+    -webkit-app-region: no-drag;
+}
+
+.timecode {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+}
+
+/* ------ Animations ------ */
 
 @keyframes stellar-pop {
     from {
         opacity: 0;
         transform: scale(0.97) translateY(4px);
     }
+
     to {
         opacity: 1;
         transform: none;

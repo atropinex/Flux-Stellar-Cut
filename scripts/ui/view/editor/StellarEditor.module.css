@@ -1,0 +1,88 @@
+/* ------ StellarEditor ------ */
+
+.boxStellarIsland {
+    height: 100%;
+}
+
+.boxStellarIsland2 {
+    flex-shrink: 0;
+
+    height: 100%;
+    width: 52px;
+}
+
+.stellarIsland {
+    position: relative;
+}
+
+.column {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+
+    height: 100%;
+}
+
+.column2 {
+    position: relative;
+    z-index: 10;
+
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+
+    min-height: 0;
+
+    padding-inline: var(--sc-gap);
+}
+
+.row {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--sc-dim);
+}
+
+.div {
+    flex: 1;
+
+    min-height: 0;
+
+    padding-bottom: var(--sc-gap);
+}
+
+.row2 {
+    display: flex;
+
+    min-height: 0;
+}
+
+.box {
+    flex-shrink: 0;
+
+    min-width: 0;
+}
+
+.box2 {
+    flex: 1;
+
+    min-width: 0;
+}
+
+.row3 {
+    display: flex;
+    flex: 1;
+
+    min-height: 0;
+
+    padding-bottom: 0;
+}
+
+.box3 {
+    flex-shrink: 0;
+
+    width: var(--sc-gap);
+}

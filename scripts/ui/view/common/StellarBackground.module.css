@@ -1,0 +1,15 @@
+/* ------ StellarBackground ------ */
+
+.root {
+    position: absolute;
+    inset: 0;
+
+    overflow: hidden;
+
+    pointer-events: none;
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+}

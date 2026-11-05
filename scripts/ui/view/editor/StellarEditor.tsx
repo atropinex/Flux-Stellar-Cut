@@ -28,6 +28,7 @@ import StellarExportDialog from '../export/StellarExportDialog';
 import StellarSettingsDialog from '../settings/StellarSettingsDialog';
 import StellarNewSequenceDialog from '../settings/StellarNewSequenceDialog';
 import StellarStatusBar from './StellarStatusBar';
+import styles from './StellarEditor.module.css';
 
 const LEFT_TABS = [
     {id: 'source', label: 'Source'},
@@ -130,18 +131,18 @@ export default function StellarEditor({projectPath}: EditorProps) {
                 tabs={LEFT_TABS}
                 activeTab={leftTab}
                 onTabChange={setLeftTab}
-                className="h-full"
+                className={styles.boxStellarIsland}
             >
-                {leftTab === 'source' ? <StellarSourceMonitor/> : null}
-                {leftTab === 'effectControls' ? <StellarEffectControlsPanel/> : null}
-                {leftTab === 'lumetri' ? <StellarLumetriPanel/> : null}
-                {leftTab === 'text' ? <StellarTextPanel/> : null}
-                {leftTab === 'mixer' ? <StellarAudioMixerPanel/> : null}
+                {leftTab === 'source' ? <StellarSourceMonitor /> : null}
+                {leftTab === 'effectControls' ? <StellarEffectControlsPanel /> : null}
+                {leftTab === 'lumetri' ? <StellarLumetriPanel /> : null}
+                {leftTab === 'text' ? <StellarTextPanel /> : null}
+                {leftTab === 'mixer' ? <StellarAudioMixerPanel /> : null}
             </StellarIsland>
         ),
         program: (
-            <StellarIsland panelId="program" title="Program" className="h-full">
-                <StellarProgramMonitor/>
+            <StellarIsland panelId="program" title="Program" className={styles.boxStellarIsland}>
+                <StellarProgramMonitor />
             </StellarIsland>
         ),
         rightTabs: (
@@ -150,9 +151,9 @@ export default function StellarEditor({projectPath}: EditorProps) {
                 tabs={[{id: 'effects', label: 'Effects'}, {id: 'history', label: 'History'}]}
                 activeTab={rightTab}
                 onTabChange={setRightTab}
-                className="h-full"
+                className={styles.boxStellarIsland}
             >
-                {rightTab === 'effects' ? <StellarEffectsPanel/> : <StellarHistoryPanel/>}
+                {rightTab === 'effects' ? <StellarEffectsPanel /> : <StellarHistoryPanel />}
             </StellarIsland>
         ),
         project: (
@@ -164,23 +165,23 @@ export default function StellarEditor({projectPath}: EditorProps) {
                     editorStore.set({settings: {...editorStore.get().settings, projectTab: tab}});
                     void window.api.updateSettings({projectTab: tab});
                 }}
-                className="h-full"
+                className={styles.boxStellarIsland}
             >
-                {projectTab === 'project' ? <StellarProjectPanel/> : null}
-                {projectTab === 'browser' ? <StellarMediaBrowser/> : null}
-                {projectTab === 'info' ? <StellarInfoPanel/> : null}
-                {projectTab === 'effects' ? <StellarEffectsPanel/> : null}
-                {projectTab === 'markers' ? <StellarMarkersPanel/> : null}
+                {projectTab === 'project' ? <StellarProjectPanel /> : null}
+                {projectTab === 'browser' ? <StellarMediaBrowser /> : null}
+                {projectTab === 'info' ? <StellarInfoPanel /> : null}
+                {projectTab === 'effects' ? <StellarEffectsPanel /> : null}
+                {projectTab === 'markers' ? <StellarMarkersPanel /> : null}
             </StellarIsland>
         ),
         tools: (
-            <StellarIsland panelId="tools" title="" className="h-full w-[52px] shrink-0">
-                <StellarToolsPanel/>
+            <StellarIsland panelId="tools" title="" className={styles.boxStellarIsland2}>
+                <StellarToolsPanel />
             </StellarIsland>
         ),
         timeline: (
-            <StellarIsland panelId="timeline" title="Timeline" className="h-full" bodyClassName="relative">
-                <StellarTimelinePanel/>
+            <StellarIsland panelId="timeline" title="Timeline" className={styles.boxStellarIsland} bodyClassName={styles.stellarIsland}>
+                <StellarTimelinePanel />
             </StellarIsland>
         )
     };
@@ -188,73 +189,52 @@ export default function StellarEditor({projectPath}: EditorProps) {
     // The maximize hotkey shows one panel on its own.
     const maximizedKey = maximizedPanel
         ? ({
-        source: 'leftTabs',
-        effectControls: 'leftTabs',
-        lumetri: 'leftTabs',
-        text: 'leftTabs',
-        mixer: 'leftTabs',
-        program: 'program',
-        history: 'rightTabs',
-        project: 'project',
-        browser: 'project',
-        info: 'project',
-        markers: 'project',
-        tools: 'tools',
-        timeline: 'timeline'
-    } as Record<string, string>)[maximizedPanel] ?? (maximizedPanel === 'effects' ? (projectTab === 'effects' ? 'project' : 'rightTabs') : null)
+            source: 'leftTabs', effectControls: 'leftTabs', lumetri: 'leftTabs', text: 'leftTabs', mixer: 'leftTabs', program: 'program',
+            history: 'rightTabs', project: 'project', browser: 'project', info: 'project', markers: 'project', tools: 'tools', timeline: 'timeline'
+        } as Record<string, string>)[maximizedPanel] ?? (maximizedPanel === 'effects' ? (projectTab === 'effects' ? 'project' : 'rightTabs') : null)
         : null;
 
     return (
-        <div className="relative flex h-full flex-col">
-            <StellarBackground/>
-            <StellarTitleBar/>
+        <div className={styles.column}>
+            <StellarBackground />
+            <StellarTitleBar />
 
-            <div ref={bodyRef} className="relative z-10 flex min-h-0 flex-1 flex-col px-(--sc-gap)">
+            <div ref={bodyRef} className={styles.column2}>
                 {!ready ? (
-                    <div
-                        className="flex flex-1 items-center justify-center text-dim">{failed ? 'The project could not be opened.' : 'Opening project...'}</div>
+                    <div className={styles.row}>{failed ? 'The project could not be opened.' : 'Opening project...'}</div>
                 ) : maximizedKey ? (
-                    <div className="min-h-0 flex-1 pb-(--sc-gap)">{panels[maximizedKey]}</div>
+                    <div className={styles.div}>{panels[maximizedKey]}</div>
                 ) : (
                     <>
-                        <div ref={topRowRef} className="flex min-h-0"
-                             style={{flexBasis: `${layout.top * 100}%`, flexGrow: 0, flexShrink: 0}}>
-                            <div style={{width: `${layout.left * 100}%`}}
-                                 className="min-w-0 shrink-0">{panels.leftTabs}</div>
-                            <StellarSplitter axis="x" containerRef={topRowRef}
-                                             onChange={(value) => setLayoutValue('left', value)} min={0.15} max={0.5}/>
-                            <div className="min-w-0 flex-1">{panels.program}</div>
-                            <StellarSplitter axis="x" containerRef={topRowRef} fromEnd
-                                             onChange={(value) => setLayoutValue('right', value)} min={0.1} max={0.4}/>
-                            <div style={{width: `${layout.right * 100}%`}}
-                                 className="min-w-0 shrink-0">{panels.rightTabs}</div>
+                        <div ref={topRowRef} className={styles.row2} style={{flexBasis: `${layout.top * 100}%`, flexGrow: 0, flexShrink: 0}}>
+                            <div style={{width: `${layout.left * 100}%`}} className={styles.box}>{panels.leftTabs}</div>
+                            <StellarSplitter axis="x" containerRef={topRowRef} onChange={(value) => setLayoutValue('left', value)} min={0.15} max={0.5} />
+                            <div className={styles.box2}>{panels.program}</div>
+                            <StellarSplitter axis="x" containerRef={topRowRef} fromEnd onChange={(value) => setLayoutValue('right', value)} min={0.1} max={0.4} />
+                            <div style={{width: `${layout.right * 100}%`}} className={styles.box}>{panels.rightTabs}</div>
                         </div>
 
-                        <StellarSplitter axis="y" containerRef={bodyRef}
-                                         onChange={(value) => setLayoutValue('top', value)} min={0.2} max={0.75}/>
+                        <StellarSplitter axis="y" containerRef={bodyRef} onChange={(value) => setLayoutValue('top', value)} min={0.2} max={0.75} />
 
-                        <div ref={bottomRowRef} className="flex min-h-0 flex-1 pb-0">
-                            <div style={{width: `${layout.project * 100}%`}}
-                                 className="min-w-0 shrink-0">{panels.project}</div>
-                            <StellarSplitter axis="x" containerRef={bottomRowRef}
-                                             onChange={(value) => setLayoutValue('project', value)} min={0.12}
-                                             max={0.6}/>
+                        <div ref={bottomRowRef} className={styles.row3}>
+                            <div style={{width: `${layout.project * 100}%`}} className={styles.box}>{panels.project}</div>
+                            <StellarSplitter axis="x" containerRef={bottomRowRef} onChange={(value) => setLayoutValue('project', value)} min={0.12} max={0.6} />
                             {panels.tools}
-                            <div className="w-(--sc-gap) shrink-0"/>
-                            <div className="min-w-0 flex-1">{panels.timeline}</div>
+                            <div className={styles.box3} />
+                            <div className={styles.box2}>{panels.timeline}</div>
                         </div>
                     </>
                 )}
             </div>
 
-            <StellarStatusBar/>
+            <StellarStatusBar />
 
-            {ready && dialog === 'export' ? <StellarExportDialog/> : null}
-            {ready && dialog === 'settings' ? <StellarSettingsDialog/> : null}
-            {ready && dialog === 'speed' ? <StellarSpeedDialog/> : null}
-            {ready && dialog === 'newSequence' ? <StellarNewSequenceDialog/> : null}
-            <StellarContextMenu/>
-            <StellarToast/>
+            {ready && dialog === 'export' ? <StellarExportDialog /> : null}
+            {ready && dialog === 'settings' ? <StellarSettingsDialog /> : null}
+            {ready && dialog === 'speed' ? <StellarSpeedDialog /> : null}
+            {ready && dialog === 'newSequence' ? <StellarNewSequenceDialog /> : null}
+            <StellarContextMenu />
+            <StellarToast />
         </div>
     );
 }

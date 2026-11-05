@@ -1,27 +1,12 @@
 import type {Clip, FrameMode, Sequence} from '../../../common/stellar/StellarContract';
-import {
-    PATH,
-    moveKeyframe,
-    nextKeyframeTime,
-    previousKeyframeTime,
-    removeKeyframeAt,
-    setKeyframeEasing,
-    type EasingId
-} from '../../../common/stellar/StellarAnimation';
+import {PATH, moveKeyframe, nextKeyframeTime, previousKeyframeTime, removeKeyframeAt, setKeyframeEasing, type EasingId} from '../../../common/stellar/StellarAnimation';
 import {defaultColor, normalizeColor, type ColorSettings} from '../../../common/stellar/StellarColor';
 import {findEffect} from '../../../common/stellar/StellarEffects';
 import {contentTime} from '../../../common/stellar/StellarEvaluate';
 import type {Mask} from '../../../common/stellar/StellarMask';
 import {createClip} from '../../../common/stellar/StellarProjectFactory';
 import {
-    isAnimatedProperty,
-    keyframeTimelineTime,
-    propertyInfo,
-    readValueAt,
-    toggleAnimation,
-    toggleKeyframe,
-    writeBase,
-    writeValueAt
+    isAnimatedProperty, keyframeTimelineTime, propertyInfo, readValueAt, toggleAnimation, toggleKeyframe, writeBase, writeValueAt
 } from '../../../common/stellar/StellarProperty';
 import {DEFAULT_TEXT_DURATION, defaultText, type TextSettings} from '../../../common/stellar/StellarText';
 import {MAX_SPEED_PERCENT, MIN_SPEED_PERCENT} from '../../../common/stellar/StellarConfig';
@@ -29,15 +14,7 @@ import {createId} from '../../../common/utils/StellarTimeHelper';
 import {editorStore, getActiveSequence, getMedia} from '../project/StellarEditor.Store';
 import {commitSequence} from '../project/StellarProject.Controller';
 import {seekTo} from '../playback/StellarPlayback.Controller';
-import {
-    addClips,
-    clearRange,
-    findClip,
-    findTrack,
-    tracksOfType,
-    updateClips,
-    withLinkedClips
-} from './StellarTimeline.Controller';
+import {addClips, clearRange, findClip, findTrack, tracksOfType, updateClips, withLinkedClips} from './StellarTimeline.Controller';
 import {cancelPreview, previewSequenceChange} from './StellarTimelineActions.Controller';
 
 // Changing the numbers of a clip: motion, volume, color, effects, speed, text and masks.
@@ -111,10 +88,7 @@ export function moveKeyframeOf(clipId: string, path: string, fromContentTime: nu
     const change = (clip: Clip): Clip => {
         const list = clip.keyframes?.[path];
 
-        return list ? {
-            ...clip,
-            keyframes: {...clip.keyframes, [path]: moveKeyframe(list, fromContentTime, toContentTime)}
-        } : clip;
+        return list ? {...clip, keyframes: {...clip.keyframes, [path]: moveKeyframe(list, fromContentTime, toContentTime)}} : clip;
     };
 
     if (isFinal) {
@@ -128,10 +102,7 @@ export function setEasingOf(clipId: string, path: string, atContentTime: number,
     commitChange('Change easing', [clipId], (clip) => {
         const list = clip.keyframes?.[path];
 
-        return list ? {
-            ...clip,
-            keyframes: {...clip.keyframes, [path]: setKeyframeEasing(list, atContentTime, easing)}
-        } : clip;
+        return list ? {...clip, keyframes: {...clip.keyframes, [path]: setKeyframeEasing(list, atContentTime, easing)}} : clip;
     });
 }
 
@@ -186,10 +157,7 @@ export function valueOfProperty(clip: Clip, path: string): number {
 // === Effects === //
 
 export function toggleEffectOf(ids: string[], effectId: string): void {
-    commitChange('Toggle effect', ids, (clip) => ({
-        ...clip,
-        effects: clip.effects.map((item) => (item.id === effectId ? {...item, enabled: !item.enabled} : item))
-    }));
+    commitChange('Toggle effect', ids, (clip) => ({...clip, effects: clip.effects.map((item) => (item.id === effectId ? {...item, enabled: !item.enabled} : item))}));
 }
 
 export function removeEffectOf(ids: string[], effectId: string): void {
@@ -211,13 +179,7 @@ export function setTransitionDuration(clipId: string, effectId: string, seconds:
     const change = (clip: Clip): Clip => {
         const length = Math.max(0.05, Math.min(seconds, clip.duration));
 
-        return {
-            ...clip,
-            effects: clip.effects.map((item) => (item.id === effectId ? {
-                ...item,
-                params: {...item.params, duration: length}
-            } : item))
-        };
+        return {...clip, effects: clip.effects.map((item) => (item.id === effectId ? {...item, params: {...item.params, duration: length}} : item))};
     };
 
     if (isFinal) {
@@ -411,10 +373,7 @@ export function addMask(clipId: string, mask: Mask): void {
 }
 
 export function updateMask(clipId: string, maskId: string, change: Partial<Mask>, isFinal: boolean): void {
-    const apply = (clip: Clip): Clip => ({
-        ...clip,
-        masks: (clip.masks ?? []).map((mask) => (mask.id === maskId ? {...mask, ...change} : mask))
-    });
+    const apply = (clip: Clip): Clip => ({...clip, masks: (clip.masks ?? []).map((mask) => (mask.id === maskId ? {...mask, ...change} : mask))});
 
     if (isFinal) {
         commitChange('Change mask', [clipId], apply);
@@ -424,10 +383,7 @@ export function updateMask(clipId: string, maskId: string, change: Partial<Mask>
 }
 
 export function removeMask(clipId: string, maskId: string): void {
-    commitChange('Delete mask', [clipId], (clip) => ({
-        ...clip,
-        masks: (clip.masks ?? []).filter((mask) => mask.id !== maskId)
-    }));
+    commitChange('Delete mask', [clipId], (clip) => ({...clip, masks: (clip.masks ?? []).filter((mask) => mask.id !== maskId)}));
 }
 
 // === Small helpers for the views === //
