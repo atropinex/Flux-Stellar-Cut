@@ -36,6 +36,7 @@ export default function StellarTimelinePanel() {
     const snapping = useStore(editorStore, (state) => state.snapping);
     const linked = useStore(editorStore, (state) => state.linkedSelection);
     const snapGuide = useStore(editorStore, (state) => state.snapGuide);
+    const snapGuideKind = useStore(editorStore, (state) => state.snapGuideKind);
     const targetVideo = useStore(editorStore, (state) => state.targetVideoTrackId);
     const targetAudio = useStore(editorStore, (state) => state.targetAudioTrackId);
     const thumbnails = useStore(editorStore, (state) => state.thumbnails);
@@ -280,6 +281,7 @@ export default function StellarTimelinePanel() {
                         onPointerDown={interaction.onPointerDown}
                         onPointerMove={interaction.onPointerMove}
                         onPointerUp={interaction.onPointerUp}
+                        onPointerLeave={interaction.onPointerLeave}
                         onContextMenu={handleContextMenu}
                         onDragOver={(event) => {
                             event.preventDefault();
@@ -341,7 +343,7 @@ export default function StellarTimelinePanel() {
                         ) : null}
 
                         {/* Snap guide */}
-                        {snapGuide !== null ? <div className={styles.div5} style={{left: HEADER_WIDTH + snapGuide * pixelsPerSecond}} /> : null}
+                        {snapGuide !== null ? <div className={`${styles.div5} ${snapGuideKind === 'grid' ? styles.div5Grid : ''}`} style={{left: HEADER_WIDTH + snapGuide * pixelsPerSecond}} /> : null}
 
                         {/* Playhead */}
                         <div className={styles.playhead} style={{left: HEADER_WIDTH + playhead * pixelsPerSecond}} data-theme="StellarTimeline.playhead">

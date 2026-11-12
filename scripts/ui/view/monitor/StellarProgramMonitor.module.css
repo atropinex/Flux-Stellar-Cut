@@ -76,6 +76,7 @@
 .overlay4 {
     position: absolute;
     inset: 0;
+    z-index: 0; /* keeps the z-index numbers of the clips inside the picture, so the overlays stay on top */
 }
 
 .timecode {

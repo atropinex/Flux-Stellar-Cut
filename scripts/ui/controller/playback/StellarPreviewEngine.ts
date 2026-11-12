@@ -337,6 +337,7 @@ export class StellarPreviewEngine {
         style.visibility = isLive && !view.trackOff ? 'visible' : 'hidden';
         style.zIndex = String(view.zIndex);
         style.opacity = String(clamp((motion.opacity / 100) * amounts.dissolve, 0, 1));
+        style.transformOrigin = `calc(50% + ${motion.anchorX * view.scale}px) calc(50% + ${motion.anchorY * view.scale}px)`;
         style.transform = `translate(${motion.x * view.scale}px, ${motion.y * view.scale}px) rotate(${motion.rotation}deg) scale(${motion.scale / 100})`;
 
         const filters: string[] = [];

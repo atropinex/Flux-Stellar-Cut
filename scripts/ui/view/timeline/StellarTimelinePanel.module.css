@@ -208,6 +208,12 @@
     background-color: var(--sc-warning);
 }
 
+/* ------ Snap guide on a plain ruler line (not a clip edge) ------ */
+.div5Grid {
+    background-color: var(--sc-accent);
+    opacity: 0.8;
+}
+
 .playhead {
     position: absolute;
     top: 0;

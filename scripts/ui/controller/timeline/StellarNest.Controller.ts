@@ -80,7 +80,7 @@ export function nestSelection(): void {
                 duration: last - first,
                 speed: 1,
                 reverse: false,
-                motion: {x: 0, y: 0, scale: 100, rotation: 0, opacity: 100},
+                motion: {x: 0, y: 0, scale: 100, rotation: 0, anchorX: 0, anchorY: 0, opacity: 100},
                 volumeDb: 0,
                 pan: 0,
                 effects: [],

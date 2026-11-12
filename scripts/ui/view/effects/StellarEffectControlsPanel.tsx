@@ -156,6 +156,8 @@ export default function StellarEffectControlsPanel() {
                     <Section title="Motion">
                         <StellarPropertyRow clip={clip} ids={ids} path={PATH.x} />
                         <StellarPropertyRow clip={clip} ids={ids} path={PATH.y} />
+                        <StellarPropertyRow clip={clip} ids={ids} path={PATH.anchorX} />
+                        <StellarPropertyRow clip={clip} ids={ids} path={PATH.anchorY} />
                         <StellarPropertyRow clip={clip} ids={ids} path={PATH.scale} />
                         <StellarPropertyRow clip={clip} ids={ids} path={PATH.rotation} />
                         <StellarPropertyRow clip={clip} ids={ids} path={PATH.opacity} />

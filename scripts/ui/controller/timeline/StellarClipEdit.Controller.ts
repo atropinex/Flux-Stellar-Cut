@@ -56,6 +56,19 @@ export function commitProperty(ids: string[], path: string, value: number): void
     commitChange(`Change ${(label ?? 'value').toLowerCase()}`, ids, (clip) => writeValueAt(clip, path, value, time));
 }
 
+/** Shows several numbers of one clip changing at once (used when dragging the picture on the monitor). */
+export function previewProperties(ids: string[], values: Record<string, number>): void {
+    const time = playhead();
+
+    live(ids, (clip) => Object.entries(values).reduce((current, [path, value]) => writeValueAt(current, path, value, time), clip));
+}
+
+export function commitProperties(label: string, ids: string[], values: Record<string, number>): void {
+    const time = playhead();
+
+    commitChange(label, ids, (clip) => Object.entries(values).reduce((current, [path, value]) => writeValueAt(current, path, value, time), clip));
+}
+
 export function resetProperty(ids: string[], path: string): void {
     const time = playhead();
 

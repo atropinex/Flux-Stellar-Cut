@@ -21,7 +21,7 @@ interface Geometry {
     stageWidth: number;
     stageHeight: number;
     picture: { x: number; y: number; width: number; height: number };
-    motion: { x: number; y: number; scale: number; rotation: number };
+    motion: { x: number; y: number; scale: number; rotation: number; anchorX: number; anchorY: number };
     sequenceWidth: number;
 }
 
@@ -40,7 +40,7 @@ function geometryOf(clip: Clip, sequence: Sequence, stageWidth: number, stageHei
     return {
         stageWidth, stageHeight,
         picture: {x: (stageWidth - width) / 2, y: (stageHeight - height) / 2, width, height},
-        motion: {x: resolved.motion.x * unit, y: resolved.motion.y * unit, scale: resolved.motion.scale / 100, rotation: resolved.motion.rotation},
+        motion: {x: resolved.motion.x * unit, y: resolved.motion.y * unit, scale: resolved.motion.scale / 100, rotation: resolved.motion.rotation, anchorX: resolved.motion.anchorX * unit, anchorY: resolved.motion.anchorY * unit},
         sequenceWidth: sequence.settings.width
     };
 }
@@ -48,12 +48,14 @@ function geometryOf(clip: Clip, sequence: Sequence, stageWidth: number, stageHei
 /** From a point on the screen (relative to the top-left of the stage) to a fraction of the picture. */
 function toPicture(geometry: Geometry, stageX: number, stageY: number): MaskPoint {
     const radians = (-geometry.motion.rotation * Math.PI) / 180;
-    const dx = stageX - geometry.stageWidth / 2 - geometry.motion.x;
-    const dy = stageY - geometry.stageHeight / 2 - geometry.motion.y;
+    const pivotX = geometry.stageWidth / 2 + geometry.motion.anchorX;
+    const pivotY = geometry.stageHeight / 2 + geometry.motion.anchorY;
+    const dx = stageX - pivotX - geometry.motion.x;
+    const dy = stageY - pivotY - geometry.motion.y;
     const rotatedX = dx * Math.cos(radians) - dy * Math.sin(radians);
     const rotatedY = dx * Math.sin(radians) + dy * Math.cos(radians);
-    const localX = rotatedX / geometry.motion.scale + geometry.stageWidth / 2;
-    const localY = rotatedY / geometry.motion.scale + geometry.stageHeight / 2;
+    const localX = rotatedX / geometry.motion.scale + pivotX;
+    const localY = rotatedY / geometry.motion.scale + pivotY;
 
     return {x: (localX - geometry.picture.x) / geometry.picture.width, y: (localY - geometry.picture.y) / geometry.picture.height};
 }
@@ -182,7 +184,9 @@ export default function StellarMaskOverlay({stageWidth, stageHeight}: {stageWidt
 
     const toScreenX = (fraction: number) => geometry.picture.x + fraction * geometry.picture.width;
     const toScreenY = (fraction: number) => geometry.picture.y + fraction * geometry.picture.height;
-    const transform = `translate(${geometry.motion.x} ${geometry.motion.y}) rotate(${geometry.motion.rotation} ${stageWidth / 2} ${stageHeight / 2}) translate(${stageWidth / 2} ${stageHeight / 2}) scale(${geometry.motion.scale}) translate(${-stageWidth / 2} ${-stageHeight / 2})`;
+    const pivotX = stageWidth / 2 + geometry.motion.anchorX;
+    const pivotY = stageHeight / 2 + geometry.motion.anchorY;
+    const transform = `translate(${geometry.motion.x} ${geometry.motion.y}) translate(${pivotX} ${pivotY}) rotate(${geometry.motion.rotation}) scale(${geometry.motion.scale}) translate(${-pivotX} ${-pivotY})`;
     const accent = 'var(--color-accent, #6aa7ff)';
 
     function outline(mask: Mask, isSelected: boolean) {

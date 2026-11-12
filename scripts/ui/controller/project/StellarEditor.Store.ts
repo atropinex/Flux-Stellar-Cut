@@ -46,6 +46,7 @@ export interface EditorState {
     targetAudioTrackId: string | null;
     clipboard: Clip[];
     snapGuide: number | null;
+    snapGuideKind: 'point' | 'grid' | null;
 
     // source monitor and project panel
     sourceMediaId: string | null;
@@ -97,6 +98,7 @@ export const editorStore = createStore<EditorState>({
     targetAudioTrackId: null,
     clipboard: [],
     snapGuide: null,
+    snapGuideKind: null,
 
     sourceMediaId: null,
     sourceTime: 0,

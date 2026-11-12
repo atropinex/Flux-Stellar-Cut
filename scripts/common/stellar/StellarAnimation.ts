@@ -235,6 +235,8 @@ export const PATH = {
     y: 'motion.y',
     scale: 'motion.scale',
     rotation: 'motion.rotation',
+    anchorX: 'motion.anchorX',
+    anchorY: 'motion.anchorY',
     opacity: 'motion.opacity',
     volume: 'audio.volume',
     pan: 'audio.pan',
