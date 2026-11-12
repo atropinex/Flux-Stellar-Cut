@@ -56,6 +56,8 @@ export function resolveClip(clip: Clip, timelineTime: number): ResolvedClip {
         y: valueAt(keyframes[PATH.y], clip.motion.y, time),
         scale: valueAt(keyframes[PATH.scale], clip.motion.scale, time),
         rotation: valueAt(keyframes[PATH.rotation], clip.motion.rotation, time),
+        anchorX: valueAt(keyframes[PATH.anchorX], clip.motion.anchorX ?? 0, time),
+        anchorY: valueAt(keyframes[PATH.anchorY], clip.motion.anchorY ?? 0, time),
         opacity: valueAt(keyframes[PATH.opacity], clip.motion.opacity, time)
     };
 

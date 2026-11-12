@@ -78,7 +78,7 @@ export function createEmptyProject(name: string, sequence: Sequence | null): Pro
 }
 
 export function defaultMotion(): ClipMotion {
-    return { x: 0, y: 0, scale: 100, rotation: 0, opacity: 100 };
+    return { x: 0, y: 0, scale: 100, rotation: 0, anchorX: 0, anchorY: 0, opacity: 100 };
 }
 
 export function createClip(fields: Pick<Clip, 'trackId' | 'mediaId' | 'name' | 'start' | 'inPoint' | 'duration'> & Partial<Clip>): Clip {

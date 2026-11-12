@@ -12,6 +12,7 @@ import {openContextMenu, separator} from '../../controller/contextmenu/StellarCo
 import StellarIcon from '../common/StellarIcon';
 import StellarMonitorStage from './StellarMonitorStage';
 import StellarMaskOverlay from './StellarMaskOverlay';
+import StellarTransformOverlay from './StellarTransformOverlay';
 import StellarScrubBar from './StellarScrubBar';
 import StellarTransportBar from './StellarTransportBar';
 import styles from './StellarProgramMonitor.module.css';
@@ -87,6 +88,7 @@ export default function StellarProgramMonitor() {
                     setStageWidth(width);
                     engineRef.current?.refresh();
                 }}
+                controls={<StellarTransformOverlay stageWidth={stageWidth} stageHeight={stageWidth / aspect} />}
                 overlay={
                     <>
                         <StellarMaskOverlay stageWidth={stageWidth} stageHeight={stageWidth / aspect} />

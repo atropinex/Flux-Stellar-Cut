@@ -4,12 +4,13 @@ import {SNAP_DISTANCE_PX} from '../../../common/stellar/StellarConfig';
 import {clamp, snapToFrame} from '../../../common/utils/StellarTimeHelper';
 import {editorStore, getActiveSequence, getMedia} from '../../controller/project/StellarEditor.Store';
 import {
-    allowedTrackShift, clipEnd, clipsAtOrAfter, clipsInRegion, editPoints, findClip, findTrack, moveClips, snapPoints, snapToPoints,
+    allowedTrackShift, clipEnd, clipsAtOrAfter, clipsInRegion, findClip, findTrack, moveClips, snapPoints, snapToPoints,
     tracksOfType, trimClip, trimLimits, withLinkedClips
 } from '../../controller/timeline/StellarTimeline.Controller';
 import {cancelPreview, commitPreview, razorAt, selectClips, deselectAll, setZoom} from '../../controller/timeline/StellarTimelineActions.Controller';
 import {pause, seekTo} from '../../controller/playback/StellarPlayback.Controller';
 import {HEADER_WIDTH} from './StellarTimelineConstants';
+import {nearestGridTime} from './StellarTimelineGrid';
 
 // Everything that happens when the mouse is pressed, moved and released on the timeline.
 // While a clip is dragged, the new layout is only a preview. It becomes one undo step when the mouse is released.
@@ -58,6 +59,47 @@ export function useStellarTimelineInteraction(scrollerRef: RefObject<HTMLDivElem
         return SNAP_DISTANCE_PX / editorStore.get().pixelsPerSecond;
     }
 
+    interface SnapResult {
+        time: number;
+        guide: number | null;
+        kind: 'point' | 'grid' | null;
+    }
+
+    /**
+     * Snaps a time. Edit points (clip edges, markers, playhead) win over the ruler grid,
+     * and the grid wins over a plain frame. The guide is where the vertical line is drawn.
+     */
+    function snapTime(time: number, sequence: Sequence, excludeIds: Set<string>): SnapResult {
+        const state = editorStore.get();
+        const frameRate = sequence.settings.frameRate;
+
+        if (!state.snapping) {
+            return {time: snapToFrame(time, frameRate), guide: null, kind: null};
+        }
+
+        const point = snapToPoints(time, snapPoints(sequence, state.playhead, excludeIds), snapThreshold());
+
+        if (point !== null) {
+            return {time: point, guide: point, kind: 'point'};
+        }
+
+        const grid = nearestGridTime(time, state.pixelsPerSecond, frameRate);
+
+        if (Math.abs(grid - time) <= snapThreshold()) {
+            return {time: grid, guide: grid, kind: 'grid'};
+        }
+
+        return {time: snapToFrame(time, frameRate), guide: null, kind: null};
+    }
+
+    function showGuide(guide: number | null, kind: 'point' | 'grid' | null) {
+        const state = editorStore.get();
+
+        if (state.snapGuide !== guide || state.snapGuideKind !== kind) {
+            editorStore.set({snapGuide: guide, snapGuideKind: kind});
+        }
+    }
+
     function scrubTo(clientX: number, noSnap: boolean) {
         const sequence = getActiveSequence();
 
@@ -68,12 +110,20 @@ export function useStellarTimelineInteraction(scrollerRef: RefObject<HTMLDivElem
         let time = timeAt(clientX);
 
         if (editorStore.get().snapping && !noSnap) {
-            const snapped = snapToPoints(time, editPoints(sequence), snapThreshold());
+            const result = snapTime(time, sequence, new Set());
 
-            time = snapped ?? time;
+            time = result.time;
+            showGuide(result.guide, result.kind);
+        } else {
+            showGuide(null, null);
         }
 
         seekTo(time);
+    }
+
+    /** Where a razor click at this x position cuts. */
+    function razorTime(clientX: number, sequence: Sequence): number {
+        return snapTime(timeAt(clientX), sequence, new Set()).time;
     }
 
     // === Pressing === //
@@ -118,7 +168,7 @@ export function useStellarTimelineInteraction(scrollerRef: RefObject<HTMLDivElem
         if (!clipElement) {
             if (state.tool === 'razor') {
                 if (event.shiftKey) {
-                    razorAt(snapToFrame(time, sequence.settings.frameRate), true, null);
+                    razorAt(razorTime(event.clientX, sequence), true, null);
                 }
 
                 return;
@@ -141,7 +191,7 @@ export function useStellarTimelineInteraction(scrollerRef: RefObject<HTMLDivElem
         }
 
         if (state.tool === 'razor') {
-            razorAt(snapToFrame(time, sequence.settings.frameRate), event.shiftKey, clipId);
+            razorAt(razorTime(event.clientX, sequence), event.shiftKey, clipId);
             return;
         }
 
@@ -183,12 +233,12 @@ export function useStellarTimelineInteraction(scrollerRef: RefObject<HTMLDivElem
 
     // === Moving === //
 
-    function moveDelta(d: Extract<Drag, {kind: 'move'}>, raw: number): {delta: number; guide: number | null} {
+    function moveDelta(d: Extract<Drag, {kind: 'move'}>, raw: number): {delta: number; guide: number | null; kind: 'point' | 'grid' | null} {
         const state = editorStore.get();
         const frameRate = d.base.settings.frameRate;
 
         if (!state.snapping) {
-            return {delta: snapToFrame(raw, frameRate), guide: null};
+            return {delta: snapToFrame(raw, frameRate), guide: null, kind: null};
         }
 
         const points = snapPoints(d.base, state.playhead, new Set(d.ids));
@@ -205,13 +255,49 @@ export function useStellarTimelineInteraction(scrollerRef: RefObject<HTMLDivElem
             }
         }
 
-        return best ? {delta: raw + best.adjust, guide: best.point} : {delta: snapToFrame(raw, frameRate), guide: null};
+        if (best) {
+            return {delta: raw + best.adjust, guide: best.point, kind: 'point'};
+        }
+
+        // No clip edge or marker is close. Try the ruler grid for the start and the end of every clip.
+        for (const clip of d.base.clips.filter((item) => d.ids.includes(item.id))) {
+            for (const edge of [clip.start + raw, clipEnd(clip) + raw]) {
+                const grid = nearestGridTime(edge, state.pixelsPerSecond, frameRate);
+
+                if (Math.abs(grid - edge) <= threshold && (!best || Math.abs(grid - edge) < Math.abs(best.adjust))) {
+                    best = {adjust: grid - edge, point: grid};
+                }
+            }
+        }
+
+        return best ? {delta: raw + best.adjust, guide: best.point, kind: 'grid'} : {delta: snapToFrame(raw, frameRate), guide: null, kind: null};
+    }
+
+    /** With the razor, a vertical line follows the mouse and shows where the cut would land. */
+    function showRazorHover(event: ReactPointerEvent<HTMLDivElement>) {
+        const sequence = getActiveSequence();
+
+        if (editorStore.get().tool !== 'razor' || !sequence || (event.target as HTMLElement).closest('[data-header]')) {
+            showGuide(null, null);
+            return;
+        }
+
+        const result = snapTime(timeAt(event.clientX), sequence, new Set());
+
+        showGuide(result.time, result.kind ?? 'grid');
+    }
+
+    function onPointerLeave() {
+        if (!drag.current) {
+            showGuide(null, null);
+        }
     }
 
     function onPointerMove(event: ReactPointerEvent<HTMLDivElement>) {
         const d = drag.current;
 
         if (!d) {
+            showRazorHover(event);
             return;
         }
 
@@ -243,7 +329,7 @@ export function useStellarTimelineInteraction(scrollerRef: RefObject<HTMLDivElem
 
             d.moved = true;
 
-            const {delta, guide} = moveDelta(d, raw);
+            const {delta, guide, kind} = moveDelta(d, raw);
             const origin = findTrack(d.base, d.originTrackId);
             const sameType = origin ? tracksOfType(d.base, origin.type) : [];
             const hoveredTrack = hovered ? findTrack(d.base, hovered) : undefined;
@@ -252,7 +338,7 @@ export function useStellarTimelineInteraction(scrollerRef: RefObject<HTMLDivElem
             const limits = allowedTrackShift(d.base, d.ids, origin?.type);
             const shift = clamp(hoveredIndex - originIndex, limits.min, limits.max);
 
-            editorStore.set({liveSequence: moveClips(d.base, d.ids, delta, shift, origin?.type), snapGuide: guide});
+            editorStore.set({liveSequence: moveClips(d.base, d.ids, delta, shift, origin?.type), snapGuide: guide, snapGuideKind: kind});
             return;
         }
 
@@ -266,27 +352,16 @@ export function useStellarTimelineInteraction(scrollerRef: RefObject<HTMLDivElem
 
             d.moved = true;
 
-            let time = timeAt(event.clientX);
-            let guide: number | null = null;
-
-            if (state.snapping) {
-                const snapped = snapToPoints(time, snapPoints(d.base, state.playhead, new Set([d.clipId])), snapThreshold());
-
-                if (snapped !== null) {
-                    time = snapped;
-                    guide = snapped;
-                }
-            }
-
-            if (guide === null) {
-                time = snapToFrame(time, d.base.settings.frameRate);
-            }
+            const result = snapTime(timeAt(event.clientX), d.base, new Set([d.clipId]));
+            const time = result.time;
+            const guide = result.guide;
 
             const limits = trimLimits(d.base, clip, d.edge, media.duration, media.kind === 'image', d.ripple);
 
             editorStore.set({
                 liveSequence: trimClip(d.base, d.clipId, d.edge, clamp(time, limits.min, limits.max), d.ripple, state.linkedSelection),
-                snapGuide: guide
+                snapGuide: guide,
+                snapGuideKind: result.kind
             });
             return;
         }
@@ -347,7 +422,9 @@ export function useStellarTimelineInteraction(scrollerRef: RefObject<HTMLDivElem
 
             cancelPreview();
         }
+
+        showGuide(null, null);
     }
 
-    return {marquee, onPointerDown, onPointerMove, onPointerUp, timeAt, trackAt};
+    return {marquee, onPointerDown, onPointerMove, onPointerUp, onPointerLeave, timeAt, trackAt};
 }

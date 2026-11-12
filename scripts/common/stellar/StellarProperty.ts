@@ -32,6 +32,10 @@ export function propertyInfo(clip: Clip, path: string): PropertyInfo | null {
             return info(path, 'Scale', 1, 800, 0.5, '%', 100);
         case PATH.rotation:
             return info(path, 'Rotation', -3600, 3600, 0.5, '°', 0);
+        case PATH.anchorX:
+            return info(path, 'Anchor Point X', -8000, 8000, 1, 'px', 0);
+        case PATH.anchorY:
+            return info(path, 'Anchor Point Y', -8000, 8000, 1, 'px', 0);
         case PATH.opacity:
             return info(path, 'Opacity', 0, 100, 0.5, '%', 100);
         case PATH.volume:
@@ -70,6 +74,10 @@ export function readBase(clip: Clip, path: string): number {
             return clip.motion.scale;
         case PATH.rotation:
             return clip.motion.rotation;
+        case PATH.anchorX:
+            return clip.motion.anchorX ?? 0;
+        case PATH.anchorY:
+            return clip.motion.anchorY ?? 0;
         case PATH.opacity:
             return clip.motion.opacity;
         case PATH.volume:
@@ -103,6 +111,10 @@ export function writeBase(clip: Clip, path: string, value: number): Clip {
             return {...clip, motion: {...clip.motion, scale: value}};
         case PATH.rotation:
             return {...clip, motion: {...clip.motion, rotation: value}};
+        case PATH.anchorX:
+            return {...clip, motion: {...clip.motion, anchorX: value}};
+        case PATH.anchorY:
+            return {...clip, motion: {...clip.motion, anchorY: value}};
         case PATH.opacity:
             return {...clip, motion: {...clip.motion, opacity: value}};
         case PATH.volume:

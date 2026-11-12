@@ -1,15 +1,8 @@
 import {formatTimecode} from '../../../common/utils/StellarTimeHelper';
 import type {Sequence} from '../../../common/stellar/StellarContract';
 import {RULER_HEIGHT} from './StellarTimelineConstants';
+import {gridDivisions, labelStep} from './StellarTimelineGrid';
 import styles from './StellarTimelineRuler.module.css';
-
-/** Picks a distance between labels so they are at least ~90px apart. */
-function labelStep(pixelsPerSecond: number, frameRate: number): number {
-    const frame = 1 / frameRate;
-    const steps = [frame, frame * 2, frame * 5, frame * 10, 1, 2, 5, 10, 15, 30, 60, 120, 300, 600, 1800, 3600];
-
-    return steps.find((step) => step * pixelsPerSecond >= 90) ?? 3600;
-}
 
 interface RulerProps {
     sequence: Sequence;
@@ -33,7 +26,7 @@ export default function StellarTimelineRuler({sequence, pixelsPerSecond, scrollX
     }
 
     // The small bars between the labels, like the ruler of a real timeline. Only as many as fit.
-    const divisions = [10, 5, 4, 2].find((count) => (step * pixelsPerSecond) / count >= 7) ?? 1;
+    const divisions = gridDivisions(step, pixelsPerSecond);
 
     if (divisions > 1) {
         for (let index = Math.max(0, first); index <= last; index += 1) {

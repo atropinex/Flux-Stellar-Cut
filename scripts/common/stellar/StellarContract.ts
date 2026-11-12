@@ -70,6 +70,8 @@ export interface ClipMotion {
     y: number;
     scale: number;      // percent
     rotation: number;   // degrees
+    anchorX: number;    // pixels. The point that scale and rotation turn around, from the center of the clip's picture
+    anchorY: number;
     opacity: number;    // percent
 }
 

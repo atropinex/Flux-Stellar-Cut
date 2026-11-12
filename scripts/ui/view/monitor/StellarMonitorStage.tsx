@@ -38,10 +38,11 @@ interface StageProps {
     stageRef?: RefObject<HTMLDivElement | null>;
     onSize?: (width: number) => void;
     overlay?: ReactNode;
+    controls?: ReactNode; // drawn over the picture but NOT cut off at its edges (the box and handles of the clip can leave the frame)
 }
 
 /** The black picture area of a monitor. */
-export default function StellarMonitorStage({aspect, children, stageRef, overlay, onSize}: StageProps) {
+export default function StellarMonitorStage({aspect, children, stageRef, overlay, controls, onSize}: StageProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const box = useFitBox(containerRef, aspect);
 
@@ -51,13 +52,12 @@ export default function StellarMonitorStage({aspect, children, stageRef, overlay
 
     return (
         <div ref={containerRef} className={styles.stage} data-theme="StellarMonitor.stage">
-            <div
-                ref={stageRef}
-                className={styles.div}
-                style={{width: box.width, height: box.height}}
-            >
-                {children}
-                {overlay}
+            <div className={styles.frame} style={{width: box.width, height: box.height}}>
+                <div ref={stageRef} className={styles.div}>
+                    {children}
+                    {overlay}
+                </div>
+                {controls}
             </div>
         </div>
     );

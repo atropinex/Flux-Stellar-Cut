@@ -460,6 +460,48 @@ function animatedValue(planned: PlannedClip, path: string, plain: number, timeVa
     return {animated: true, text: keyframeExpression(keyframes, plain, contentExpression(planned, timeVariable))};
 }
 
+/**
+ * Scale and rotation turn around the anchor point. The filters turn around the picture's center,
+ * so the center moves to where it would be after turning around the anchor. That shift is added to the position:
+ * shift = anchor - scale * rotate(anchor).
+ */
+function anchorCompensation(planned: PlannedClip, timeVariable: string, factor: number): { x: string; y: string } {
+    const anchorX = animatedValue(planned, PATH.anchorX, planned.clip.motion.anchorX ?? 0, timeVariable);
+    const anchorY = animatedValue(planned, PATH.anchorY, planned.clip.motion.anchorY ?? 0, timeVariable);
+
+    if (!anchorX.animated && !anchorY.animated && Math.abs(Number(anchorX.text)) < 0.01 && Math.abs(Number(anchorY.text)) < 0.01) {
+        return {x: '', y: ''};
+    }
+
+    const scale = animatedValue(planned, PATH.scale, planned.clip.motion.scale, timeVariable);
+    const rotation = animatedValue(planned, PATH.rotation, planned.clip.motion.rotation, timeVariable);
+    const animated = anchorX.animated || anchorY.animated || scale.animated || rotation.animated;
+
+    if (!animated) {
+        const ax = Number(anchorX.text);
+        const ay = Number(anchorY.text);
+        const factorScale = Number(scale.text) / 100;
+        const radians = (Number(rotation.text) * Math.PI) / 180;
+        const turnedX = ax * Math.cos(radians) - ay * Math.sin(radians);
+        const turnedY = ax * Math.sin(radians) + ay * Math.cos(radians);
+
+        return {
+            x: `+${num((ax - factorScale * turnedX) * factor)}`,
+            y: `+${num((ay - factorScale * turnedY) * factor)}`
+        };
+    }
+
+    const ax = `(${anchorX.text})`;
+    const ay = `(${anchorY.text})`;
+    const s = `((${scale.text})/100)`;
+    const angle = `((${rotation.text})*PI/180)`;
+
+    return {
+        x: `+(${ax}-${s}*(${ax}*cos${angle}-${ay}*sin${angle}))*${num(factor)}`,
+        y: `+(${ay}-${s}*(${ax}*sin${angle}+${ay}*cos${angle}))*${num(factor)}`
+    };
+}
+
 function frameModeFor(planned: PlannedClip, build: Build): FrameMode {
     const {clip, media} = planned;
 
@@ -711,13 +753,14 @@ function buildVideoLayer(build: Build, plan: ExportPlan, transparent: boolean): 
         const y = animatedValue(planned, PATH.y, clip.motion.y, `(${localTime})`);
         const offsetX = x.animated ? `(${x.text})*${num(build.scaleFactor)}` : num(Number(x.text) * build.scaleFactor);
         const offsetY = y.animated ? `(${y.text})*${num(build.scaleFactor)}` : num(Number(y.text) * build.scaleFactor);
+        const pivot = anchorCompensation(planned, localTime, build.scaleFactor);
         const from = num(planned.start);
         const to = num(planned.start + planned.duration);
         const next = newLabel(build, 'base');
         const overlayFormat = transparent ? ':format=auto' : '';
 
         build.graph.push(
-            `${previous}${finished}overlay=x='(W-w)/2+${offsetX}':y='(H-h)/2+${offsetY}':eof_action=pass${overlayFormat}:enable='between(t,${from},${to})'[${next}]`
+            `${previous}${finished}overlay=x='(W-w)/2+${offsetX}${pivot.x}':y='(H-h)/2+${offsetY}${pivot.y}':eof_action=pass${overlayFormat}:enable='between(t,${from},${to})'[${next}]`
         );
         previous = `[${next}]`;
     }

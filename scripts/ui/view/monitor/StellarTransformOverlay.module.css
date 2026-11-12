@@ -1,0 +1,80 @@
+/* ------ Overlay ------ */
+.overlay {
+    position: absolute;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    overflow: visible;
+    pointer-events: none;
+}
+
+/* ------ Box around the clip ------ */
+.body {
+    cursor: move;
+    pointer-events: all;
+
+    fill: transparent;
+    stroke: var(--sc-accent, #6aa7ff);
+    stroke-width: 1px;
+    vector-effect: non-scaling-stroke;
+}
+
+/* ------ Handles ------ */
+.handle {
+    pointer-events: all;
+
+    fill: #ffffff;
+    stroke: var(--sc-accent, #6aa7ff);
+    stroke-width: 1.5px;
+}
+
+.cursorNwse {
+    cursor: nwse-resize;
+}
+
+.cursorNesw {
+    cursor: nesw-resize;
+}
+
+.cursorRotate {
+    cursor: grab;
+}
+
+.stem {
+    pointer-events: none;
+
+    stroke: var(--sc-accent, #6aa7ff);
+    stroke-width: 1px;
+}
+
+/* ------ Anchor point ------ */
+.anchor {
+    cursor: crosshair;
+    pointer-events: all;
+}
+
+.anchorHit {
+    fill: transparent;
+}
+
+.anchorRing {
+    fill: rgba(0, 0, 0, 0.35);
+    stroke: #ffffff;
+    stroke-width: 1.5px;
+}
+
+.anchorCross {
+    stroke: #ffffff;
+    stroke-width: 1.5px;
+}
+
+/* ------ Lines the clip sticks to ------ */
+.guide {
+    pointer-events: none;
+
+    stroke: var(--sc-warning, #ffb020);
+    stroke-width: 1px;
+    stroke-dasharray: 4 3;
+}
