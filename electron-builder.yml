@@ -1,4 +1,3 @@
-# Packaging. Run "npm run package".
 appId: com.flux.stellarcut
 productName: Flux-Stellar-Cut
 directories:
@@ -15,7 +14,13 @@ fileAssociations:
     name: Flux-Stellar-Cut Project
     role: Editor
 win:
-  target: nsis
+  target:
+    - msi
+msi:
+  upgradeCode: "{12345678-ABCD-1234-ABCD-123456789ABC}"
+  perMachine: false
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
 mac:
   target: dmg
   category: public.app-category.video
