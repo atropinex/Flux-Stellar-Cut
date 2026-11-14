@@ -8,6 +8,8 @@ export interface CommandDefinition {
     label: string;
     category: CommandCategory;
     defaultKey: string; // '' = no hotkey
+    /** 'wheel' commands are a modifier held while scrolling the mouse wheel (for example "Alt"), not a key press. */
+    kind?: 'key' | 'wheel';
 }
 
 export const COMMANDS: CommandDefinition[] = [
@@ -77,6 +79,8 @@ export const COMMANDS: CommandDefinition[] = [
     { id: 'timeline.snap', label: 'Toggle Snapping', category: 'Timeline', defaultKey: 'S' },
     { id: 'timeline.zoomIn', label: 'Zoom In', category: 'Timeline', defaultKey: '=' },
     { id: 'timeline.zoomOut', label: 'Zoom Out', category: 'Timeline', defaultKey: '-' },
+    { id: 'timeline.wheelZoom', label: 'Zoom Timeline (hold + scroll)', category: 'Timeline', defaultKey: 'Alt', kind: 'wheel' },
+    { id: 'timeline.wheelScroll', label: 'Scroll Timeline Sideways (hold + scroll)', category: 'Timeline', defaultKey: 'Shift', kind: 'wheel' },
     { id: 'timeline.zoomFit', label: 'Zoom to Sequence', category: 'Timeline', defaultKey: '\\' },
     { id: 'timeline.addVideoTrack', label: 'Add Video Track', category: 'Timeline', defaultKey: '' },
     { id: 'timeline.addAudioTrack', label: 'Add Audio Track', category: 'Timeline', defaultKey: '' },
@@ -108,6 +112,10 @@ export const COMMANDS: CommandDefinition[] = [
     { id: 'window.panelMarkers', label: 'Show Markers', category: 'Window', defaultKey: '' },
     { id: 'window.fullscreen', label: 'Toggle Full Screen', category: 'Window', defaultKey: 'F11' },
 ];
+
+export function isWheelCommand(command: CommandDefinition | undefined): boolean {
+    return command?.kind === 'wheel';
+}
 
 export function findCommand(id: string): CommandDefinition | undefined {
     return COMMANDS.find((command) => command.id === id);

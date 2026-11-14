@@ -1,4 +1,4 @@
-import {COMMANDS, findCommand} from '../../../common/stellar/StellarCommands';
+import {COMMANDS, findCommand, isWheelCommand} from '../../../common/stellar/StellarCommands';
 import {editorStore, getActiveSequence} from '../project/StellarEditor.Store';
 import {
     closeProject, confirmDiscardOrSave, deleteMedia, redo, saveProject, saveProjectAs, showToast, undo
@@ -191,7 +191,7 @@ export function runCommand(id: string): void {
 
 /** Commands that exist in the list but have no handler (a mistake while adding a command). */
 export function findMissingHandlers(): string[] {
-    return COMMANDS.filter((command) => !HANDLERS[command.id]).map((command) => command.id);
+    return COMMANDS.filter((command) => !isWheelCommand(command) && !HANDLERS[command.id]).map((command) => command.id);
 }
 
 /** The hotkey of a command as set right now, for menus. */
