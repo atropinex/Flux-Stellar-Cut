@@ -68,11 +68,6 @@
     width: 36px;
 
     margin-bottom: 10px;
-
-    color: var(--sc-accentInk);
-
-    border-radius: 10px;
-    background-color: var(--sc-accent);
 }
 
 .textH1 {

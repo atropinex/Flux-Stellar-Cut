@@ -4,6 +4,7 @@ import {PROJECT_EXTENSION} from '../../../common/stellar/StellarConfig';
 import {openContextMenu, separator} from '../../controller/contextmenu/StellarContextMenu.Controller';
 import StellarBackground from '../common/StellarBackground';
 import StellarIcon from '../common/StellarIcon';
+import StellarAppLogo from '../common/StellarAppLogo';
 import StellarWindowControls from '../common/StellarWindowControls';
 import StellarContextMenu from '../common/StellarContextMenu';
 import {BUTTON, BUTTON_PRIMARY, INPUT} from '../common/StellarStyles';
@@ -125,7 +126,7 @@ export default function StellarLauncher() {
                 <aside className={`${styles.sidebar} glass`} data-theme="StellarLauncher.sidebar">
                     <div className={styles.div}>
                         <div className={styles.row3}>
-                            <StellarIcon name="sparkle" size={24} filled />
+                            <StellarAppLogo size={36} />
                         </div>
                         <h1 className={styles.textH1}>Flux-Stellar-Cut</h1>
                         <p className={styles.textP}>Cut, color and finish your story.</p>

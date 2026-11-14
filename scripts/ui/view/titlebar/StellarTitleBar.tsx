@@ -5,6 +5,7 @@ import {MENUS} from '../../controller/command/StellarMenu.Controller';
 import {runCommand} from '../../controller/command/StellarCommand.Controller';
 import {openMenuAt} from '../../controller/contextmenu/StellarContextMenu.Controller';
 import StellarIcon from '../common/StellarIcon';
+import StellarAppLogo from '../common/StellarAppLogo';
 import StellarWindowControls from '../common/StellarWindowControls';
 import {BUTTON_GHOST, BUTTON_PRIMARY} from '../common/StellarStyles';
 import styles from './StellarTitleBar.module.css';
@@ -31,7 +32,7 @@ export default function StellarTitleBar() {
     return (
         <header className={`${styles.root} drag-region`} data-theme="StellarTitleBar.root">
             <div className={styles.row}>
-                <StellarIcon name="sparkle" size={14} filled />
+                <StellarAppLogo size={20} />
             </div>
 
             <nav className={`${styles.rowNav} no-drag`}>
