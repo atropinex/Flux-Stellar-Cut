@@ -1,7 +1,7 @@
 import {useEffect, useState, type ReactNode} from 'react';
 import type {Theme, ThemeList, UpdatableSettings} from '../../../common/CommonInteface';
-import {COMMANDS, type CommandCategory} from '../../../common/stellar/StellarCommands';
-import {describeCombo, eventToCombo} from '../../../common/utils/StellarKeybindHelper';
+import {COMMANDS, findCommand, isWheelCommand, type CommandCategory} from '../../../common/stellar/StellarCommands';
+import {describeCombo, eventToCombo, wheelEventToCombo} from '../../../common/utils/StellarKeybindHelper';
 import {editorStore} from '../../controller/project/StellarEditor.Store';
 import {useStore} from '../../controller/store/StellarStore';
 import {applyTheme} from '../../controller/theme/StellarTheme.Controller';
@@ -205,6 +205,23 @@ function ShortcutsTab() {
 
         setHotkeysPaused(true);
 
+        const wheelCommand = isWheelCommand(findCommand(recording));
+
+        // Wheel commands are a modifier held while scrolling, so we listen for the wheel and read the held keys.
+        const handleWheel = (event: WheelEvent) => {
+            event.preventDefault();
+            event.stopPropagation();
+
+            const combo = wheelEventToCombo(event);
+
+            if (!combo) {
+                return; // a plain wheel can not be a hotkey, wait for a modifier
+            }
+
+            setRecording(null);
+            void window.api.setKeybind(recording, combo).then((next) => editorStore.set({keybinds: next}));
+        };
+
         const handleKey = (event: KeyboardEvent) => {
             event.preventDefault();
             event.stopPropagation();
@@ -212,6 +229,10 @@ function ShortcutsTab() {
             if (event.key === 'Escape') {
                 setRecording(null);
                 return;
+            }
+
+            if (wheelCommand) {
+                return; // wheel commands ignore normal keys
             }
 
             const combo = eventToCombo(event);
@@ -225,9 +246,11 @@ function ShortcutsTab() {
         };
 
         window.addEventListener('keydown', handleKey, true);
+        window.addEventListener('wheel', handleWheel, {capture: true, passive: false});
 
         return () => {
             window.removeEventListener('keydown', handleKey, true);
+            window.removeEventListener('wheel', handleWheel, true);
             setHotkeysPaused(false);
         };
     }, [recording]);
@@ -262,7 +285,9 @@ function ShortcutsTab() {
                         onClick={() => setRecording(isRecording ? null : command.id)}
                         className={`${styles.textButton2} ${isRecording ? styles.textButtonIsRecording : styles.buttonNotIsRecording}`}
                     >
-                        {isRecording ? 'Press keys...' : describeCombo(combo, isMac)}
+                        {isRecording
+                            ? (isWheelCommand(command) ? 'Hold keys and scroll...' : 'Press keys...')
+                            : (isWheelCommand(command) && combo ? `${describeCombo(combo, isMac)} + Scroll` : describeCombo(combo, isMac))}
                     </button>
                     <button type="button" title="Remove hotkey" disabled={!combo} className={styles.textButton3} onClick={() => clearKey(command.id)}>
                         <StellarIcon name="close" size={12} />
@@ -279,7 +304,7 @@ function ShortcutsTab() {
                 <button type="button" className={BUTTON} onClick={() => void window.api.resetKeybinds().then((next) => editorStore.set({keybinds: next}))}>Reset All</button>
                 <button type="button" className={BUTTON} onClick={() => window.api.openKeybindsFile()}>Open YAML</button>
             </div>
-            <p className={styles.textP4}>Click a hotkey, then press the new keys. If another command already uses them, it loses them.</p>
+            <p className={styles.textP4}>Click a hotkey, then press the new keys. For the scroll commands, hold the keys and scroll the wheel instead. If another command already uses them, it loses them.</p>
             {rows}
         </div>
     );

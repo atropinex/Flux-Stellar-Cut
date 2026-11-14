@@ -63,6 +63,28 @@ export function eventToCombo(event: KeyLike): string | null {
     return parts.join('+');
 }
 
+/**
+ * The modifiers held during a mouse wheel event as a combo, like "Alt" or "Mod+Shift".
+ * Returns null when no modifier is held, because a plain wheel is not something we can bind.
+ */
+export function wheelEventToCombo(event: Pick<KeyLike, 'ctrlKey' | 'metaKey' | 'altKey' | 'shiftKey'>): string | null {
+    const parts: string[] = [];
+
+    if (event.ctrlKey || event.metaKey) {
+        parts.push('Mod');
+    }
+
+    if (event.altKey) {
+        parts.push('Alt');
+    }
+
+    if (event.shiftKey) {
+        parts.push('Shift');
+    }
+
+    return parts.length > 0 ? parts.join('+') : null;
+}
+
 /** "Mod+Shift+Z" -> "Ctrl + Shift + Z" (or "⌘ + Shift + Z" on a Mac) */
 export function describeCombo(combo: string, isMac = false): string {
     if (!combo) {

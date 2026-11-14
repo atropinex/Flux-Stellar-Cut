@@ -8,6 +8,7 @@ import {sequenceDuration, tracksOfType} from '../../controller/timeline/StellarT
 import {
     addMarker, applyEffect, dropMediaOnTimeline, setTimelineViewportWidth, setZoom, toggleLinkedSelection, toggleSnapping, zoomToFit
 } from '../../controller/timeline/StellarTimelineActions.Controller';
+import {attachTimelineWheel} from '../../controller/timeline/StellarTimelineWheel.Controller';
 import {openContextMenu, openMenuAt} from '../../controller/contextmenu/StellarContextMenu.Controller';
 import StellarAudioMeter from '../mixer/StellarAudioMeter';
 import StellarIcon from '../common/StellarIcon';
@@ -49,6 +50,7 @@ export default function StellarTimelinePanel() {
     const [viewportWidth, setViewportWidth] = useState(800);
     const [dropActive, setDropActive] = useState(false);
     const [markerColor, setMarkerColor] = useState<string>(MARKER_COLORS[0].color);
+    const hasTimeline = Boolean(sequence && document);
     const interaction = useStellarTimelineInteraction(scrollerRef, contentRef);
 
     // Keep the viewport size up to date, for the ruler and for "zoom to sequence".
@@ -71,35 +73,14 @@ export default function StellarTimelinePanel() {
         observer.observe(scroller);
 
         return () => observer.disconnect();
-    }, []);
+    }, [hasTimeline]);
 
-    // Ctrl + wheel zooms around the mouse. Shift + wheel scrolls sideways.
+    // Alt + wheel zooms around the mouse, Shift + wheel scrolls sideways (like Premiere Pro).
     useEffect(() => {
         const scroller = scrollerRef.current;
 
-        if (!scroller) {
-            return;
-        }
-
-        const handleWheel = (event: WheelEvent) => {
-            if (event.ctrlKey || event.metaKey || event.altKey) {
-                event.preventDefault();
-
-                const state = editorStore.get();
-                const anchorX = event.clientX - scroller.getBoundingClientRect().left - HEADER_WIDTH;
-                const anchorTime = (scroller.scrollLeft + anchorX) / state.pixelsPerSecond;
-
-                setZoom(state.pixelsPerSecond * (event.deltaY < 0 ? 1.15 : 1 / 1.15), anchorTime, anchorX);
-            } else if (event.shiftKey) {
-                event.preventDefault();
-                scroller.scrollLeft += event.deltaY;
-            }
-        };
-
-        scroller.addEventListener('wheel', handleWheel, {passive: false});
-
-        return () => scroller.removeEventListener('wheel', handleWheel);
-    }, []);
+        return scroller ? attachTimelineWheel(scroller, HEADER_WIDTH) : undefined;
+    }, [hasTimeline]); // the scroller only exists once a sequence is open
 
     // The store can ask for a new scroll position (after zooming). The scroller can also be dragged by hand.
     useEffect(() => {
