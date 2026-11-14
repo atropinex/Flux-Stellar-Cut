@@ -23,11 +23,6 @@
     width: 20px;
 
     margin-right: 3px;
-
-    color: var(--sc-accentInk);
-
-    border-radius: 5px;
-    background-color: var(--sc-accent);
 }
 
 .rowNav {
