@@ -1,0 +1,88 @@
+/* ------ StellarPanel ------ */
+/* A flat docked panel. The gaps between panels are the window color showing through. */
+
+.root {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    height: 100%;
+    min-height: 0;
+    min-width: 0;
+
+    background: var(--sc-glass-island);
+}
+
+.header {
+    display: flex;
+    flex-shrink: 0;
+    align-items: stretch;
+
+    height: 28px;
+
+    background: var(--sc-glass-header);
+    border-bottom: 1px solid var(--sc-line);
+}
+
+.tabs {
+    display: flex;
+    align-items: stretch;
+    overflow: hidden;
+
+    min-width: 0;
+}
+
+.tab {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    padding-inline: 12px;
+
+    font-size: 12px;
+    white-space: nowrap;
+    color: var(--sc-dim);
+
+    transition: color 120ms ease-out, background-color 120ms ease-out;
+}
+
+.tab:hover {
+    color: var(--sc-ink);
+}
+
+/* The active tab is marked by a line under it, like in Premiere Pro. */
+.tabActive {
+    color: var(--sc-ink);
+}
+
+.tabActive::after {
+    content: '';
+
+    position: absolute;
+    inset-inline: 8px;
+    bottom: -1px;
+
+    height: 2px;
+
+    background: var(--sc-accent);
+}
+
+.title {
+    cursor: default;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+
+    margin-left: auto;
+    padding-inline: 6px;
+}
+
+.body {
+    flex: 1;
+
+    min-height: 0;
+}

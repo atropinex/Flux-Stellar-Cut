@@ -66,7 +66,7 @@ export const CLIP_LABELS: Record<string, string> = {
 };
 
 export const DEFAULT_SETTINGS: AppSettings = {
-    theme: 'aurora',
+    theme: 'dark',
     workspace: 'editing',
     layout: {},
     autosaveEnabled: true,

@@ -7,14 +7,14 @@
     --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
     --font-mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
 
-    --sc-ink: #eef1f8;
-    --sc-dim: #98a2b8;
-    --sc-accent: #7c9cff;
-    --sc-accentInk: #0b1020;
-    --sc-surface: rgba(255, 255, 255, 0.06);
-    --sc-surfaceHover: rgba(255, 255, 255, 0.12);
-    --sc-line: rgba(255, 255, 255, 0.1);
-    --sc-deep: #0a0c12;
+    --sc-ink: #e6e6e6;
+    --sc-dim: #9a9a9a;
+    --sc-accent: #4a8bff;
+    --sc-accentInk: #ffffff;
+    --sc-surface: rgba(255, 255, 255, 0.07);
+    --sc-surfaceHover: rgba(255, 255, 255, 0.13);
+    --sc-line: rgba(255, 255, 255, 0.09);
+    --sc-deep: #161616;
     --sc-danger: #ff6b7a;
     --sc-success: #4fe0b0;
     --sc-warning: #ffb454;
@@ -24,17 +24,19 @@
     --sc-playhead: #ff5d73;
     --sc-selection: #ffffff;
 
-    --sc-glass-island: rgba(24, 27, 38, 0.62);
-    --sc-glass-header: rgba(255, 255, 255, 0.04);
-    --sc-glass-blur: 28px;
-    --sc-glass-saturate: 160%;
-    --sc-glass-border: rgba(255, 255, 255, 0.1);
-    --sc-glass-highlight: rgba(255, 255, 255, 0.1);
-    --sc-glass-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+    /* Panel surfaces. "island" is the panel color, "header" the tab strip on top of it. */
+    --sc-glass-island: #232323;
+    --sc-glass-header: #1d1d1d;
+    --sc-glass-blur: 0px;
+    --sc-glass-saturate: 100%;
+    --sc-glass-border: #3a3a3a;
+    --sc-glass-highlight: rgba(255, 255, 255, 0.05);
+    --sc-glass-shadow: 0 8px 28px rgba(0, 0, 0, 0.5);
 
-    --sc-radius: 14px;
-    --sc-gap: 8px;
-    --sc-base: #0b0d14;
+    --sc-radius: 6px;      /* dialogs and menus */
+    --sc-gap: 8px;         /* launcher spacing */
+    --sc-splitter: 4px;    /* the gutter between docked panels in the editor */
+    --sc-base: #141414;    /* the window color, which shows in the gutters */
 }
 
 /* ------ Reset ------ */
@@ -147,7 +149,7 @@ input[type="range"] {
 
 * {
     scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+    scrollbar-color: color-mix(in oklab, var(--sc-ink) 28%, transparent) transparent;
 }
 
 ::-webkit-scrollbar {
@@ -156,14 +158,14 @@ input[type="range"] {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.16);
+    background: color-mix(in oklab, var(--sc-ink) 24%, transparent);
     border-radius: 8px;
     border: 2px solid transparent;
     background-clip: padding-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.28);
+    background: color-mix(in oklab, var(--sc-ink) 40%, transparent);
     background-clip: padding-box;
     border: 2px solid transparent;
 }
@@ -174,7 +176,7 @@ input[type="range"] {
 
 /* ------ Shared classes ------ */
 
-/* A glass panel: a see-through layer that blurs what is behind it. */
+/* A floating surface for dialogs, menus and toasts. The docked editor panels do not use it. */
 .glass {
     background: var(--sc-glass-island);
     backdrop-filter: blur(var(--sc-glass-blur)) saturate(var(--sc-glass-saturate));

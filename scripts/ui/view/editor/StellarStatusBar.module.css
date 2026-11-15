@@ -15,6 +15,9 @@
 
     font-size: 11px;
     color: var(--sc-dim);
+
+    background: var(--sc-base);
+    border-top: 1px solid var(--sc-line);
 }
 
 .textSpan {

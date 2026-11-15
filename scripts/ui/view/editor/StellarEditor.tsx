@@ -4,12 +4,12 @@ import {useStore} from '../../controller/store/StellarStore';
 import {startEditorSession} from '../../controller/project/StellarSession.Controller';
 import {layoutOf, setLayoutValue} from '../../controller/command/StellarWorkspace.Controller';
 import StellarSpeedDialog from '../speed/StellarSpeedDialog';
-import StellarBackground from '../common/StellarBackground';
 import StellarContextMenu from '../common/StellarContextMenu';
-import StellarIsland from '../common/StellarIsland';
+import StellarPanel from '../common/StellarPanel';
 import StellarSplitter from '../common/StellarSplitter';
 import StellarToast from '../common/StellarToast';
 import StellarTitleBar from '../titlebar/StellarTitleBar';
+import StellarWorkspaceBar from '../titlebar/StellarWorkspaceBar';
 import StellarProjectPanel from '../projectpanel/StellarProjectPanel';
 import StellarSourceMonitor from '../monitor/StellarSourceMonitor';
 import StellarProgramMonitor from '../monitor/StellarProgramMonitor';
@@ -50,7 +50,7 @@ interface EditorProps {
     projectPath: string;
 }
 
-/** The editing window: a row of monitors above, and the project, tools and timeline below. */
+/** The editing window, docked like Premiere Pro: monitors above, and the project, tools and timeline below. */
 export default function StellarEditor({projectPath}: EditorProps) {
     const [ready, setReady] = useState(false);
     const [failed, setFailed] = useState(false);
@@ -126,38 +126,38 @@ export default function StellarEditor({projectPath}: EditorProps) {
 
     const panels: Record<string, ReactNode> = {
         leftTabs: (
-            <StellarIsland
+            <StellarPanel
                 panelId={leftTab}
                 tabs={LEFT_TABS}
                 activeTab={leftTab}
                 onTabChange={setLeftTab}
-                className={styles.boxStellarIsland}
+                className={styles.fill}
             >
                 {leftTab === 'source' ? <StellarSourceMonitor /> : null}
                 {leftTab === 'effectControls' ? <StellarEffectControlsPanel /> : null}
                 {leftTab === 'lumetri' ? <StellarLumetriPanel /> : null}
                 {leftTab === 'text' ? <StellarTextPanel /> : null}
                 {leftTab === 'mixer' ? <StellarAudioMixerPanel /> : null}
-            </StellarIsland>
+            </StellarPanel>
         ),
         program: (
-            <StellarIsland panelId="program" title="Program" className={styles.boxStellarIsland}>
+            <StellarPanel panelId="program" title="Program" className={styles.fill}>
                 <StellarProgramMonitor />
-            </StellarIsland>
+            </StellarPanel>
         ),
         rightTabs: (
-            <StellarIsland
+            <StellarPanel
                 panelId={rightTab}
                 tabs={[{id: 'effects', label: 'Effects'}, {id: 'history', label: 'History'}]}
                 activeTab={rightTab}
                 onTabChange={setRightTab}
-                className={styles.boxStellarIsland}
+                className={styles.fill}
             >
                 {rightTab === 'effects' ? <StellarEffectsPanel /> : <StellarHistoryPanel />}
-            </StellarIsland>
+            </StellarPanel>
         ),
         project: (
-            <StellarIsland
+            <StellarPanel
                 panelId={projectTab}
                 tabs={PROJECT_TABS}
                 activeTab={projectTab}
@@ -165,24 +165,24 @@ export default function StellarEditor({projectPath}: EditorProps) {
                     editorStore.set({settings: {...editorStore.get().settings, projectTab: tab}});
                     void window.api.updateSettings({projectTab: tab});
                 }}
-                className={styles.boxStellarIsland}
+                className={styles.fill}
             >
                 {projectTab === 'project' ? <StellarProjectPanel /> : null}
                 {projectTab === 'browser' ? <StellarMediaBrowser /> : null}
                 {projectTab === 'info' ? <StellarInfoPanel /> : null}
                 {projectTab === 'effects' ? <StellarEffectsPanel /> : null}
                 {projectTab === 'markers' ? <StellarMarkersPanel /> : null}
-            </StellarIsland>
+            </StellarPanel>
         ),
         tools: (
-            <StellarIsland panelId="tools" title="" className={styles.boxStellarIsland2}>
+            <StellarPanel panelId="tools" title="" className={styles.toolsPanel}>
                 <StellarToolsPanel />
-            </StellarIsland>
+            </StellarPanel>
         ),
         timeline: (
-            <StellarIsland panelId="timeline" title="Timeline" className={styles.boxStellarIsland} bodyClassName={styles.stellarIsland}>
+            <StellarPanel panelId="timeline" title="Timeline" className={styles.fill} bodyClassName={styles.timelineBody}>
                 <StellarTimelinePanel />
-            </StellarIsland>
+            </StellarPanel>
         )
     };
 
@@ -196,8 +196,8 @@ export default function StellarEditor({projectPath}: EditorProps) {
 
     return (
         <div className={styles.column}>
-            <StellarBackground />
             <StellarTitleBar />
+            <StellarWorkspaceBar />
 
             <div ref={bodyRef} className={styles.column2}>
                 {!ready ? (
@@ -220,7 +220,7 @@ export default function StellarEditor({projectPath}: EditorProps) {
                             <div style={{width: `${layout.project * 100}%`}} className={styles.box}>{panels.project}</div>
                             <StellarSplitter axis="x" containerRef={bottomRowRef} onChange={(value) => setLayoutValue('project', value)} min={0.12} max={0.6} />
                             {panels.tools}
-                            <div className={styles.box3} />
+                            <div className={styles.gutter} />
                             <div className={styles.box2}>{panels.timeline}</div>
                         </div>
                     </>

@@ -1,4 +1,5 @@
-/* ------ handleMove ------ */
+/* ------ StellarSplitter ------ */
+/* The gutter between two panels. It is the window color until you hover it. */
 
 .div {
     position: relative;
@@ -7,47 +8,29 @@
 }
 
 .divVariant {
-    width: var(--sc-gap);
+    width: var(--sc-splitter);
 
     cursor: col-resize;
 }
 
 .divVariant2 {
-    height: var(--sc-gap);
+    height: var(--sc-splitter);
 
     cursor: row-resize;
 }
 
 .div2 {
     position: absolute;
+    inset: 0;
 
-    border-radius: calc(infinity * 1px);
-    background-color: color-mix(in oklab, var(--sc-accent) 0%, transparent);
-    transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 150ms;
+    background-color: transparent;
+    transition: background-color 120ms ease-out;
 }
 
 :global(.group):hover .div2 {
-    background-color: color-mix(in oklab, var(--sc-accent) 60%, transparent);
+    background-color: color-mix(in oklab, var(--sc-accent) 55%, transparent);
 }
 
 :global(.group):active .div2 {
     background-color: var(--sc-accent);
-}
-
-.divVariant3 {
-    inset-block: 7px;
-    left: calc(1 / 2 * 100%);
-    translate: calc(calc(1 / 2 * 100%) * -1) 0;
-
-    width: 1.6px;
-}
-
-.divVariant4 {
-    inset-inline: 7px;
-    top: calc(1 / 2 * 100%);
-    translate: 0 calc(calc(1 / 2 * 100%) * -1);
-
-    height: 1.6px;
 }

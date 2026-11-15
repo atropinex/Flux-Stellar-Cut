@@ -112,7 +112,9 @@ export async function initializeTheme(): Promise<void> {
 
     try {
         const [result, settings] = await Promise.all([window.api.listThemes(), window.api.getSettings()]);
-        const theme = result.themes.find((item) => item.id === settings.theme) ?? result.themes[0];
+        const theme = result.themes.find((item) => item.id === settings.theme)
+            ?? result.themes.find((item) => item.id === 'dark')
+            ?? result.themes[0];
 
         if (theme) {
             applyTheme(theme);
