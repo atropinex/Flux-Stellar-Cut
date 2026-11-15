@@ -1,17 +1,18 @@
 /* ------ StellarEditor ------ */
+/* Panels sit flush against each other. The window color shows in the thin gutters between them. */
 
-.boxStellarIsland {
+.fill {
     height: 100%;
 }
 
-.boxStellarIsland2 {
+.toolsPanel {
     flex-shrink: 0;
 
     height: 100%;
-    width: 52px;
+    width: 44px;
 }
 
-.stellarIsland {
+.timelineBody {
     position: relative;
 }
 
@@ -22,6 +23,8 @@
     flex-direction: column;
 
     height: 100%;
+
+    background: var(--sc-base);
 }
 
 .column2 {
@@ -34,7 +37,7 @@
 
     min-height: 0;
 
-    padding-inline: var(--sc-gap);
+    padding: var(--sc-splitter);
 }
 
 .row {
@@ -50,8 +53,6 @@
     flex: 1;
 
     min-height: 0;
-
-    padding-bottom: var(--sc-gap);
 }
 
 .row2 {
@@ -77,12 +78,10 @@
     flex: 1;
 
     min-height: 0;
-
-    padding-bottom: 0;
 }
 
-.box3 {
+.gutter {
     flex-shrink: 0;
 
-    width: var(--sc-gap);
+    width: var(--sc-splitter);
 }

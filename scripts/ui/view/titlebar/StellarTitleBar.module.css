@@ -12,6 +12,8 @@
     height: 33px;
 
     padding-left: 10px;
+
+    background: var(--sc-base);
 }
 
 .row {

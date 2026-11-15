@@ -46,11 +46,7 @@ export default function StellarSplitter({axis, containerRef, onChange, fromEnd =
                 event.currentTarget.releasePointerCapture(event.pointerId);
             }}
         >
-            <div
-                className={`${styles.div2} ${
-                    axis === 'x' ? styles.divVariant3 : styles.divVariant4
-                }`}
-            />
+            <div className={styles.div2} />
         </div>
     );
 }

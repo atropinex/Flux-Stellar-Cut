@@ -121,8 +121,8 @@ export interface Theme {
     name: string;
     colors: Partial<Record<ThemeColor, string>>;
     glass: ThemeGlass;
-    radius: number;     // px, corners of the panels
-    gap: number;        // px, space between the panels
+    radius: number;     // px, corners of dialogs and menus
+    gap: number;        // px, spacing in the launcher
     material: WindowMaterial;
     base: string;       // color behind everything
     layers: ThemeLayer[];

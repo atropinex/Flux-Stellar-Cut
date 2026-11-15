@@ -138,7 +138,7 @@ export class StellarWindowController {
             title: APP_NAME,
             frame: false,
             show: false,
-            backgroundColor: material === 'none' ? (theme?.base ?? '#0b0d14') : '#00000000',
+            backgroundColor: material === 'none' ? (theme?.base ?? '#141414') : '#00000000',
             webPreferences: {
                 preload: join(__dirname, '../preload/preloadindex.js'),
                 contextIsolation: true,
@@ -151,7 +151,7 @@ export class StellarWindowController {
         const webContentsId = window.webContents.id;
 
         this.contexts.set(webContentsId, context);
-        this.applyMaterial(window, material, theme?.base ?? '#0b0d14');
+        this.applyMaterial(window, material, theme?.base ?? '#141414');
 
         window.once('ready-to-show', () => window.show());
         const sendMaximized = (maximized: boolean) => {

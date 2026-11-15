@@ -1,146 +1,119 @@
 // Written to the themes folder the first time the app runs. Missing files are written again, existing files are never touched.
+// Three themes ship with the app: Dark, Light and Midnight Purple.
 export const DEFAULT_THEMES: Record<string, string> = {
-    'aurora.yaml': `# Themes are plain YAML files. Edit this one, or copy it to make your own,
+    'dark.yaml': `# Themes are plain YAML files. Edit this one, or copy it to make your own,
 # then press "Reload" in Settings > Appearance. Every field is optional.
-name: Aurora
+name: Dark
 
 colors:
-  ink: "#eef1f7"                          # main text
-  dim: "#98a1b8"                          # secondary text
-  accent: "#8fa8ff"                       # highlights, playhead handle
-  accentInk: "#0b1030"                    # text on accent buttons
-  surface: "rgba(255, 255, 255, 0.06)"   # buttons, fields
-  surfaceHover: "rgba(255, 255, 255, 0.12)"
-  line: "rgba(255, 255, 255, 0.09)"      # thin borders
-  deep: "rgba(8, 10, 18, 0.55)"          # dark wells, such as the monitor
+  ink: "#e6e6e6"                          # main text
+  dim: "#9a9a9a"                          # secondary text
+  accent: "#4a8bff"                       # active tab line, highlights, buttons
+  accentInk: "#ffffff"                    # text on accent buttons
+  surface: "rgba(255, 255, 255, 0.07)"   # buttons, fields
+  surfaceHover: "rgba(255, 255, 255, 0.13)"
+  line: "rgba(255, 255, 255, 0.09)"      # thin borders and dividers
+  deep: "#161616"                         # dark wells, such as the monitor
   danger: "#ff6b7d"
   success: "#5fe3a1"
   warning: "#ffbf5e"
-  videoClip: "#4d6bd6"
+  videoClip: "#4f7bd0"
   audioClip: "#2fa37f"
   imageClip: "#a05fd0"
   playhead: "#ff5d73"
   selection: "#ffffff"
 
-# The glass look of the panels (the "islands").
+# Panel colors. "island" is the color of every docked panel and "header" is its tab strip.
+# Blur and saturate only matter for dialogs and menus.
 glass:
-  island: "rgba(24, 27, 40, 0.58)"
-  header: "rgba(255, 255, 255, 0.04)"
-  blur: 28                                # px
-  saturate: 160                           # percent
-  border: "rgba(255, 255, 255, 0.10)"
-  highlight: "rgba(255, 255, 255, 0.10)"
-  shadow: "0 10px 36px rgba(0, 0, 0, 0.35)"
+  island: "#232323"
+  header: "#1d1d1d"
+  blur: 0                                 # px
+  saturate: 100                           # percent
+  border: "#3a3a3a"
+  highlight: "rgba(255, 255, 255, 0.05)"
+  shadow: "0 8px 28px rgba(0, 0, 0, 0.5)"
 
 layout:
-  radius: 14                              # corner size of the panels
-  gap: 8                                  # space between the panels
+  radius: 6                               # corner size of dialogs and menus
+  gap: 8                                  # spacing in the launcher
 
 window:
   material: none                          # none | mica | acrylic | tabbed (Windows 11 only)
 
 background:
-  base: "#0a0c14"
-  layers:
-    - type: gradient
-      value: "radial-gradient(ellipse at 15% 0%, #3b4fd1, transparent 55%)"
-      opacity: 0.55
-    - type: gradient
-      value: "radial-gradient(ellipse at 90% 100%, #7a3fc2, transparent 55%)"
-      opacity: 0.45
-  #  - type: image                        # a file on your computer, or a https:// link
-  #    value: "C:/Users/you/Pictures/wallpaper.jpg"
-  #    opacity: 0.4
-  #    blur: 8
-  #    size: cover
+  base: "#141414"                         # the window color, which shows between the panels
+  layers: []
 
 # Change one part of the app. The name is "<View>.<element>" from the data-theme attribute.
 overrides: {}
-#  StellarTimeline.panel:
-#    border-radius: 22px
+#  StellarPanel.timeline:
+#    background: "#1b1b1b"
 `,
-    'midnight.yaml': `name: Midnight
+    'light.yaml': `name: Light
 colors:
-  accent: "#b69cff"
-  accentInk: "#160b33"
-  dim: "#9a9bb8"
-  videoClip: "#6a52c9"
-  audioClip: "#3a9b9b"
-glass:
-  island: "rgba(16, 14, 34, 0.62)"
-background:
-  base: "#06050f"
-  layers:
-    - type: gradient
-      value: "radial-gradient(ellipse at 50% 0%, #4b3bb5, transparent 60%)"
-      opacity: 0.5
-`,
-    'ember.yaml': `name: Ember
-colors:
-  accent: "#ffb86b"
-  accentInk: "#2b1503"
-  videoClip: "#c25a3a"
-  audioClip: "#b88a2f"
-  playhead: "#ffd36b"
-glass:
-  island: "rgba(34, 20, 16, 0.6)"
-background:
-  base: "#0e0806"
-  layers:
-    - type: gradient
-      value: "radial-gradient(circle at 80% 8%, #ff7a45, transparent 55%)"
-      opacity: 0.4
-    - type: gradient
-      value: "radial-gradient(circle at 10% 100%, #b3261e, transparent 50%)"
-      opacity: 0.35
-`,
-    'mist.yaml': `# A light glass theme.
-name: Mist
-colors:
-  ink: "#1b2430"
-  dim: "#5d6b7e"
-  accent: "#3a6df0"
+  ink: "#1d1d1f"
+  dim: "#5e5e63"
+  accent: "#2a6df4"
   accentInk: "#ffffff"
-  surface: "rgba(255, 255, 255, 0.55)"
-  surfaceHover: "rgba(255, 255, 255, 0.85)"
-  line: "rgba(20, 30, 50, 0.12)"
-  deep: "rgba(20, 30, 50, 0.14)"
+  surface: "rgba(0, 0, 0, 0.05)"
+  surfaceHover: "rgba(0, 0, 0, 0.10)"
+  line: "rgba(0, 0, 0, 0.12)"
+  deep: "rgba(0, 0, 0, 0.10)"
   videoClip: "#6f93f5"
   audioClip: "#4fbf9a"
   imageClip: "#b98ae6"
   playhead: "#e5384f"
-  selection: "#1b2430"
+  selection: "#1d1d1f"
 glass:
-  island: "rgba(255, 255, 255, 0.5)"
-  header: "rgba(255, 255, 255, 0.35)"
-  border: "rgba(255, 255, 255, 0.7)"
-  highlight: "rgba(255, 255, 255, 0.9)"
-  shadow: "0 10px 30px rgba(40, 60, 100, 0.18)"
-background:
-  base: "#dfe7f2"
-  layers:
-    - type: gradient
-      value: "radial-gradient(ellipse at 20% 0%, #9fc0ff, transparent 60%)"
-      opacity: 0.7
-    - type: gradient
-      value: "radial-gradient(ellipse at 100% 100%, #f2b6d8, transparent 55%)"
-      opacity: 0.6
-`,
-    'graphite.yaml': `name: Graphite
-colors:
-  accent: "#7fd1c7"
-  accentInk: "#05211d"
-  videoClip: "#4f7f9c"
-  audioClip: "#5f9c73"
-glass:
-  island: "rgba(30, 32, 36, 0.78)"
-  blur: 18
-  border: "rgba(255, 255, 255, 0.07)"
+  island: "#ececec"
+  header: "#e2e2e2"
+  blur: 0
+  saturate: 100
+  border: "#c8c8c8"
+  highlight: "rgba(255, 255, 255, 0.8)"
+  shadow: "0 8px 24px rgba(0, 0, 0, 0.18)"
 layout:
-  radius: 10
-  gap: 6
+  radius: 6
+  gap: 8
+window:
+  material: none
 background:
-  base: "#121316"
+  base: "#c4c4c4"
   layers: []
+overrides: {}
+`,
+    'midnight-purple.yaml': `name: Midnight Purple
+colors:
+  ink: "#ece8ff"
+  dim: "#9d96c4"
+  accent: "#a78bfa"
+  accentInk: "#14092e"
+  surface: "rgba(180, 160, 255, 0.08)"
+  surfaceHover: "rgba(180, 160, 255, 0.16)"
+  line: "rgba(190, 170, 255, 0.12)"
+  deep: "#0f0a1f"
+  videoClip: "#6a52c9"
+  audioClip: "#3a9b9b"
+  imageClip: "#c77dff"
+  playhead: "#ff6fa5"
+  selection: "#ffffff"
+glass:
+  island: "#1a1430"
+  header: "#150f28"
+  blur: 0
+  saturate: 100
+  border: "#2f2658"
+  highlight: "rgba(190, 170, 255, 0.06)"
+  shadow: "0 8px 28px rgba(5, 2, 20, 0.6)"
+layout:
+  radius: 6
+  gap: 8
+window:
+  material: none
+background:
+  base: "#0b0816"
+  layers: []
+overrides: {}
 `
 };

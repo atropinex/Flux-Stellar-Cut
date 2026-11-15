@@ -18,13 +18,13 @@ const IMAGE_TYPES: Record<string, string> = {
 const MATERIALS: WindowMaterial[] = ['none', 'mica', 'acrylic', 'tabbed'];
 
 const DEFAULT_GLASS: ThemeGlass = {
-    island: 'rgba(24, 27, 40, 0.58)',
-    header: 'rgba(255, 255, 255, 0.04)',
-    blur: 28,
-    saturate: 160,
-    border: 'rgba(255, 255, 255, 0.10)',
-    highlight: 'rgba(255, 255, 255, 0.10)',
-    shadow: '0 10px 36px rgba(0, 0, 0, 0.35)'
+    island: '#232323',
+    header: '#1d1d1d',
+    blur: 0,
+    saturate: 100,
+    border: '#3a3a3a',
+    highlight: 'rgba(255, 255, 255, 0.05)',
+    shadow: '0 8px 28px rgba(0, 0, 0, 0.5)'
 };
 
 type Raw = Record<string, any>;
@@ -70,12 +70,12 @@ export class ThemeModel {
         return {themes, errors};
     }
 
-    /** Finds one theme by id. Falls back to "aurora", then to the first one. */
+    /** Finds one theme by id. Falls back to "dark", then to the first one. */
     find(id: string): Theme | null {
         const {themes} = this.load();
 
         return themes.find((theme) => theme.id === id)
-            ?? themes.find((theme) => theme.id === 'aurora')
+            ?? themes.find((theme) => theme.id === 'dark')
             ?? themes[0]
             ?? null;
     }
@@ -120,10 +120,10 @@ export class ThemeModel {
             name: asText(raw.name) ?? id,
             colors,
             glass: this.toGlass(raw.glass),
-            radius: clamp(asNumber(raw.layout?.radius, 14), 0, 40),
+            radius: clamp(asNumber(raw.layout?.radius, 6), 0, 40),
             gap: clamp(asNumber(raw.layout?.gap, 8), 0, 24),
             material: material && MATERIALS.includes(material) ? material : 'none',
-            base: asText(background.base) ?? '#0a0c14',
+            base: asText(background.base) ?? '#141414',
             layers,
             overrides: this.toOverrides(raw.overrides)
         };
