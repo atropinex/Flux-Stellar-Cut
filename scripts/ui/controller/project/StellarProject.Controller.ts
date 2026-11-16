@@ -422,6 +422,28 @@ export function sequenceSettingsFromMedia(media: MediaItem): SequenceSettings {
     };
 }
 
+/**
+ * A new project has no sequence. The first media put on the timeline makes one that matches the first video in it
+ * (size, frame rate and sample rate), like Premiere's "New Sequence From Clip". Returns false when there is nothing to build from.
+ */
+export function ensureSequenceForMedia(items: MediaItem[]): boolean {
+    if (getActiveSequence()) {
+        return true;
+    }
+
+    if (!editorStore.get().document || items.length === 0) {
+        return false;
+    }
+
+    const base = items.find((item) => item.kind === 'video' && item.width > 0)
+        ?? items.find((item) => item.hasVideo && item.width > 0)
+        ?? items[0];
+
+    addSequence(base.name.replace(/\.[^.]+$/, ''), sequenceSettingsFromMedia(base));
+
+    return true;
+}
+
 export function requireActiveSequence(): Sequence | null {
     return getActiveSequence();
 }

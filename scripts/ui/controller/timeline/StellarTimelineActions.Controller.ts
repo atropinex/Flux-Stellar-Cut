@@ -3,7 +3,7 @@ import {defaultEffectParams, findEffect} from '../../../common/stellar/StellarEf
 import {MAX_PIXELS_PER_SECOND, MIN_PIXELS_PER_SECOND, MAX_TRACKS_PER_TYPE} from '../../../common/stellar/StellarConfig';
 import {createId, snapToFrame} from '../../../common/utils/StellarTimeHelper';
 import {editorStore, getActiveSequence, getMedia, type ToolId} from '../project/StellarEditor.Store';
-import {commitSequence, showToast} from '../project/StellarProject.Controller';
+import {commitSequence, ensureSequenceForMedia, showToast} from '../project/StellarProject.Controller';
 import {
     addClips, addTrack, clearRange, clipsUnderTime, extractRange, findClip, findTrack, liftClips, liftRange, linkClips, nextEditPoint, pasteClips,
     placeMedia, previousEditPoint, removeTrack, rippleDeleteClips, rippleTrimToTime, sequenceDuration, splitAllTracksAt,
@@ -308,14 +308,18 @@ export function goToOut(): void {
 // === Putting media on the timeline === //
 
 export function placeSourceOnTimeline(mediaId: string, mode: 'insert' | 'overwrite'): void {
-    const state = editorStore.get();
-    const media = getMedia(state, mediaId);
+    const media = getMedia(editorStore.get(), mediaId);
 
     if (!media) {
         showToast('Open a clip in the Source Monitor first.');
         return;
     }
 
+    if (!ensureSequenceForMedia([media])) {
+        return;
+    }
+
+    const state = editorStore.get(); // read again, because a new sequence changes the target tracks and playhead
     const marks = state.sourceMarks[mediaId];
     const sourceIn = marks?.inPoint ?? 0;
     const sourceOut = marks?.outPoint ?? media.duration;
@@ -368,7 +372,20 @@ export function dropMediaOnTimeline(mediaId: string, time: number, trackId: stri
     editorStore.set({selection: newIds});
 }
 
+/** Media dropped on the timeline while there is no sequence yet. The first video decides the sequence settings. */
+export function dropMediaOnEmptyTimeline(mediaIds: string[]): void {
+    const items = mediaIds
+        .map((id) => getMedia(editorStore.get(), id))
+        .filter((media): media is MediaItem => Boolean(media));
+
+    appendMediaToTimeline(items);
+}
+
 export function appendMediaToTimeline(items: MediaItem[]): void {
+    if (!ensureSequenceForMedia(items)) {
+        return;
+    }
+
     const state = editorStore.get();
     let time = sequenceOrNull() ? sequenceDuration(sequenceOrNull() as Sequence) : 0;
 

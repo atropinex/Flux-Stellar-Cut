@@ -5,7 +5,7 @@ import {DEFAULT_PIXELS_PER_SECOND, DEFAULT_SETTINGS} from '../../../common/stell
 import {createStore} from '../store/StellarStore';
 
 export type ToolId = 'selection' | 'trackSelect' | 'ripple' | 'razor' | 'hand' | 'zoom' | 'pen';
-export type DialogId = 'export' | 'settings' | 'newSequence' | 'newProject' | 'speed' | null;
+export type DialogId = 'export' | 'settings' | 'newProject' | 'speed' | null;
 
 export interface HistoryEntry {
     label: string;

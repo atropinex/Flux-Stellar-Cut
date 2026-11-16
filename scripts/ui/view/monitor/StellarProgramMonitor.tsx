@@ -50,10 +50,7 @@ export default function StellarProgramMonitor() {
         return (
             <div className={styles.column}>
                 <StellarIcon name="sequence" size={30} />
-                <p className={styles.textP}>There is no sequence yet.</p>
-                <button type="button" className={styles.textButton} onClick={() => editorStore.set({dialog: 'newSequence'})}>
-                    New Sequence
-                </button>
+                <p className={styles.textP}>Drag a video to the timeline to start.</p>
             </div>
         );
     }

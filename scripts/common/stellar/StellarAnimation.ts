@@ -134,7 +134,7 @@ export function valueAt(keyframes: Keyframe[] | undefined, plainValue: number, t
 
 // === Editing keyframes. All of these return a new list. === //
 
-const SAME_TIME = 1 / 240; // two keyframes closer than this are the same keyframe
+const SAME_TIME = 1 / 1000; // two keyframes closer than this are the same keyframe
 
 export function findKeyframeIndex(keyframes: Keyframe[] | undefined, time: number, tolerance = SAME_TIME): number {
     if (!keyframes) {

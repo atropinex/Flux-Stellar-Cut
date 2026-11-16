@@ -12,6 +12,13 @@
     color: var(--sc-dim);
 }
 
+.columnDrop {
+    color: var(--sc-ink);
+
+    outline: 2px dashed var(--sc-accent);
+    outline-offset: -8px;
+}
+
 .textP {
     font-size: 12px;
 }

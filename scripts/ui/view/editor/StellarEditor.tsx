@@ -26,7 +26,6 @@ import StellarMarkersPanel from '../markers/StellarMarkersPanel';
 import StellarMediaBrowser from '../projectpanel/StellarMediaBrowser';
 import StellarExportDialog from '../export/StellarExportDialog';
 import StellarSettingsDialog from '../settings/StellarSettingsDialog';
-import StellarNewSequenceDialog from '../settings/StellarNewSequenceDialog';
 import StellarStatusBar from './StellarStatusBar';
 import styles from './StellarEditor.module.css';
 
@@ -232,7 +231,6 @@ export default function StellarEditor({projectPath}: EditorProps) {
             {ready && dialog === 'export' ? <StellarExportDialog /> : null}
             {ready && dialog === 'settings' ? <StellarSettingsDialog /> : null}
             {ready && dialog === 'speed' ? <StellarSpeedDialog /> : null}
-            {ready && dialog === 'newSequence' ? <StellarNewSequenceDialog /> : null}
             <StellarContextMenu />
             <StellarToast />
         </div>

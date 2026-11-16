@@ -216,7 +216,7 @@ export default function StellarExportDialog() {
                                 <input type="number" className={INPUT} min={16} max={8192} step={2} value={settings.height} disabled={running} onChange={(event) => update({height: Math.max(16, Number(event.target.value))})} />
                             </Field>
                             <Field label="Frame rate">
-                                <input type="number" className={INPUT} min={1} max={120} step={0.001} value={Number(settings.frameRate.toFixed(3))} disabled={running} onChange={(event) => update({frameRate: Math.max(1, Number(event.target.value))})} />
+                                <input type="number" className={INPUT} min={1} max={1000} step={0.001} value={Number(settings.frameRate.toFixed(3))} disabled={running} onChange={(event) => update({frameRate: Math.max(1, Number(event.target.value))})} />
                             </Field>
                             <Field label="Encoding">
                                 <select className={INPUT} value={settings.encodeSpeed} disabled={running || format.type === 'animation'} onChange={(event) => update({encodeSpeed: event.target.value as ExportSettings['encodeSpeed']})}>

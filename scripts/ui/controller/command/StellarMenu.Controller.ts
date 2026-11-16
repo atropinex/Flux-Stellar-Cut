@@ -29,7 +29,7 @@ export const MENUS: MenuDefinition[] = [
         id: 'file', label: 'File',
         build: () => [
             commandItem('file.newProject'), commandItem('file.openProject'), separator('a'),
-            commandItem('file.newSequence'), commandItem('file.newBin'), commandItem('file.import'), separator('b'),
+            commandItem('file.newBin'), commandItem('file.import'), separator('b'),
             commandItem('file.save'), commandItem('file.saveAs'), separator('c'),
             commandItem('file.export'), separator('d'),
             commandItem('file.closeProject'), commandItem('file.settings')

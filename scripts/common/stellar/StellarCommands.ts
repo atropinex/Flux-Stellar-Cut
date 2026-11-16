@@ -18,7 +18,6 @@ export const COMMANDS: CommandDefinition[] = [
     { id: 'file.openProject', label: 'Open Project...', category: 'File', defaultKey: 'Mod+O' },
     { id: 'file.save', label: 'Save', category: 'File', defaultKey: 'Mod+S' },
     { id: 'file.saveAs', label: 'Save As...', category: 'File', defaultKey: 'Mod+Shift+S' },
-    { id: 'file.newSequence', label: 'New Sequence...', category: 'File', defaultKey: 'Mod+N' },
     { id: 'file.newBin', label: 'New Bin', category: 'File', defaultKey: 'Mod+B' },
     { id: 'file.import', label: 'Import...', category: 'File', defaultKey: 'Mod+I' },
     { id: 'file.export', label: 'Export Media...', category: 'File', defaultKey: 'Mod+M' },
