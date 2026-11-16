@@ -1,5 +1,4 @@
 import {useEffect, useState} from 'react';
-import {SEQUENCE_PRESETS} from '../../../common/stellar/StellarConfig';
 import StellarDialog from '../common/StellarDialog';
 import StellarIcon from '../common/StellarIcon';
 import {BUTTON, BUTTON_PRIMARY, INPUT, LABEL} from '../common/StellarStyles';
@@ -13,7 +12,6 @@ interface NewProjectDialogProps {
 export default function StellarNewProjectDialog({onClose, onCreate}: NewProjectDialogProps) {
     const [name, setName] = useState('Untitled Project');
     const [folder, setFolder] = useState('');
-    const [presetId, setPresetId] = useState('hd1080-24');
     const [error, setError] = useState<string | null>(null);
     const [busy, setBusy] = useState(false);
 
@@ -30,8 +28,6 @@ export default function StellarNewProjectDialog({onClose, onCreate}: NewProjectD
     }
 
     async function create() {
-        const preset = SEQUENCE_PRESETS.find((item) => item.id === presetId);
-
         if (!name.trim() || !folder) {
             setError('Give the project a name and choose a folder for it.');
             return;
@@ -41,11 +37,7 @@ export default function StellarNewProjectDialog({onClose, onCreate}: NewProjectD
         setError(null);
 
         try {
-            const path = await window.api.createProject({
-                name: name.trim(),
-                folder,
-                sequence: preset ? {name: 'Sequence 01', width: preset.width, height: preset.height, frameRate: preset.frameRate, sampleRate: 48000} : null
-            });
+            const path = await window.api.createProject({name: name.trim(), folder});
 
             onCreate(path);
         } catch (failure) {
@@ -80,15 +72,6 @@ export default function StellarNewProjectDialog({onClose, onCreate}: NewProjectD
                         </button>
                     </div>
                     <p className={styles.textP}>A folder named after the project is made here. It holds the project file and its auto-saves.</p>
-                </div>
-                <div>
-                    <label className={LABEL}>First sequence</label>
-                    <select className={INPUT} value={presetId} onChange={(event) => setPresetId(event.target.value)}>
-                        {SEQUENCE_PRESETS.map((preset) => (
-                            <option key={preset.id} value={preset.id}>{preset.label}</option>
-                        ))}
-                        <option value="">Start with no sequence</option>
-                    </select>
                 </div>
                 {error ? <p className={styles.textP2}>{error}</p> : null}
             </div>

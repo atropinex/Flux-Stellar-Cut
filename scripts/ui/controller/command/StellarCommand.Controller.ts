@@ -181,7 +181,9 @@ export function runCommand(id: string): void {
         return;
     }
 
-    if (!getActiveSequence() && id.startsWith('timeline.') && id !== 'timeline.zoomFit') {
+    const buildsSequence = id === 'timeline.insert' || id === 'timeline.overwrite'; // these make the first sequence
+
+    if (!getActiveSequence() && id.startsWith('timeline.') && id !== 'timeline.zoomFit' && !buildsSequence) {
         showToast('Create or open a sequence first.');
         return;
     }

@@ -6,7 +6,7 @@ import {useStore} from '../../controller/store/StellarStore';
 import {activateSequence} from '../../controller/project/StellarProject.Controller';
 import {sequenceDuration, tracksOfType} from '../../controller/timeline/StellarTimeline.Controller';
 import {
-    addMarker, applyEffect, dropMediaOnTimeline, setTimelineViewportWidth, setZoom, toggleLinkedSelection, toggleSnapping, zoomToFit
+    addMarker, applyEffect, dropMediaOnEmptyTimeline, dropMediaOnTimeline, setTimelineViewportWidth, setZoom, toggleLinkedSelection, toggleSnapping, zoomToFit
 } from '../../controller/timeline/StellarTimelineActions.Controller';
 import {attachTimelineWheel} from '../../controller/timeline/StellarTimelineWheel.Controller';
 import {openContextMenu, openMenuAt} from '../../controller/contextmenu/StellarContextMenu.Controller';
@@ -109,9 +109,28 @@ export default function StellarTimelinePanel() {
 
     if (!sequence || !document) {
         return (
-            <div className={styles.column}>
+            <div
+                className={`${styles.column} ${dropActive ? styles.columnDrop : ''}`}
+                onDragOver={(event) => {
+                    if (event.dataTransfer.types.includes(MEDIA_DRAG_TYPE)) {
+                        event.preventDefault();
+                        setDropActive(true);
+                    }
+                }}
+                onDragLeave={() => setDropActive(false)}
+                onDrop={(event) => {
+                    event.preventDefault();
+                    setDropActive(false);
+
+                    const dragged = event.dataTransfer.getData(MEDIA_DRAG_TYPE);
+
+                    if (dragged) {
+                        dropMediaOnEmptyTimeline(JSON.parse(dragged) as string[]);
+                    }
+                }}
+            >
                 <StellarIcon name="sequence" size={28} />
-                <p className={styles.textP}>Create a sequence to start editing.</p>
+                <p className={styles.textP}>Drag a video here to start. The sequence takes its size and frame rate from it.</p>
             </div>
         );
     }

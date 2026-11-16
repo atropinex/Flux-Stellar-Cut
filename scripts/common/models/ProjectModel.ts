@@ -3,7 +3,7 @@ import {basename, dirname, extname, join} from 'path';
 import {parse, stringify} from 'yaml';
 import type {NewProjectOptions, ProjectDocument, RecentProject} from '../stellar/StellarContract';
 import {PROJECT_EXTENSION, RECENT_PROJECTS_LIMIT} from '../stellar/StellarConfig';
-import {createEmptyProject, createSequence, normalizeProject} from '../stellar/StellarProjectFactory';
+import {createEmptyProject, normalizeProject} from '../stellar/StellarProjectFactory';
 
 const HEADER = '# Flux-Stellar-Cut project. It is plain YAML, so it can be read, diffed and fixed by hand.\n';
 
@@ -39,11 +39,7 @@ export class ProjectModel {
 
         mkdirSync(projectFolder, {recursive: true});
 
-        const sequence = options.sequence
-            ? createSequence(options.sequence.name, options.sequence)
-            : null;
-
-        this.write(path, createEmptyProject(baseName, sequence));
+        this.write(path, createEmptyProject(baseName, null));
 
         return path;
     }

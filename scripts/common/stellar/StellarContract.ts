@@ -157,8 +157,7 @@ export interface RecentProject {
 
 export interface NewProjectOptions {
     name: string;
-    folder: string;
-    sequence: (SequenceSettings & { name: string }) | null; // null starts an empty project
+    folder: string; // a project starts with no sequence, the first video put on the timeline makes it
 }
 
 export interface LaunchContext {
