@@ -26,7 +26,9 @@ export function formatTimecode(seconds: number, frameRate: number): string {
     const minutes = Math.floor(totalSeconds / 60) % 60;
     const hours = Math.floor(totalSeconds / 3600);
 
-    return [hours, minutes, secs, frames].map((part) => String(part).padStart(2, '0')).join(':');
+    const frameDigits = Math.max(2, String(base - 1).length); // 3 digits from 101 fps up
+
+    return [hours, minutes, secs].map((part) => String(part).padStart(2, '0')).concat(String(frames).padStart(frameDigits, '0')).join(':');
 }
 
 /** "00:01:23:12" -> 83.5. Also accepts "1:23:12", "123" (frames) and plain seconds like "83.5s". */

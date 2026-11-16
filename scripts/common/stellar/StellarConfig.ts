@@ -19,29 +19,7 @@ export const WEB_IMAGE_EXTENSIONS = ['png', 'jpg', 'jpeg', 'bmp', 'gif', 'webp',
 export const ALL_MEDIA_EXTENSIONS = [...VIDEO_EXTENSIONS, ...AUDIO_EXTENSIONS, ...IMAGE_EXTENSIONS];
 
 // === Sequences === //
-export interface SequencePreset {
-    id: string;
-    label: string;
-    width: number;
-    height: number;
-    frameRate: number;
-}
-
-export const SEQUENCE_PRESETS: SequencePreset[] = [
-    { id: 'hd1080-24', label: 'HD 1080p  ·  24 fps', width: 1920, height: 1080, frameRate: 24 },
-    { id: 'hd1080-2398', label: 'HD 1080p  ·  23.976 fps', width: 1920, height: 1080, frameRate: 24000 / 1001 },
-    { id: 'hd1080-25', label: 'HD 1080p  ·  25 fps', width: 1920, height: 1080, frameRate: 25 },
-    { id: 'hd1080-30', label: 'HD 1080p  ·  30 fps', width: 1920, height: 1080, frameRate: 30 },
-    { id: 'hd1080-2997', label: 'HD 1080p  ·  29.97 fps', width: 1920, height: 1080, frameRate: 30000 / 1001 },
-    { id: 'hd1080-60', label: 'HD 1080p  ·  60 fps', width: 1920, height: 1080, frameRate: 60 },
-    { id: 'hd720-30', label: 'HD 720p  ·  30 fps', width: 1280, height: 720, frameRate: 30 },
-    { id: 'uhd-24', label: '4K UHD  ·  24 fps', width: 3840, height: 2160, frameRate: 24 },
-    { id: 'uhd-30', label: '4K UHD  ·  30 fps', width: 3840, height: 2160, frameRate: 30 },
-    { id: 'uhd-60', label: '4K UHD  ·  60 fps', width: 3840, height: 2160, frameRate: 60 },
-    { id: 'vertical-1080', label: 'Vertical 1080x1920  ·  30 fps', width: 1080, height: 1920, frameRate: 30 },
-    { id: 'square-1080', label: 'Square 1080x1080  ·  30 fps', width: 1080, height: 1080, frameRate: 30 }
-];
-
+// A sequence is never made from a preset. It takes its settings from the first video put on the timeline.
 export const DEFAULT_SAMPLE_RATE = 48000;
 export const DEFAULT_VIDEO_TRACKS = 3;
 export const DEFAULT_AUDIO_TRACKS = 3;
@@ -49,7 +27,7 @@ export const MAX_TRACKS_PER_TYPE = 12;
 
 // === Timeline === //
 export const MIN_PIXELS_PER_SECOND = 2;
-export const MAX_PIXELS_PER_SECOND = 1200;
+export const MAX_PIXELS_PER_SECOND = 3000; // enough to see single frames at 360 fps
 export const DEFAULT_PIXELS_PER_SECOND = 80;
 export const SNAP_DISTANCE_PX = 8;
 export const MAX_HISTORY_STEPS = 100;

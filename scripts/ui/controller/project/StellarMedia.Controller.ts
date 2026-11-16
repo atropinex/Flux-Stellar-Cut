@@ -158,7 +158,7 @@ export function openInSource(mediaId: string): void {
     window.dispatchEvent(new CustomEvent('stellar:show-source'));
 }
 
-/** "New Sequence From Clip": a sequence with the clip's size and frame rate, with the clip already placed. */
+/** Right-click a clip > "Create New Sequence": a sequence with the clip's size and frame rate, with the clip already placed. */
 export function createSequenceFromMedia(mediaId: string): void {
     const media = getMedia(editorStore.get(), mediaId);
 

@@ -249,7 +249,7 @@ export default function StellarProjectPanel() {
             {id: 'insert', label: 'Insert', hotkey: ',', action: () => placeSourceOnTimeline(row.id, 'insert')},
             {id: 'overwrite', label: 'Overwrite', hotkey: '.', action: () => placeSourceOnTimeline(row.id, 'overwrite')},
             {id: 'append', label: 'Add to End of Timeline', action: () => appendMediaToTimeline(items)},
-            {id: 'seq', label: 'New Sequence From Clip', action: () => createSequenceFromMedia(row.id)},
+            {id: 'seq', label: 'Create New Sequence', action: () => createSequenceFromMedia(row.id)},
             separator('a'),
             {id: 'rename', label: 'Rename', hotkey: 'F2', action: () => setRenamingId(row.id)},
             {id: 'relink', label: 'Link Media...', disabled: !offline[row.id], action: () => void relinkMedia(row.id)},
@@ -262,7 +262,6 @@ export default function StellarProjectPanel() {
     function emptyMenu(): ContextMenuItem[] {
         return [
             {id: 'bin', label: 'New Bin', hotkey: 'Mod+B', action: () => makeBin(null)},
-            {id: 'sequence', label: 'New Sequence...', action: () => editorStore.set({dialog: 'newSequence'})},
             {id: 'import', label: 'Import...', hotkey: 'Mod+I', action: () => void importWithDialog(null)},
             separator('a'),
             {id: 'all', label: 'Select All', action: () => editorStore.set({selectedMediaIds: (document?.media ?? []).map((item) => item.id)})}
@@ -530,7 +529,6 @@ export default function StellarProjectPanel() {
                 <div className={styles.row3}>
                     <button type="button" className={BUTTON_GHOST} title="Import media" onClick={() => void importWithDialog(null)}><StellarIcon name="import" size={14} /></button>
                     <button type="button" className={BUTTON_GHOST} title="New bin" onClick={() => makeBin(null)}><StellarIcon name="folderPlus" size={14} /></button>
-                    <button type="button" className={BUTTON_GHOST} title="New sequence" onClick={() => editorStore.set({dialog: 'newSequence'})}><StellarIcon name="sequence" size={14} /></button>
                     <button
                         type="button" className={BUTTON_GHOST} title="Delete selected" disabled={selectedIds.length === 0}
                         onClick={() => deleteMedia(selectedIds)}

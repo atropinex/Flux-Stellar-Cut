@@ -280,7 +280,7 @@ export function trimLimits(sequence: Sequence, clip: Clip, edge: 'start' | 'end'
     const neighbors = sequence.clips.filter((other) => other.trackId === clip.trackId && other.id !== clip.id);
     const previousEnd = neighbors.filter((other) => clipEnd(other) <= clip.start + EPSILON).reduce((latest, other) => Math.max(latest, clipEnd(other)), 0);
     const nextStart = neighbors.filter((other) => other.start >= clipEnd(clip) - EPSILON).reduce((soonest, other) => Math.min(soonest, other.start), Infinity);
-    const minLength = 1 / 120;
+    const minLength = 1 / sequence.settings.frameRate; // one frame, whatever the frame rate is
 
     if (edge === 'start') {
         const roomBefore = clip.reverse ? (mediaDuration - (clip.inPoint + clip.duration * clip.speed)) / clip.speed : clip.inPoint / clip.speed;

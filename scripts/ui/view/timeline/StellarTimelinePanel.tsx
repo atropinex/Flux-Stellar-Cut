@@ -218,9 +218,6 @@ export default function StellarTimelinePanel() {
                         {item.name}
                     </button>
                 ))}
-                <button type="button" className={BUTTON_GHOST} title="New sequence" onClick={() => editorStore.set({dialog: 'newSequence'})}>
-                    <StellarIcon name="plus" size={14} />
-                </button>
 
                 <span className={`${styles.textSpan} timecode`}>{formatTimecode(playhead, sequence.settings.frameRate)}</span>
 

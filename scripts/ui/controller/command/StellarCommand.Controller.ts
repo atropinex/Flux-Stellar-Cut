@@ -46,7 +46,6 @@ const HANDLERS: Record<string, Handler> = {
     'file.openProject': openAnotherProject,
     'file.save': saveProject,
     'file.saveAs': saveProjectAs,
-    'file.newSequence': () => editorStore.set({dialog: 'newSequence'}),
     'file.newBin': () => window.dispatchEvent(new CustomEvent('stellar:new-bin')),
     'file.import': () => importWithDialog(editorStore.get().selectedBinId),
     'file.export': () => editorStore.set({dialog: 'export'}),
