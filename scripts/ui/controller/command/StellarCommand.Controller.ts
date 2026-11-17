@@ -157,11 +157,11 @@ const HANDLERS: Record<string, Handler> = {
     'tool.hand': () => setTool('hand'),
     'tool.zoom': () => setTool('zoom'),
     'tool.pen': () => setTool('pen'),
+    'tool.text': () => setTool('text'),
 
     // Window
     'window.panelEffectControls': () => showPanel('effectControls'),
     'window.panelLumetri': () => showPanel('lumetri'),
-    'window.panelText': () => showPanel('text'),
     'window.panelMixer': () => showPanel('mixer'),
     'window.panelSource': () => showPanel('source'),
     'window.panelProject': () => showPanel('project'),
@@ -180,7 +180,7 @@ export function runCommand(id: string): void {
         return;
     }
 
-    const buildsSequence = id === 'timeline.insert' || id === 'timeline.overwrite'; // these make the first sequence
+    const buildsSequence = id === 'timeline.insert' || id === 'timeline.overwrite' || id === 'timeline.addText'; // these make the first sequence
 
     if (!getActiveSequence() && id.startsWith('timeline.') && id !== 'timeline.zoomFit' && !buildsSequence) {
         showToast('Create or open a sequence first.');

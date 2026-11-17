@@ -23,7 +23,7 @@ import {useStellarTimelineInteraction} from './useStellarTimelineInteraction';
 import styles from './StellarTimelinePanel.module.css';
 
 const CURSORS: Record<ToolId, string> = {
-    selection: 'default', trackSelect: 'e-resize', ripple: 'col-resize', razor: 'crosshair', hand: 'grab', zoom: 'zoom-in', pen: 'crosshair'
+    selection: 'default', trackSelect: 'e-resize', ripple: 'col-resize', razor: 'crosshair', hand: 'grab', zoom: 'zoom-in', pen: 'crosshair', text: 'default'
 };
 
 /** The timeline: tracks, clips, ruler and playhead. */

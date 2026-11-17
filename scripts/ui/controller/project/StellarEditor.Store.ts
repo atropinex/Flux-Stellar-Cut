@@ -4,7 +4,7 @@ import type {KeybindMap} from '../../../common/stellar/StellarCommands';
 import {DEFAULT_PIXELS_PER_SECOND, DEFAULT_SETTINGS} from '../../../common/stellar/StellarConfig';
 import {createStore} from '../store/StellarStore';
 
-export type ToolId = 'selection' | 'trackSelect' | 'ripple' | 'razor' | 'hand' | 'zoom' | 'pen';
+export type ToolId = 'selection' | 'trackSelect' | 'ripple' | 'razor' | 'hand' | 'zoom' | 'pen' | 'text';
 export type DialogId = 'export' | 'settings' | 'newProject' | 'speed' | null;
 
 export interface HistoryEntry {

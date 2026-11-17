@@ -14,13 +14,17 @@ import styles from './StellarTextPanel.module.css';
 const ALIGNMENTS: { id: TextAlign; label: string }[] = [{id: 'left', label: 'Left'}, {id: 'center', label: 'Center'}, {id: 'right', label: 'Right'}];
 const STROKE_POSITIONS: StrokePosition[] = ['outside', 'center', 'inside'];
 
-export default function StellarTextPanel() {
+export default function StellarTextPanel({embedded = false}: {embedded?: boolean}) {
     const sequence = useStore(editorStore, (state) => getShownSequence(state));
     const selection = useStore(editorStore, (state) => state.selection);
     const clip = sequence && selection[0] ? findClip(sequence, selection[0]) : undefined;
     const text = clip?.text;
 
     if (!clip || !text) {
+        if (embedded) {
+            return null;
+        }
+
         return (
             <EmptyPanel icon={<StellarIcon name="text" size={28} />}>
                 <p className={styles.p}>Select a text clip to change how it looks.</p>
@@ -49,7 +53,7 @@ export default function StellarTextPanel() {
     }
 
     return (
-        <div className={styles.panel} data-theme="StellarText.panel">
+        <div className={embedded ? styles.embedded : styles.panel} data-theme="StellarText.panel">
             <PanelSection title="Text">
                 <div className={styles.div}>
                     <textarea

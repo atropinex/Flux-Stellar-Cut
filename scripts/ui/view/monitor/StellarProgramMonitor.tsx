@@ -9,10 +9,12 @@ import {
     addEditAtPlayhead, goToIn, goToNextEdit, goToOut, goToPreviousEdit, markIn, markOut, removeInOutRange, clearInOut, addMarker
 } from '../../controller/timeline/StellarTimelineActions.Controller';
 import {openContextMenu, separator} from '../../controller/contextmenu/StellarContextMenu.Controller';
+import {ensureSequence, showToast} from '../../controller/project/StellarProject.Controller';
 import StellarIcon from '../common/StellarIcon';
 import StellarMonitorStage from './StellarMonitorStage';
 import StellarMaskOverlay from './StellarMaskOverlay';
 import StellarTransformOverlay from './StellarTransformOverlay';
+import StellarTextOverlay from './StellarTextOverlay';
 import StellarScrubBar from './StellarScrubBar';
 import StellarTransportBar from './StellarTransportBar';
 import styles from './StellarProgramMonitor.module.css';
@@ -23,6 +25,7 @@ export default function StellarProgramMonitor() {
     const playhead = useStore(editorStore, (state) => state.playhead);
     const playing = useStore(editorStore, (state) => state.playing);
     const loop = useStore(editorStore, (state) => state.loop);
+    const tool = useStore(editorStore, (state) => state.tool);
     const sources = useStore(editorStore, (state) => state.playbackSources);
     const layerRef = useRef<HTMLDivElement>(null);
     const engineRef = useRef<StellarPreviewEngine | null>(null);
@@ -48,9 +51,17 @@ export default function StellarProgramMonitor() {
 
     if (!sequence) {
         return (
-            <div className={styles.column}>
+            <div
+                className={styles.column}
+                onPointerDown={() => {
+                    // The Type tool needs a picture to draw on, so the first click makes a sequence.
+                    if (tool === 'text' && ensureSequence()) {
+                        showToast('Made a 1080p sequence. Now click or drag on the picture to add text.');
+                    }
+                }}
+            >
                 <StellarIcon name="sequence" size={30} />
-                <p className={styles.textP}>Drag a video to the timeline to start.</p>
+                <p className={styles.textP}>{tool === 'text' ? 'Click here to start a sequence for your text.' : 'Drag a video to the timeline to start.'}</p>
             </div>
         );
     }
@@ -85,7 +96,12 @@ export default function StellarProgramMonitor() {
                     setStageWidth(width);
                     engineRef.current?.refresh();
                 }}
-                controls={<StellarTransformOverlay stageWidth={stageWidth} stageHeight={stageWidth / aspect} />}
+                controls={
+                    <>
+                        <StellarTransformOverlay stageWidth={stageWidth} stageHeight={stageWidth / aspect} />
+                        <StellarTextOverlay stageWidth={stageWidth} stageHeight={stageWidth / aspect} />
+                    </>
+                }
                 overlay={
                     <>
                         <StellarMaskOverlay stageWidth={stageWidth} stageHeight={stageWidth / aspect} />

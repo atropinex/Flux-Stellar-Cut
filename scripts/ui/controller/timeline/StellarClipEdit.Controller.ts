@@ -4,15 +4,15 @@ import {defaultColor, normalizeColor, type ColorSettings} from '../../../common/
 import {findEffect} from '../../../common/stellar/StellarEffects';
 import {contentTime} from '../../../common/stellar/StellarEvaluate';
 import type {Mask} from '../../../common/stellar/StellarMask';
-import {createClip} from '../../../common/stellar/StellarProjectFactory';
+import {createClip, defaultMotion} from '../../../common/stellar/StellarProjectFactory';
 import {
     isAnimatedProperty, keyframeTimelineTime, propertyInfo, readValueAt, toggleAnimation, toggleKeyframe, writeBase, writeValueAt
 } from '../../../common/stellar/StellarProperty';
-import {DEFAULT_TEXT_DURATION, defaultText, type TextSettings} from '../../../common/stellar/StellarText';
+import {DEFAULT_TEXT_DURATION, defaultText, type TextAlign, type TextSettings} from '../../../common/stellar/StellarText';
 import {MAX_SPEED_PERCENT, MIN_SPEED_PERCENT} from '../../../common/stellar/StellarConfig';
 import {createId} from '../../../common/utils/StellarTimeHelper';
 import {editorStore, getActiveSequence, getMedia} from '../project/StellarEditor.Store';
-import {commitSequence} from '../project/StellarProject.Controller';
+import {commitSequence, ensureSequence} from '../project/StellarProject.Controller';
 import {seekTo} from '../playback/StellarPlayback.Controller';
 import {addClips, clearRange, findClip, findTrack, tracksOfType, updateClips, withLinkedClips} from './StellarTimeline.Controller';
 import {cancelPreview, previewSequenceChange} from './StellarTimelineActions.Controller';
@@ -351,8 +351,19 @@ export function updateText(ids: string[], change: Partial<TextSettings>, isFinal
     }
 }
 
+export interface TextClipOptions {
+    x?: number;          // where the middle of the text box is, in sequence pixels from the middle of the frame
+    y?: number;
+    boxWidth?: number;   // percent of the frame width where lines wrap. 0 = never wrap
+    align?: TextAlign;
+}
+
 /** Puts a new text clip on the top video track at the playhead, in free space if there is any. */
-export function addTextClip(content = 'Your Title Here'): string | null {
+export function addTextClip(content = 'Your Title Here', options: TextClipOptions = {}): string | null {
+    if (!ensureSequence()) {
+        return null;
+    }
+
     const sequence = getActiveSequence();
 
     if (!sequence) {
@@ -370,7 +381,13 @@ export function addTextClip(content = 'Your Title Here'): string | null {
 
     const clip = createClip({
         trackId: track.id, mediaId: '', name: 'Title', start: time, inPoint: 0, duration: DEFAULT_TEXT_DURATION,
-        text: defaultText(content), label: 'rose'
+        motion: {...defaultMotion(), x: options.x ?? 0, y: options.y ?? 0},
+        text: {
+            ...defaultText(content),
+            ...(options.boxWidth !== undefined ? {boxWidth: options.boxWidth} : {}),
+            ...(options.align ? {align: options.align} : {})
+        },
+        label: 'rose'
     });
 
     commitSequence('Add text', (current) => addClips(current, [clip], 'overwrite', time, DEFAULT_TEXT_DURATION));

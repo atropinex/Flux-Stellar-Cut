@@ -13,7 +13,8 @@ const TOOLS: {id: ToolId; icon: IconName; label: string; command: string}[] = [
     {id: 'razor', icon: 'razor', label: 'Razor', command: 'tool.razor'},
     {id: 'pen', icon: 'pen', label: 'Pen (draw a mask)', command: 'tool.pen'},
     {id: 'hand', icon: 'hand', label: 'Hand', command: 'tool.hand'},
-    {id: 'zoom', icon: 'zoom', label: 'Zoom', command: 'tool.zoom'}
+    {id: 'zoom', icon: 'zoom', label: 'Zoom', command: 'tool.zoom'},
+    {id: 'text', icon: 'text', label: 'Type (click or drag on the Program monitor)', command: 'tool.text'}
 ];
 
 /** The tool strip next to the timeline. */
