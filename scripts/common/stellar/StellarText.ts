@@ -39,10 +39,14 @@ export interface TextSettings {
 
 export const DEFAULT_TEXT_DURATION = 5;
 
-/** A long list of families. The first one that is installed is used, and the font stack falls back to the generic family. */
-export const FONT_FAMILIES: { name: string; generic: 'sans-serif' | 'serif' | 'monospace' | 'cursive' | 'fantasy' }[] = [
+/**
+ * A long list of families. The panel only shows the ones that are installed on this computer. A font can name look-alikes in
+ * "fallbacks", which are tried in order before the generic family (Century Gothic, for example, is not on every system).
+ */
+export const FONT_FAMILIES: { name: string; generic: 'sans-serif' | 'serif' | 'monospace' | 'cursive' | 'fantasy'; fallbacks?: string[] }[] = [
     { name: 'Inter', generic: 'sans-serif' },
     { name: 'Segoe UI', generic: 'sans-serif' },
+    { name: 'Segoe UI Black', generic: 'sans-serif' },
     { name: 'Helvetica Neue', generic: 'sans-serif' },
     { name: 'Helvetica', generic: 'sans-serif' },
     { name: 'Arial', generic: 'sans-serif' },
@@ -53,41 +57,105 @@ export const FONT_FAMILIES: { name: string; generic: 'sans-serif' | 'serif' | 'm
     { name: 'Trebuchet MS', generic: 'sans-serif' },
     { name: 'Calibri', generic: 'sans-serif' },
     { name: 'Candara', generic: 'sans-serif' },
+    { name: 'Corbel', generic: 'sans-serif' },
+    { name: 'Century Gothic', generic: 'sans-serif', fallbacks: ['URW Gothic', 'Avant Garde', 'ITC Avant Garde Gothic', 'Questrial'] },
     { name: 'Gill Sans', generic: 'sans-serif' },
     { name: 'Futura', generic: 'sans-serif' },
     { name: 'Avenir', generic: 'sans-serif' },
+    { name: 'Avenir Next', generic: 'sans-serif' },
     { name: 'Optima', generic: 'sans-serif' },
+    { name: 'Franklin Gothic Medium', generic: 'sans-serif' },
+    { name: 'Lucida Sans', generic: 'sans-serif' },
+    { name: 'Geneva', generic: 'sans-serif' },
+    { name: 'Myriad Pro', generic: 'sans-serif' },
+    { name: 'Frutiger', generic: 'sans-serif' },
+    { name: 'Univers', generic: 'sans-serif' },
     { name: 'Roboto', generic: 'sans-serif' },
     { name: 'Open Sans', generic: 'sans-serif' },
     { name: 'Montserrat', generic: 'sans-serif' },
     { name: 'Lato', generic: 'sans-serif' },
     { name: 'Poppins', generic: 'sans-serif' },
+    { name: 'Nunito', generic: 'sans-serif' },
+    { name: 'Raleway', generic: 'sans-serif' },
+    { name: 'Oswald', generic: 'sans-serif' },
+    { name: 'Bebas Neue', generic: 'sans-serif' },
+    { name: 'Anton', generic: 'sans-serif' },
+    { name: 'Questrial', generic: 'sans-serif' },
+    { name: 'Josefin Sans', generic: 'sans-serif' },
+    { name: 'Quicksand', generic: 'sans-serif' },
+    { name: 'Barlow', generic: 'sans-serif' },
+    { name: 'Fira Sans', generic: 'sans-serif' },
+    { name: 'Rubik', generic: 'sans-serif' },
+    { name: 'Karla', generic: 'sans-serif' },
+    { name: 'Cabin', generic: 'sans-serif' },
+    { name: 'Work Sans', generic: 'sans-serif' },
+    { name: 'DM Sans', generic: 'sans-serif' },
+    { name: 'Manrope', generic: 'sans-serif' },
+    { name: 'Ubuntu', generic: 'sans-serif' },
+    { name: 'Noto Sans', generic: 'sans-serif' },
+    { name: 'Source Sans Pro', generic: 'sans-serif' },
     { name: 'Impact', generic: 'sans-serif' },
     { name: 'Haettenschweiler', generic: 'sans-serif' },
     { name: 'Times New Roman', generic: 'serif' },
     { name: 'Georgia', generic: 'serif' },
     { name: 'Palatino Linotype', generic: 'serif' },
+    { name: 'Palatino', generic: 'serif' },
     { name: 'Book Antiqua', generic: 'serif' },
+    { name: 'Bookman Old Style', generic: 'serif' },
     { name: 'Garamond', generic: 'serif' },
     { name: 'Baskerville', generic: 'serif' },
     { name: 'Didot', generic: 'serif' },
+    { name: 'Bodoni MT', generic: 'serif' },
     { name: 'Cambria', generic: 'serif' },
     { name: 'Constantia', generic: 'serif' },
+    { name: 'Century', generic: 'serif' },
+    { name: 'Century Schoolbook', generic: 'serif' },
+    { name: 'Rockwell', generic: 'serif' },
+    { name: 'Perpetua', generic: 'serif' },
+    { name: 'Hoefler Text', generic: 'serif' },
     { name: 'Playfair Display', generic: 'serif' },
     { name: 'Merriweather', generic: 'serif' },
-    { name: 'Courier New', generic: 'monospace' },
+    { name: 'Lora', generic: 'serif' },
+    { name: 'Cormorant Garamond', generic: 'serif' },
+    { name: 'Noto Serif', generic: 'serif' },
+    { name: 'Libre Baskerville', generic: 'serif' },
     { name: 'Consolas', generic: 'monospace' },
+    { name: 'Courier New', generic: 'monospace' },
     { name: 'Menlo', generic: 'monospace' },
     { name: 'Monaco', generic: 'monospace' },
     { name: 'Lucida Console', generic: 'monospace' },
     { name: 'JetBrains Mono', generic: 'monospace' },
+    { name: 'Fira Code', generic: 'monospace' },
+    { name: 'Cascadia Code', generic: 'monospace' },
+    { name: 'Source Code Pro', generic: 'monospace' },
+    { name: 'SF Mono', generic: 'monospace' },
+    { name: 'Roboto Mono', generic: 'monospace' },
+    { name: 'Ubuntu Mono', generic: 'monospace' },
     { name: 'Comic Sans MS', generic: 'cursive' },
     { name: 'Brush Script MT', generic: 'cursive' },
     { name: 'Segoe Script', generic: 'cursive' },
     { name: 'Lucida Handwriting', generic: 'cursive' },
+    { name: 'Ink Free', generic: 'cursive' },
+    { name: 'Bradley Hand', generic: 'cursive' },
+    { name: 'Snell Roundhand', generic: 'cursive' },
+    { name: 'Pacifico', generic: 'cursive' },
+    { name: 'Lobster', generic: 'cursive' },
+    { name: 'Dancing Script', generic: 'cursive' },
+    { name: 'Caveat', generic: 'cursive' },
+    { name: 'Satisfy', generic: 'cursive' },
     { name: 'Papyrus', generic: 'fantasy' },
     { name: 'Copperplate', generic: 'fantasy' },
-    { name: 'Chalkduster', generic: 'fantasy' }
+    { name: 'Chalkduster', generic: 'fantasy' },
+    { name: 'Jokerman', generic: 'fantasy' },
+    { name: 'Showcard Gothic', generic: 'fantasy' },
+    { name: 'Stencil', generic: 'fantasy' },
+    { name: 'Bauhaus 93', generic: 'fantasy' },
+    { name: 'Algerian', generic: 'fantasy' },
+    { name: 'Broadway', generic: 'fantasy' },
+    { name: 'Harrington', generic: 'fantasy' },
+    { name: 'Magneto', generic: 'fantasy' },
+    { name: 'Old English Text MT', generic: 'fantasy' },
+    { name: 'Luminari', generic: 'fantasy' },
 ];
 
 export const FONT_WEIGHTS: { value: number; label: string }[] = [
@@ -106,11 +174,12 @@ export function genericFamilyOf(name: string): string {
     return FONT_FAMILIES.find((family) => family.name === name)?.generic ?? 'sans-serif';
 }
 
-/** The CSS font-family value for a name: "Georgia", serif. */
+/** The CSS font-family value for a name: "Georgia", serif. Look-alike fonts come before the generic family. */
 export function fontStackFor(name: string): string {
-    const safeName = name.replace(/["\\]/g, '');
+    const entry = FONT_FAMILIES.find((family) => family.name === name);
+    const names = [name, ...(entry?.fallbacks ?? [])].map((item) => `"${item.replace(/["\\]/g, '')}"`);
 
-    return `"${safeName}", ${genericFamilyOf(name)}`;
+    return `${names.join(', ')}, ${genericFamilyOf(name)}`;
 }
 
 export function defaultText(content = 'Your Title Here'): TextSettings {

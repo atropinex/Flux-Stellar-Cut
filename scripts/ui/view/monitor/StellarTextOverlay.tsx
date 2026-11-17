@@ -80,6 +80,8 @@ export default function StellarTextOverlay({stageWidth, stageHeight}: {stageWidt
 
         const next: Editing = {clipId, mode, rect};
 
+        window.dispatchEvent(new CustomEvent('stellar:show-panel', {detail: 'text'})); // the Text tab on the right shows the look of the new text
+
         editingRef.current = next;
         valueRef.current = '';
         setValue('');

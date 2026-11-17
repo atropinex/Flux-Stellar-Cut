@@ -67,7 +67,54 @@
     border-radius: 5px;
 }
 
-/* Inside Effect Controls, which scrolls on its own. */
-.embedded {
-    display: block;
+/* The layer row at the top, like the layer list in Essential Graphics. */
+.layer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 8px 10px;
+
+    font-size: 12px;
+
+    border-bottom: 1px solid var(--sc-line);
+}
+
+.layerName {
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.layerCount {
+    margin-left: auto;
+
+    color: var(--sc-dim);
+}
+
+.alignRow {
+    display: flex;
+    gap: 2px;
+
+    padding: 2px 10px 6px;
+}
+
+.alignButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 28px;
+    height: 24px;
+
+    color: var(--sc-dim);
+
+    border-radius: 4px;
+}
+
+.alignButton:hover {
+    color: var(--sc-ink);
+
+    background-color: var(--sc-surfaceHover);
 }

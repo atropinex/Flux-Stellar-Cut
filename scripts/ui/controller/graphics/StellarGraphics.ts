@@ -75,6 +75,32 @@ function roundedRectangle(context: CanvasRenderingContext2D, x: number, y: numbe
     context.closePath();
 }
 
+let measureContext: CanvasRenderingContext2D | null = null;
+
+/**
+ * How big the text is on the frame, in frame pixels (with the padding of the background box if there is one).
+ * The picture of a text clip is as big as the whole frame, but the box around it on the monitor should only hug the text.
+ * The text always sits in the middle of that picture, so the box is centered on the clip.
+ */
+export function measureTextBlock(text: TextSettings, width: number, height: number): {width: number; height: number} {
+    measureContext ??= makeCanvas(2, 2).getContext('2d') as CanvasRenderingContext2D;
+
+    const unit = Math.max(2, height) / REFERENCE_HEIGHT;
+    const size = Math.max(1, text.fontSize * unit);
+    const content = text.uppercase ? text.content.toUpperCase() : text.content;
+
+    measureContext.font = fontFor(text, size);
+    measureContext.letterSpacing = `${text.letterSpacing * unit}px`;
+
+    const boxWidth = text.boxWidth > 0 ? (width * text.boxWidth) / 100 : 0;
+    const lines = layoutLines(measureContext, content, boxWidth);
+    const widest = Math.max(1, ...lines.map((line) => measureContext?.measureText(line).width ?? 0));
+    const blockWidth = boxWidth > 0 ? Math.max(boxWidth, widest) : widest;
+    const padding = text.backgroundEnabled ? text.backgroundPadding * unit : 0;
+
+    return {width: blockWidth + padding * 2, height: size * text.lineHeight * lines.length + padding * 2};
+}
+
 /** Draws a text clip onto a see-through picture the size of the frame. The text is centered. */
 export function renderTextCanvas(text: TextSettings, width: number, height: number): HTMLCanvasElement {
     const canvas = makeCanvas(width, height);

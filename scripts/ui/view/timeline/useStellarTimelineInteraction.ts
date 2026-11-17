@@ -202,7 +202,7 @@ export function useStellarTimelineInteraction(scrollerRef: RefObject<HTMLDivElem
 
         const edge = target.closest<HTMLElement>('[data-edge]')?.dataset.edge as 'start' | 'end' | undefined;
 
-        if (edge && (state.tool === 'selection' || state.tool === 'ripple')) {
+        if (edge && (state.tool === 'selection' || state.tool === 'text' || state.tool === 'ripple')) {
             selectClips([clipId], event.shiftKey);
             drag.current = {kind: 'trim', base: sequence, clipId, edge, ripple: state.tool === 'ripple', moved: false};
             return;
@@ -346,7 +346,8 @@ export function useStellarTimelineInteraction(scrollerRef: RefObject<HTMLDivElem
             const clip = findClip(d.base, d.clipId);
             const media = clip ? getMedia(state, clip.mediaId) : undefined;
 
-            if (!clip || !media) {
+            // Text has no media file, so it can be made as long or short as you like.
+            if (!clip || (!media && !clip.text)) {
                 return;
             }
 
@@ -356,7 +357,7 @@ export function useStellarTimelineInteraction(scrollerRef: RefObject<HTMLDivElem
             const time = result.time;
             const guide = result.guide;
 
-            const limits = trimLimits(d.base, clip, d.edge, media.duration, media.kind === 'image', d.ripple);
+            const limits = trimLimits(d.base, clip, d.edge, media?.duration ?? 0, !media || media.kind === 'image', d.ripple);
 
             editorStore.set({
                 liveSequence: trimClip(d.base, d.clipId, d.edge, clamp(time, limits.min, limits.max), d.ripple, state.linkedSelection),
