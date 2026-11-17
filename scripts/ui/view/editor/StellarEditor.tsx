@@ -19,7 +19,6 @@ import StellarEffectControlsPanel from '../effects/StellarEffectControlsPanel';
 import StellarToolsPanel from '../tools/StellarToolsPanel';
 import StellarHistoryPanel from '../history/StellarHistoryPanel';
 import StellarLumetriPanel from '../color/StellarLumetriPanel';
-import StellarTextPanel from '../text/StellarTextPanel';
 import StellarAudioMixerPanel from '../mixer/StellarAudioMixerPanel';
 import StellarInfoPanel from '../info/StellarInfoPanel';
 import StellarMarkersPanel from '../markers/StellarMarkersPanel';
@@ -33,7 +32,6 @@ const LEFT_TABS = [
     {id: 'source', label: 'Source'},
     {id: 'effectControls', label: 'Effect Controls'},
     {id: 'lumetri', label: 'Lumetri Color'},
-    {id: 'text', label: 'Text'},
     {id: 'mixer', label: 'Audio Clip Mixer'}
 ];
 
@@ -135,7 +133,6 @@ export default function StellarEditor({projectPath}: EditorProps) {
                 {leftTab === 'source' ? <StellarSourceMonitor /> : null}
                 {leftTab === 'effectControls' ? <StellarEffectControlsPanel /> : null}
                 {leftTab === 'lumetri' ? <StellarLumetriPanel /> : null}
-                {leftTab === 'text' ? <StellarTextPanel /> : null}
                 {leftTab === 'mixer' ? <StellarAudioMixerPanel /> : null}
             </StellarPanel>
         ),
@@ -188,7 +185,7 @@ export default function StellarEditor({projectPath}: EditorProps) {
     // The maximize hotkey shows one panel on its own.
     const maximizedKey = maximizedPanel
         ? ({
-            source: 'leftTabs', effectControls: 'leftTabs', lumetri: 'leftTabs', text: 'leftTabs', mixer: 'leftTabs', program: 'program',
+            source: 'leftTabs', effectControls: 'leftTabs', lumetri: 'leftTabs', mixer: 'leftTabs', program: 'program',
             history: 'rightTabs', project: 'project', browser: 'project', info: 'project', markers: 'project', tools: 'tools', timeline: 'timeline'
         } as Record<string, string>)[maximizedPanel] ?? (maximizedPanel === 'effects' ? (projectTab === 'effects' ? 'project' : 'rightTabs') : null)
         : null;

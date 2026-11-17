@@ -75,7 +75,7 @@ export const MENUS: MenuDefinition[] = [
         build: () => [
             commandItem('window.panelProject'), commandItem('window.panelBrowser'), commandItem('window.panelInfo'), commandItem('window.panelMarkers'), separator('p1'),
             commandItem('window.panelSource'), commandItem('window.panelEffectControls'), commandItem('window.panelLumetri'),
-            commandItem('window.panelText'), commandItem('window.panelMixer'), separator('p2'),
+            commandItem('window.panelMixer'), separator('p2'),
             commandItem('window.maximizePanel'), commandItem('window.fullscreen')
         ]
     },

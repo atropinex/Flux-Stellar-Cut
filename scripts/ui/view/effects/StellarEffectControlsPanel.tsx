@@ -11,6 +11,7 @@ import {createMask, type Mask, type MaskShape} from '../../../common/stellar/Ste
 import {maskUiStore, selectMask} from '../../controller/timeline/StellarMaskUi.Controller';
 import {setTool} from '../../controller/timeline/StellarTimelineActions.Controller';
 import StellarIcon from '../common/StellarIcon';
+import StellarTextPanel from '../text/StellarTextPanel';
 import StellarScrubNumber from '../common/StellarScrubNumber';
 import StellarPropertyRow from './StellarPropertyRow';
 import styles from './StellarEffectControlsPanel.module.css';
@@ -152,6 +153,8 @@ export default function StellarEffectControlsPanel() {
             </div>
 
             <div>
+                {isText ? <StellarTextPanel embedded /> : null}
+
                 {isVideo ? (
                     <Section title="Motion">
                         <StellarPropertyRow clip={clip} ids={ids} path={PATH.x} />

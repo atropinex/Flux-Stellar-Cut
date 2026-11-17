@@ -97,12 +97,12 @@ export const COMMANDS: CommandDefinition[] = [
     { id: 'tool.hand', label: 'Hand Tool', category: 'Tools', defaultKey: 'H' },
     { id: 'tool.zoom', label: 'Zoom Tool', category: 'Tools', defaultKey: 'Z' },
     { id: 'tool.pen', label: 'Pen Tool', category: 'Tools', defaultKey: 'P' },
+    { id: 'tool.text', label: 'Type Tool', category: 'Tools', defaultKey: 'T' },
 
     // Window
     { id: 'window.maximizePanel', label: 'Maximize Panel Under Cursor', category: 'Window', defaultKey: '`' },
     { id: 'window.panelEffectControls', label: 'Show Effect Controls', category: 'Window', defaultKey: '' },
     { id: 'window.panelLumetri', label: 'Show Lumetri Color', category: 'Window', defaultKey: '' },
-    { id: 'window.panelText', label: 'Show Text', category: 'Window', defaultKey: '' },
     { id: 'window.panelMixer', label: 'Show Audio Clip Mixer', category: 'Window', defaultKey: '' },
     { id: 'window.panelSource', label: 'Show Source Monitor', category: 'Window', defaultKey: '' },
     { id: 'window.panelProject', label: 'Show Project', category: 'Window', defaultKey: '' },

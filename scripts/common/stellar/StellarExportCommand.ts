@@ -515,6 +515,35 @@ function frameModeFor(planned: PlannedClip, build: Build): FrameMode {
     return differs ? build.request.settings.frameInterpolation : 'sampling';
 }
 
+/**
+ * Going down in frame rate, like 240 to 60: every output frame blends the source frames around it, the way a camera
+ * shutter records them. That is the motion blur. (ffmpeg's "framerate" filter only mixes the two closest frames, so it can not do this.)
+ *
+ * The blend is a tent: frames in the middle count the most and the ones at the edges fade out, and the window reaches into the
+ * neighbouring output frames. A plain average of 4 frames shows 4 separate copies of something that moves fast, the tent
+ * turns them into one smooth trail. It is centered on the output frame, so the picture stays in time with the sound.
+ * Optical flow first makes new in-between frames when the rates do not divide evenly, so a whole number of frames can be stacked.
+ */
+function stackFilters(ratio: number, mode: FrameMode, playedRate: number, exportRate: number, frameRateText: string): string[] {
+    const count = Math.min(64, Math.max(2, Math.round(ratio)));
+    const divides = Math.abs(ratio - count) < 0.05;
+    const filters: string[] = [];
+    let sourceRate = playedRate;
+
+    if (mode === 'opticalFlow' && !divides) {
+        sourceRate = exportRate * count;
+        filters.push('format=yuv420p', `minterpolate=fps=${num(sourceRate)}:mi_mode=mci:mc_mode=aobmc:me_mode=bidir:vsbmc=1`);
+    }
+
+    const frames = count * 2 - 1;
+    const weights = Array.from({length: frames}, (_, index) => count - Math.abs(index + 1 - count)).join(' ');
+    const lag = (frames - 1) / 2 / sourceRate; // tmix averages the frames up to the current one, so move the result back to the middle of them
+
+    filters.push(`tmix=frames=${frames}:weights='${weights}'`, `setpts='max(0,PTS-${num(lag)}/TB)'`, `fps=${frameRateText}`);
+
+    return filters;
+}
+
 function timingFilters(planned: PlannedClip, build: Build, isStill: boolean, hasAlpha: boolean): string[] {
     const {clip} = planned;
     const filters: string[] = [];
@@ -534,7 +563,14 @@ function timingFilters(planned: PlannedClip, build: Build, isStill: boolean, has
     // Frames with see-through parts can only be repeated or dropped, because the smart filters work on opaque pictures.
     const mode = hasAlpha ? 'sampling' : frameModeFor(planned, build);
 
-    if (mode === 'blending') {
+    // The rate of the footage as it plays on the timeline (a clip sped up 2x shows twice as many source frames per second).
+    const exportRate = build.request.settings.frameRate;
+    const playedRate = planned.media.frameRate * clip.speed;
+    const ratio = playedRate > 0 && exportRate > 0 ? playedRate / exportRate : 0;
+
+    if ((mode === 'blending' || mode === 'opticalFlow') && ratio >= 1.5) {
+        filters.push(...stackFilters(ratio, mode, playedRate, exportRate, build.frameRate));
+    } else if (mode === 'blending') {
         filters.push(`framerate=fps=${build.frameRate}`);
     } else if (mode === 'opticalFlow') {
         filters.push('format=yuv420p', `minterpolate=fps=${build.frameRate}:mi_mode=mci:mc_mode=aobmc:me_mode=bidir:vsbmc=1`);

@@ -444,6 +444,21 @@ export function ensureSequenceForMedia(items: MediaItem[]): boolean {
     return true;
 }
 
+/** For things that need a sequence but have no video to copy settings from (text). Makes a 1080p, 24 fps one if there is none. */
+export function ensureSequence(): boolean {
+    if (getActiveSequence()) {
+        return true;
+    }
+
+    if (!editorStore.get().document) {
+        return false;
+    }
+
+    addSequence('Sequence 01', {width: 1920, height: 1080, frameRate: 24, sampleRate: 48000});
+
+    return true;
+}
+
 export function requireActiveSequence(): Sequence | null {
     return getActiveSequence();
 }
