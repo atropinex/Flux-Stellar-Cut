@@ -17,6 +17,7 @@ import StellarTimelinePanel from '../timeline/StellarTimelinePanel';
 import StellarEffectsPanel from '../effects/StellarEffectsPanel';
 import StellarEffectControlsPanel from '../effects/StellarEffectControlsPanel';
 import StellarToolsPanel from '../tools/StellarToolsPanel';
+import StellarTextPanel from '../text/StellarTextPanel';
 import StellarHistoryPanel from '../history/StellarHistoryPanel';
 import StellarLumetriPanel from '../color/StellarLumetriPanel';
 import StellarAudioMixerPanel from '../mixer/StellarAudioMixerPanel';
@@ -33,6 +34,12 @@ const LEFT_TABS = [
     {id: 'effectControls', label: 'Effect Controls'},
     {id: 'lumetri', label: 'Lumetri Color'},
     {id: 'mixer', label: 'Audio Clip Mixer'}
+];
+
+const RIGHT_TABS = [
+    {id: 'effects', label: 'Effects'},
+    {id: 'history', label: 'History'},
+    {id: 'text', label: 'Text'}
 ];
 
 const PROJECT_TABS = [
@@ -99,6 +106,8 @@ export default function StellarEditor({projectPath}: EditorProps) {
 
             if (LEFT_TABS.some((tab) => tab.id === id)) {
                 setLeftTab(id);
+            } else if (id === 'text') {
+                setRightTab('text');
             } else if (PROJECT_TABS.some((tab) => tab.id === id)) {
                 editorStore.set({settings: {...editorStore.get().settings, projectTab: id}});
                 void window.api.updateSettings({projectTab: id});
@@ -144,12 +153,12 @@ export default function StellarEditor({projectPath}: EditorProps) {
         rightTabs: (
             <StellarPanel
                 panelId={rightTab}
-                tabs={[{id: 'effects', label: 'Effects'}, {id: 'history', label: 'History'}]}
+                tabs={RIGHT_TABS}
                 activeTab={rightTab}
                 onTabChange={setRightTab}
                 className={styles.fill}
             >
-                {rightTab === 'effects' ? <StellarEffectsPanel /> : <StellarHistoryPanel />}
+                {rightTab === 'effects' ? <StellarEffectsPanel /> : rightTab === 'text' ? <StellarTextPanel /> : <StellarHistoryPanel />}
             </StellarPanel>
         ),
         project: (
@@ -186,7 +195,7 @@ export default function StellarEditor({projectPath}: EditorProps) {
     const maximizedKey = maximizedPanel
         ? ({
             source: 'leftTabs', effectControls: 'leftTabs', lumetri: 'leftTabs', mixer: 'leftTabs', program: 'program',
-            history: 'rightTabs', project: 'project', browser: 'project', info: 'project', markers: 'project', tools: 'tools', timeline: 'timeline'
+            history: 'rightTabs', text: 'rightTabs', project: 'project', browser: 'project', info: 'project', markers: 'project', tools: 'tools', timeline: 'timeline'
         } as Record<string, string>)[maximizedPanel] ?? (maximizedPanel === 'effects' ? (projectTab === 'effects' ? 'project' : 'rightTabs') : null)
         : null;
 

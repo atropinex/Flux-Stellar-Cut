@@ -320,7 +320,7 @@ export default function StellarTimelinePanel() {
                                                         trackType={track.type}
                                                         pixelsPerSecond={pixelsPerSecond}
                                                         selected={selection.includes(clip.id)}
-                                                        offline={media ? Boolean(offline[media.id]) : true}
+                                                        offline={media ? Boolean(offline[media.id]) : !clip.text && !clip.nestId}
                                                         thumbnail={media ? thumbnails[media.path] : undefined}
                                                         locked={track.locked}
                                                     />

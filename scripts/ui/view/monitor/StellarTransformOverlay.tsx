@@ -6,6 +6,7 @@ import {clamp} from '../../../common/utils/StellarTimeHelper';
 import {editorStore, getMedia, getShownSequence} from '../../controller/project/StellarEditor.Store';
 import {useStore} from '../../controller/store/StellarStore';
 import {findClip, findTrack} from '../../controller/timeline/StellarTimeline.Controller';
+import {measureTextBlock} from '../../controller/graphics/StellarGraphics';
 import {commitProperties, previewProperties} from '../../controller/timeline/StellarClipEdit.Controller';
 import {cancelPreview} from '../../controller/timeline/StellarTimelineActions.Controller';
 import {maskUiStore} from '../../controller/timeline/StellarMaskUi.Controller';
@@ -41,8 +42,16 @@ function pictureSize(clip: Clip, sequenceWidth: number, sequenceHeight: number, 
     const state = editorStore.get();
     const media = getMedia(state, clip.mediaId);
     const inner = clip.nestId ? state.document?.sequences.find((item) => item.id === clip.nestId)?.settings : undefined;
-    const sourceWidth = clip.text ? sequenceWidth : media?.width ?? inner?.width ?? sequenceWidth;
-    const sourceHeight = clip.text ? sequenceHeight : media?.height ?? inner?.height ?? sequenceHeight;
+    if (clip.text) {
+        // A text clip is a picture of the whole frame, but the box only goes around the letters.
+        const block = measureTextBlock(clip.text, sequenceWidth, sequenceHeight);
+        const onStage = stageWidth / sequenceWidth;
+
+        return {width: Math.max(24, block.width * onStage), height: Math.max(24, block.height * onStage)};
+    }
+
+    const sourceWidth = media?.width ?? inner?.width ?? sequenceWidth;
+    const sourceHeight = media?.height ?? inner?.height ?? sequenceHeight;
     const ratio = Math.min(stageWidth / sourceWidth, stageHeight / sourceHeight);
 
     return {width: sourceWidth * ratio, height: sourceHeight * ratio};
